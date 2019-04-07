@@ -310,9 +310,11 @@ if CLIENT then
                 local fontH = draw.GetFontHeight(NAME_FONT);
                 if (nH > fontH) then height = (SLOT_HEIGHT - fontH) + nH; end
               end
-            else
+            elseif (not isActive and onActiveSlot) then
               local nW, nH = HOLOHUD:GetTextSize(weapon:GetPrintName(), NAME_FONT);
               height = math.max(nH + SLOT_MARGIN_RETRACTED, SLOT_SIZE_RETRACTED);
+            elseif (not onActiveSlot) then
+              height = SLOT_SIZE_RETRACTED;
             end
 
             -- Draw weapon slot
