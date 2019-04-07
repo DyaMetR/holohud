@@ -29,5 +29,14 @@ Customizable holographic themed heads up display (HUD) for Garry's Mod.
 + Background opacity
 + Swaying
 
+# Credits
++ *DyaMetR*
+   + Code
++ *Matsilagi*
+   + Testing
+   + Occasional development support
++ *code_gs*
+   + [Weapon selector skeleton](https://github.com/Kefta/Weapon-Switcher-Skeleton)
+
 # Adding custom content
 ## [Documentation coming soon]
