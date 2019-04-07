@@ -23,7 +23,8 @@ if CLIENT then
     ["holohud_death"] = 1,
     ["holohud_background_r"] = 0,
     ["holohud_background_g"] = 0,
-    ["holohud_background_b"] = 0
+    ["holohud_background_b"] = 0,
+    ["holohud_autosave_enabled"] = 1
   }
 
   -- ConVars
@@ -102,6 +103,14 @@ if CLIENT then
   ]]
   function HOLOHUD:GetBackgroundColour()
     return Color(values.holohud_background_r:GetInt(), values.holohud_background_g:GetInt(), values.holohud_background_b:GetInt());
+  end
+
+  --[[
+    Returns whether the auto saving feature is enabled
+    @return {boolean} auto save enabled
+  ]]
+  function HOLOHUD:IsAutoSaveEnabled()
+    return values.holohud_autosave_enabled:GetInt() > 0;
   end
 
   --[[

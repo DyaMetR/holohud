@@ -36,6 +36,12 @@ if CLIENT then
   		}
   	);
 
+    panel:AddControl( "CheckBox", {
+  		Label = "Configuration auto saving enabled",
+      Command = "holohud_autosave_enabled"
+  		}
+  	);
+
     panel:AddControl( "Slider", {
       Label = "Swaying",
       Type = "Float",

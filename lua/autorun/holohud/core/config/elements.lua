@@ -24,6 +24,8 @@ if CLIENT then
   local CONFIG_DIR = HOLOHUD.CONFIG.DataDir .. "/elements";
   local DATA_EXTENSION = ".dat";
   local DATA_DIR = "DATA";
+  local AUTO_SAVE_TIME = 1;
+  local TIMER_PREFIX = "holohud_autosave_element_";
 
   -- Data containers
   HOLOHUD.ELEMENTS.Elements = {}; -- Elements default configuration
@@ -309,6 +311,23 @@ if CLIENT then
   end
 
   --[[
+    Initiates the auto saving process for an element's configuration
+    @param {string} id
+    @void
+  ]]
+  local function AutoSaveConfig(id)
+    -- Make sure the user has stopped changing values before saving
+    local timerName = TIMER_PREFIX .. id;
+    if (timer.Exists(timerName)) then
+      timer.Stop(timerName); timer.Start(timerName); -- Reset timer
+    else
+      timer.Create(timerName, AUTO_SAVE_TIME, 1, function() -- Create it
+        HOLOHUD.ELEMENTS:SaveUserConfiguration(id);
+      end);
+    end
+  end
+
+  --[[
     Changes and saves an element's configuration parameter
     @param {string} id
     @param {string} field
@@ -321,7 +340,11 @@ if CLIENT then
     if (save == nil) then save = false; end
     if (HOLOHUD.ELEMENTS.ElementData[id].config[field] == nil) then HOLOHUD.ELEMENTS.ElementData[id].config[field] = {value = value}; end
     HOLOHUD.ELEMENTS.ElementData[id].config[field].value = value;
-    if (save) then HOLOHUD.ELEMENTS:SaveUserConfiguration(id); end
+    if (save) then
+      HOLOHUD.ELEMENTS:SaveUserConfiguration(id);
+    elseif (not save and HOLOHUD:IsAutoSaveEnabled()) then
+      AutoSaveConfig(id);
+    end
   end
 
   --[[
