@@ -65,7 +65,8 @@ if CLIENT then
     local w = HOLOHUD:GetNumberSize(2, "holohud_clock_big");
     surface.SetFont("holohud_clock_small");
 
-    local date = CLOCK.DAY_OF_WEEK[tonumber(os.date("%w", timestamp)) + 1] .. ", " .. os.date("%d", timestamp);
+    local weekDay = os.date("*t", os.time()).wday;
+    local date = CLOCK.DAY_OF_WEEK[weekDay] .. ", " .. os.date("%d", timestamp);
     w = w + surface.GetTextSize(date) + MARGIN;
 
     HOLOHUD:DrawFragmentAlignSimple((ScrW() * hor_off) - (w * 0.5), ScrH() * ver_off, w, H, Foreground, PANEL_NAME, TEXT_ALIGN_TOP, timestamp, date, h24, sec, colour);
