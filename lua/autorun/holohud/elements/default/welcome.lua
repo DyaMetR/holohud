@@ -322,7 +322,7 @@ if CLIENT then
 
     -- Reset
     if (hasSuit ~= LocalPlayer():IsSuitEquipped() and LocalPlayer():Alive()) then
-      ResetAnimation();
+      HOLOHUD:ResetWelcomeAnimation();
       hasSuit = LocalPlayer():IsSuitEquipped();
     end
 
