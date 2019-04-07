@@ -144,10 +144,15 @@ if CLIENT then
   end
 
   -- Include files
-  include("icons/ammo.lua");
+  --[[include("icons/ammo.lua");
   include("icons/items.lua");
   include("icons/weapons.lua");
   include("icons/hazards.lua");
-  include("icons/killicons.lua");
-
+  include("icons/killicons.lua");]]
 end
+
+HOLOHUD:IncludeFile("icons/ammo.lua");
+HOLOHUD:IncludeFile("icons/items.lua");
+HOLOHUD:IncludeFile("icons/weapons.lua");
+HOLOHUD:IncludeFile("icons/hazards.lua");
+HOLOHUD:IncludeFile("icons/killicons.lua");
