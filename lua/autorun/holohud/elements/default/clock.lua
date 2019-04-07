@@ -8,11 +8,24 @@ if CLIENT then
   -- Namespace
   HOLOHUD.ELEMENTS.CLOCK = {};
 
+  HOLOHUD.ELEMENTS.CLOCK.DAY_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+  HOLOHUD.ELEMENTS.CLOCK.MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+  --[[
+    -- Include
+    include("clock/simple.lua");
+    include("clock/digital.lua");
+  ]]
+end
+
+HOLOHUD:IncludeFile("clock/simple.lua");
+HOLOHUD:IncludeFile("clock/digital.lua");
+
+if CLIENT then
+
   -- Parameters
   local PANEL_NAME = "clock";
   local TIME = 10;
-  HOLOHUD.ELEMENTS.CLOCK.DAY_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-  HOLOHUD.ELEMENTS.CLOCK.MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
   -- Highlight and panel
   HOLOHUD:AddFlashPanel(PANEL_NAME);
@@ -21,10 +34,6 @@ if CLIENT then
   -- Value
   local time = 0;
   local lastUpdate = 0;
-
-  -- Include
-  include("clock/simple.lua");
-  include("clock/digital.lua");
 
   --[[
     Trigger the clock if an hour passes

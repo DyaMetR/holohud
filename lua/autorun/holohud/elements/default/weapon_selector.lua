@@ -280,7 +280,6 @@ if CLIENT then
       local onActiveSlot = iSlot == slot;
       local v = 0; -- Vertical displacement
       local width = SLOT_WIDTH;
-      local height = nil;
 
       if (slotSize[slot] > 0) then
         -- Check greatest width of slot
@@ -295,6 +294,7 @@ if CLIENT then
 
         -- Display weapon
         for pos, weapon in pairs(weapons[slot]) do
+          local height = SLOT_HEIGHT;
           if (IsValid(weapon)) then
             local isActive = onActiveSlot and iPos == pos;
 

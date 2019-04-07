@@ -11,11 +11,18 @@ if CLIENT then
   -- Namespace
   HOLOHUD.ELEMENTS.DAMAGE = {};
 
+  --include("damage/triarrow.lua");
+end
+
+HOLOHUD:IncludeFile("damage/triarrow.lua");
+
+if CLIENT then
+
   -- Parameters
+  local HIGHLIGHT = "damage_generic";
   local MAX_COUNT = 3; -- Maximum amount of arrows at the same time
   local MAX_TIME = 7; -- Maximum amount of time an arrow will be present on screen
   local MIN_TIME = 2.66; -- Minimum amount of time an arrow will be present on screen
-  local HIGHLIGHT = "damage_generic";
 
   -- Textures
   local CORNER_W, CORNER_H = 256, 256; -- Generic indicator size
@@ -42,8 +49,6 @@ if CLIENT then
     surface.DrawTexturedRectUV(0, ScrH() - CORNER_H, CORNER_W, CORNER_H, 0, 0, 1, 1);
     surface.DrawTexturedRectUV(ScrW() - CORNER_W, ScrH() - CORNER_H, CORNER_W, CORNER_H, 1, 0, 0, 1);
   end
-
-  include("damage/triarrow.lua");
 
   --[[
     Draws all damage indicator elements

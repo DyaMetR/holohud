@@ -20,17 +20,32 @@ if CLIENT then
 		ARMOUR = "armour"
 	};
 
+	--[[
+	-- Include panels
+	include("health/default.lua");
+	include("health/heartrate.lua");
+	include("health/classic.lua");
+	]]
+
+end
+
+HOLOHUD:IncludeFile("health/default.lua");
+HOLOHUD:IncludeFile("health/heartrate.lua");
+HOLOHUD:IncludeFile("health/classic.lua");
+
+if CLIENT then
+
 	-- Colours
 	local HEALTH_GOOD, HEALTH_WARN, HEALTH_CRIT = Color(100, 255, 100, 200), Color(255, 233, 100, 200), Color(255, 100, 72, 200);
 	local ARMOUR_COLOUR = Color(100, 166, 255);
 
 	-- Register panels
 	HOLOHUD:AddFlashPanel(HOLOHUD.ELEMENTS.HEALTH.PANELS.DEFAULT);
-  HOLOHUD:AddFlashPanel(HOLOHUD.ELEMENTS.HEALTH.PANELS.KEVLAR);
+	HOLOHUD:AddFlashPanel(HOLOHUD.ELEMENTS.HEALTH.PANELS.KEVLAR);
 
 	-- Register highlight
-  HOLOHUD:AddHighlight(HOLOHUD.ELEMENTS.HEALTH.HIGHLIGHT.HEALTH);
-  HOLOHUD:AddHighlight(HOLOHUD.ELEMENTS.HEALTH.HIGHLIGHT.ARMOUR);
+	HOLOHUD:AddHighlight(HOLOHUD.ELEMENTS.HEALTH.HIGHLIGHT.HEALTH);
+	HOLOHUD:AddHighlight(HOLOHUD.ELEMENTS.HEALTH.HIGHLIGHT.ARMOUR);
 
 	-- Parameters
 	local TIME = 5; -- Time to display panel after changing modes
@@ -53,12 +68,12 @@ if CLIENT then
 	local function Animate(health, armour, mode)
 
 		-- Mode changes, display new indicators
-    if (lastMode ~= mode) then
+		if (lastMode ~= mode) then
 			if (lastMode > -1) then
-      	time = CurTime() + TIME;
+				time = CurTime() + TIME;
 			end
-      lastMode = mode;
-    end
+			lastMode = mode;
+		end
 
 		-- Trigger panel if variables change
 		if (lastHp ~= health or (lastAp ~= armour and mode ~= 3)) then
@@ -117,11 +132,6 @@ if CLIENT then
 	function HOLOHUD.ELEMENTS.HEALTH:GetArmourColour()
 		return HOLOHUD.ELEMENTS:GetElementUserConfigParam(ELEMENT_NAME, "armour");
 	end
-
-	-- Include panels
-	include("health/default.lua");
-	include("health/heartrate.lua");
-	include("health/classic.lua");
 
   --[[
 		Animates and draws the full panel

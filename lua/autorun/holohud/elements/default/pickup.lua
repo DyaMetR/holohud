@@ -16,13 +16,32 @@ if CLIENT then
   }
   HOLOHUD.ELEMENTS.PICKUP.PANEL_SUBFIX = "pickup_";
   HOLOHUD.ELEMENTS.PICKUP.TIME = 5.66;
+
+  -- Variables
+  HOLOHUD.ELEMENTS.PICKUP.pickups = {};
+  HOLOHUD.ELEMENTS.PICKUP.ammoPickups = {}; -- Cache to locate ammunition pickups for cumulative purposes
+
+  -- Include pickup panels
+  --[[include("pickup/ammo.lua");
+  include("pickup/weapon.lua");
+  include("pickup/item.lua");
+  include("pickup/health.lua");]]
+
+end
+
+HOLOHUD:IncludeFile("pickup/ammo.lua");
+HOLOHUD:IncludeFile("pickup/weapon.lua");
+HOLOHUD:IncludeFile("pickup/item.lua");
+HOLOHUD:IncludeFile("pickup/health.lua");
+
+if CLIENT then
+
+  -- Parameters
   local SCREEN_MAX = 0.5; -- The maximum amount of screen space to take
   local PICKUP_PANEL_ALIGN = TEXT_ALIGN_RIGHT; -- The flash panel animation alignment
   local MARGIN = 5; -- Margin between panels
 
   -- Variables
-  HOLOHUD.ELEMENTS.PICKUP.pickups = {};
-  HOLOHUD.ELEMENTS.PICKUP.ammoPickups = {}; -- Cache to locate ammunition pickups for cumulative purposes
   local curSize = 0; -- Current screen occupied
 
   --[[
@@ -77,12 +96,6 @@ if CLIENT then
     HOLOHUD:AddFlashPanel(HOLOHUD.ELEMENTS.PICKUP.PANEL_SUBFIX .. table.Count(HOLOHUD.ELEMENTS.PICKUP.pickups));
     curSize = curSize + h;
   end
-
-  -- Include pickup panels
-  include("pickup/ammo.lua");
-  include("pickup/weapon.lua");
-  include("pickup/item.lua");
-  include("pickup/health.lua");
 
   --[[
     Draws a pickup history entry

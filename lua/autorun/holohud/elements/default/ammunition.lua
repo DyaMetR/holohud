@@ -22,9 +22,22 @@ if CLIENT then
     SECONDARY = "ammunition_alt"
   };
 
+  -- Inlcude panels
+  --[[include("ammunition/default.lua");
+  include("ammunition/minimalist.lua");
+  include("ammunition/compact.lua");]]
+end
+
+HOLOHUD:IncludeFile("ammunition/default.lua");
+HOLOHUD:IncludeFile("ammunition/minimalist.lua");
+HOLOHUD:IncludeFile("ammunition/compact.lua");
+
+if CLIENT then
+
+  -- Parameters
+  local ELEMENT_NAME = "ammunition";
   local AMMO_COLOUR, CRIT_COLOUR = Color(255, 236, 100, 200), Color(255, 100, 72, 200); -- Default colours
   local TIME = 5; -- Default display time (in seconds)
-  local ELEMENT_NAME = "ammunition";
 
   -- Register panels
   HOLOHUD:AddFlashPanel(HOLOHUD.ELEMENTS.AMMUNITION.PANELS.DEFAULT);
@@ -320,11 +333,6 @@ if CLIENT then
       return aOffset, rOffset;
     end
   end
-
-  -- Inlcude panels
-  include("ammunition/default.lua");
-  include("ammunition/minimalist.lua");
-  include("ammunition/compact.lua");
 
   --[[
 		Animates and draws the full panel
