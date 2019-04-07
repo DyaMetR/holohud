@@ -41,7 +41,7 @@ if CLIENT then
   local function DrawCornerIndicators(colour)
     local corner = HOLOHUD:GetHighlight(HIGHLIGHT);
     if (corner <= 0) then return; end
-    surface.SetDrawColor(Color(255, 0, 0, 255 * corner));
+    surface.SetDrawColor(Color(colour.r, colour.g, colour.b, 255 * corner));
     surface.SetTexture(CORNER);
 
     surface.DrawTexturedRectUV(0, 0, CORNER_W, CORNER_H, 0, 1, 1, 0);

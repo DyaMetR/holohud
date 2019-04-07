@@ -85,25 +85,25 @@ if CLIENT then
     local brightAlpha = 255 * fade * math.Clamp(0.15 + bright, 0, 1);
 
     -- Minor
-    HOLOHUD:DrawTextureRotated(MINOR, x, y, WIDTH, HEIGHT, Color(255, 0, 0, alpha), rot, true);
+    HOLOHUD:DrawTextureRotated(MINOR, x, y, WIDTH, HEIGHT, Color(colour.r, colour.g, colour.b, alpha), rot, true);
 
-    surface.SetDrawColor(Color(255, 0, 0, brightAlpha));
+    surface.SetDrawColor(Color(colour.r, colour.g, colour.b, brightAlpha));
     surface.SetTexture(MINOR_BRIGHT);
     surface.DrawTexturedRectRotated(x, y, WIDTH, HEIGHT, rot);
 
     if (amount <= 5) then return; end
     -- Moderate
-    HOLOHUD:DrawTextureRotated(MODERATE, x, y, WIDTH, HEIGHT, Color(255, 0, 0, alpha), rot, true);
+    HOLOHUD:DrawTextureRotated(MODERATE, x, y, WIDTH, HEIGHT, Color(colour.r, colour.g, colour.b, alpha), rot, true);
 
-    surface.SetDrawColor(Color(255, 0, 0, brightAlpha));
+    surface.SetDrawColor(Color(colour.r, colour.g, colour.b, brightAlpha));
     surface.SetTexture(MODERATE_BRIGHT);
     surface.DrawTexturedRectRotated(x, y, WIDTH, HEIGHT, rot);
 
     if (amount <= 10) then return; end
     -- Major
-    HOLOHUD:DrawTextureRotated(MAJOR, x, y, WIDTH, HEIGHT, Color(255, 0, 0, alpha), rot, true);
+    HOLOHUD:DrawTextureRotated(MAJOR, x, y, WIDTH, HEIGHT, Color(colour.r, colour.g, colour.b, alpha), rot, true);
 
-    surface.SetDrawColor(Color(255, 0, 0, brightAlpha));
+    surface.SetDrawColor(Color(colour.r, colour.g, colour.b, brightAlpha));
     surface.SetTexture(MAJOR_BRIGHT);
     surface.DrawTexturedRectRotated(x, y, WIDTH, HEIGHT, rot);
 

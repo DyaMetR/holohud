@@ -16,7 +16,7 @@ if CLIENT then
     @param {Weapon} weapon
     @void
   ]]
-  function PICKUP:AddWeaponPickup(weapon, displayWeapon, displayTitle)
+  function PICKUP:AddWeaponPickup(weapon, displayTitle, displayWeapon)
     if (not IsValid(weapon)) then return; end
 
     surface.SetFont("holohud_weapon_name");
