@@ -98,7 +98,7 @@ if CLIENT then
     scroll = 0;
     sysLogCount = 0;
     nextTime = 0;
-    time = 0;
+    hasSuit = true;
   end
 
   --[[
@@ -321,9 +321,14 @@ if CLIENT then
     local x, y = math.Clamp(ScrW() * 0.56, 0, ScrW() - W), (ScrH() * 0.5) - (H * 0.5);
 
     -- Reset
-    if (hasSuit ~= LocalPlayer():IsSuitEquipped() and LocalPlayer():Alive()) then
-      HOLOHUD:ResetWelcomeAnimation();
-      hasSuit = LocalPlayer():IsSuitEquipped();
+    if (not LocalPlayer():Alive()) then
+      hasSuit = true;
+      ended = true;
+    else
+      if (hasSuit ~= LocalPlayer():IsSuitEquipped()) then
+        HOLOHUD:ResetWelcomeAnimation();
+        hasSuit = LocalPlayer():IsSuitEquipped();
+      end
     end
 
     -- Draw

@@ -280,11 +280,13 @@ if CLIENT then
       local onActiveSlot = iSlot == slot;
       local v = 0; -- Vertical displacement
       local width = SLOT_WIDTH;
+      local height = nil;
 
       if (slotSize[slot] > 0) then
         -- Check greatest width of slot
         if (onActiveSlot) then
           for pos, weapon in pairs(weapons[slot]) do
+            if (not IsValid(weapon)) then continue; end
             surface.SetFont(NAME_FONT);
             local textSize = surface.GetTextSize(weapon:GetPrintName()) + 12;
             if (textSize > width) then width = textSize; end
@@ -293,15 +295,14 @@ if CLIENT then
 
         -- Display weapon
         for pos, weapon in pairs(weapons[slot]) do
-          local isActive = onActiveSlot and iPos == pos;
-          local height = nil;
-
-          -- Add header
-          local header = nil;
-          if (pos <= 1) then header = slot; end
-
-          -- Get height in case of multiline weapon names
           if (IsValid(weapon)) then
+            local isActive = onActiveSlot and iPos == pos;
+
+            -- Add header
+            local header = nil;
+            if (pos <= 1) then header = slot; end
+
+            -- Get height in case of multiline weapon names
             if (isActive) then
               local firstLine = string.sub(weapon:GetPrintName(), 1, string.find(weapon:GetPrintName(), "\n"));
               if (HOLOHUD:GetTextSize(firstLine, NAME_FONT) > (SLOT_WIDTH - ICON_WIDTH) * 1.5) then
@@ -313,10 +314,10 @@ if CLIENT then
               local nW, nH = HOLOHUD:GetTextSize(weapon:GetPrintName(), NAME_FONT);
               height = math.max(nH + SLOT_MARGIN_RETRACTED, SLOT_SIZE_RETRACTED);
             end
-          end
 
-          -- Draw weapon slot
-          DrawWeaponSlot(x + u, y + v, weapon, width, height, isActive, onActiveSlot, header, alpha, quality, config("animation"), config("colour"), config("crit_colour"));
+            -- Draw weapon slot
+            DrawWeaponSlot(x + u, y + v, weapon, width, height, isActive, onActiveSlot, header, alpha, quality, config("animation"), config("colour"), config("crit_colour"));
+          end
 
           -- Set next weapon placement
           if (isActive) then
