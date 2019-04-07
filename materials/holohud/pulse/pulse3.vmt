@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "holohud/pulse/pulse3"
+	"$additive" "1"
+	"$vertexalpha" "1"
+   	"$vertexcolor" "1"
+}
