@@ -31,7 +31,7 @@ Customizable holographic themed heads up display (HUD) for Garry's Mod.
 
 # Credits
 + *DyaMetR*
-   + Code
+   + Coding
 + *Matsilagi*
    + Testing
    + Occasional development support
