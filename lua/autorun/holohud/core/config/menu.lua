@@ -7,9 +7,16 @@ if CLIENT then
   -- Namespace
   HOLOHUD.MENU = {};
 
-  include("menu/fonts.lua");
-  include("menu/params.lua");
-  include("menu/presets.lua");
+  --[[include("menu/fonts.lua");
+    include("menu/params.lua");
+    include("menu/presets.lua");]]
+end
+
+HOLOHUD:IncludeFile("menu/fonts.lua");
+HOLOHUD:IncludeFile("menu/params.lua");
+HOLOHUD:IncludeFile("menu/presets.lua");
+
+if CLIENT then
 
   --[[
     Builds the Q menu portion
