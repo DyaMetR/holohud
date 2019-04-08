@@ -87,6 +87,7 @@ if CLIENT then
     @void
   ]]
   local function DrawPanel(config)
+    if (LocalPlayer().GetCount == nil) then return; end
     local props = LocalPlayer():GetCount("props");
     local maxProps = GetConVar("sbox_maxprops"):GetInt();
     Animate(props, maxProps);
