@@ -68,10 +68,11 @@ if CLIENT then
   local LocalPlayer = LocalPlayer
   local string_lower = string.lower
   local input_SelectWeapon = input.SelectWeapon
+  local hud_fastswitch = GetConVar("hud_fastswitch");
 
   -- Hide the default weapon selection
   hook_Add("HUDShouldDraw", "HOLOHUD_GS_WeaponSelector", function(sName)
-    if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector")) then return; end
+    if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
   	if (sName == "CHudWeaponSelection") then
   		return false
   	end
@@ -131,7 +132,7 @@ if CLIENT then
   -- Draw weapon selector
   hook_Add("HUDPaint", "HOLOHUD_GS_WeaponSelector", function()
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector")) then return; end
-  	if (iCurSlot == 0 or not cl_drawhud:GetBool()) then
+    if (iCurSlot == 0 or not cl_drawhud:GetBool() or hud_fastswitch:GetInt() > 0) then
   		return
   	end
 
@@ -152,7 +153,7 @@ if CLIENT then
   local lastInv = nil;
   local lSlot = 0;
   hook_Add("PlayerBindPress", "HOLOHUD_GS_WeaponSelector", function(pPlayer, sBind, bPressed)
-    if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector")) then return; end
+    if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
 
     -- Don't show if physgun is in use
     local physgun = IsValid(pPlayer:GetActiveWeapon()) and pPlayer:KeyDown(IN_ATTACK) and pPlayer:GetActiveWeapon():GetClass() == "weapon_physgun";
