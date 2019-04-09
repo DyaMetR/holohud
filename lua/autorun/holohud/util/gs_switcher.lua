@@ -332,8 +332,12 @@ if CLIENT then
   		return true
   	end
 
+    -- Support for the CW2.0 weapons customization menu
+    local pActiveWeapon = pPlayer:GetActiveWeapon();
+    local isCW20 = not IsValid(pActiveWeapon) or (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
+
   	-- Keys 1-6
-  	if (sBind:sub(1, 4) == "slot") then
+    if (sBind:sub(1, 4) == "slot" and not isCW20) then
   		local iSlot = tonumber(sBind:sub(5))
 
   		-- If the command is slot#, use it for the weapon HUD
