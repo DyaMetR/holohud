@@ -109,6 +109,12 @@ if CLIENT then
   		}
   	);
 
+    panel:AddControl( "Numpad", {
+      Label = "[Hold] Display all HUD elements",
+      Command = "holohud_contextmenu"
+      }
+    );
+
     -- Credits
     panel:AddControl( "Label" , { Text = ""} );
     panel:AddControl( "Label",  { Text = "H0L-D4: Holographic Heads Up Display"});

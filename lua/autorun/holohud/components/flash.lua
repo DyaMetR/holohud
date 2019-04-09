@@ -203,18 +203,15 @@ if CLIENT then
     end
   end
 
-  -- Animate
+  -- Animate and enable edit mode
+  local hasPressed = false;
   hook.Add("Think", "holohud_panel_animation", function()
     Animate();
-  end);
-
-  -- Display all panels upon pressing the context menu
-  hook.Add("OnContextMenuOpen", "holohud_panel_show", function()
-    HOLOHUD.EditMode = true;
-  end);
-
-  hook.Add("OnContextMenuClose", "holohud_panel_hide", function()
-    HOLOHUD.EditMode = false;
+    local pressed = input.IsKeyDown(HOLOHUD:GetContextMenuKey());
+    if (pressed ~= hasPressed) then
+      HOLOHUD.EditMode = pressed;
+      hasPressed = pressed;
+    end
   end);
 
 end

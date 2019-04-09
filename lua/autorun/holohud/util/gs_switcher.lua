@@ -126,8 +126,9 @@ if CLIENT then
   	end
   end
 
-  local cl_drawhud = GetConVar("cl_drawhud")
+  local cl_drawhud = GetConVar("cl_drawhud");
 
+  -- Draw weapon selector
   hook_Add("HUDPaint", "HOLOHUD_GS_WeaponSelector", function()
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector")) then return; end
   	if (iCurSlot == 0 or not cl_drawhud:GetBool()) then
@@ -147,15 +148,43 @@ if CLIENT then
   	end
   end)
 
+  -- Bind press
+  local lastInv = nil;
   local lSlot = 0;
   hook_Add("PlayerBindPress", "HOLOHUD_GS_WeaponSelector", function(pPlayer, sBind, bPressed)
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector")) then return; end
+
+    -- Don't show if physgun is in use
     local physgun = IsValid(pPlayer:GetActiveWeapon()) and pPlayer:KeyDown(IN_ATTACK) and pPlayer:GetActiveWeapon():GetClass() == "weapon_physgun";
   	if (not pPlayer:Alive() or pPlayer:InVehicle() and not pPlayer:GetAllowWeaponsInVehicle() or physgun) then
   		return
   	end
 
   	sBind = string_lower(sBind)
+
+    -- Restore last inv function
+    if (LocalPlayer():Alive() and sBind == "lastinv") then
+      if (lastInv ~= nil and pPlayer:HasWeapon(lastInv)) then
+        local cache = pPlayer:GetActiveWeapon();
+        input_SelectWeapon(pPlayer:GetWeapon(lastInv));
+        lastInv = cache:GetClass();
+      elseif (lastInv == nil and table.Count(pPlayer:GetWeapons()) > 0) then
+        -- Get current and first weapons
+        local cache = pPlayer:GetActiveWeapon();
+        local weapon = pPlayer:GetWeapons()[1];
+
+        -- In case the active weapon is the same as the first, set the last as lastinv
+        if (weapon == cache) then weapon = pPlayer:GetWeapons()[table.Count(pPlayer:GetWeapons())]; end
+
+        -- Select weapon
+        input_SelectWeapon(weapon);
+        if (IsValid(cache)) then
+          lastInv = cache:GetClass();
+        else
+          lastInv = weapon:GetClass();
+        end
+      end
+    end
 
     -- Get the sound volume
     local volume = HOLOHUD.ELEMENTS:ConfigValue("weapon_selector", "volume") or 1;
@@ -366,6 +395,7 @@ if CLIENT then
 
   			-- If the weapon still exists and isn't the player's active weapon
   			if (pWeapon:IsValid() and pWeapon ~= pPlayer:GetActiveWeapon()) then
+          lastInv = pPlayer:GetActiveWeapon():GetClass();
   				input_SelectWeapon(pWeapon)
   			end
 
