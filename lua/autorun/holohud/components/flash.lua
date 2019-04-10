@@ -207,7 +207,7 @@ if CLIENT then
   local hasPressed = false;
   hook.Add("Think", "holohud_panel_animation", function()
     Animate();
-    local pressed = input.IsKeyDown(HOLOHUD:GetContextMenuKey());
+    local pressed = input.IsKeyDown(HOLOHUD:GetContextMenuKey()) and HOLOHUD:IsContextMenuEnabled();
     if (pressed ~= hasPressed) then
       HOLOHUD.EditMode = pressed;
       hasPressed = pressed;

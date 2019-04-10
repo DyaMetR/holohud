@@ -25,7 +25,8 @@ if CLIENT then
     ["holohud_background_g"] = 0,
     ["holohud_background_b"] = 0,
     ["holohud_autosave_enabled"] = 1,
-    ["holohud_contextmenu"] = KEY_C
+    ["holohud_contextmenu"] = KEY_C,
+    ["holohud_contextmenu_enabled"] = 1
   }
 
   -- ConVars
@@ -112,6 +113,14 @@ if CLIENT then
   ]]
   function HOLOHUD:IsAutoSaveEnabled()
     return values.holohud_autosave_enabled:GetInt() > 0;
+  end
+
+  --[[
+    Returns whether the 'display all elements' feature is enabled
+    @return {boolean} is context menu feature enabled
+  ]]
+  function HOLOHUD:IsContextMenuEnabled()
+    return values.holohud_contextmenu_enabled:GetInt() > 0;
   end
 
   --[[

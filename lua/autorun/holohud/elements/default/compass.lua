@@ -144,7 +144,7 @@ if CLIENT then
     local w = config("width") or W;
 
     -- Draw the compass
-    HOLOHUD:SetPanelActive(PANEL_NAME_MAIN, true);
+    HOLOHUD:SetPanelActive(PANEL_NAME_MAIN, config("always"));
     HOLOHUD:DrawFragmentAlignSimple((ScrW() * 0.5) - (w * 0.5), ScrH() * config("offset"), w, H, DrawCompass, PANEL_NAME_MAIN, TEXT_ALIGN_TOP, config("degrees"), config("scale"), config("numbers"), config("colour"));
 
     -- Get degrees panel size
@@ -169,6 +169,7 @@ if CLIENT then
 		"Utility tool to keep track of your bearings",
 		nil,
 		{
+      always = { name = "Always displayed", desc = "Display on the HUD at all times", value = true },
       numbers = { name = "Numeric in-between angles", desc = "Display a number between every 10 degrees", value = false },
       rotation = { name = "Show the current angle", value = false },
       degrees = { name = "0 to 360 degrees", desc = "Switch either -180 to 180 or 0 to 360 degrees scale", value = false },

@@ -109,6 +109,12 @@ if CLIENT then
   		}
   	);
 
+    panel:AddControl( "CheckBox", {
+  		Label = "'Show all elements' shortcut enabled",
+      Command = "holohud_contextmenu_enabled"
+  		}
+  	);
+
     panel:AddControl( "Numpad", {
       Label = "[Hold] Display all HUD elements",
       Command = "holohud_contextmenu"
