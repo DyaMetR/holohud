@@ -77,7 +77,7 @@ if CLIENT then
         weapon.DrawWeaponInfoBox = false;
 
         -- If icon is a png, give it the original size
-        if (type(weapon.WepSelectIcon) ~= "number") then
+        if (type(weapon.WepSelectIcon) == "IMaterial") then
           w = weapon.WepSelectIcon:GetInt("$realwidth");
           h = weapon.WepSelectIcon:GetInt("$realheight");
         end

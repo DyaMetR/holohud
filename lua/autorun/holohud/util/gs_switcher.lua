@@ -129,14 +129,27 @@ if CLIENT then
 
   local cl_drawhud = GetConVar("cl_drawhud");
 
+  -- Last inventory
+  local lastWeapon = nil;
+  local lastInv = nil;
+
   -- Draw weapon selector
   hook_Add("HUDPaint", "HOLOHUD_GS_WeaponSelector", function()
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector")) then return; end
+
+    -- Last inventory
+    local pActiveWeapon = LocalPlayer():GetActiveWeapon();
+    if (IsValid(pActiveWeapon) and pActiveWeapon ~= nil and pActiveWeapon:GetClass() ~= lastWeapon) then
+      if (lastWeapon ~= nil) then lastInv = lastWeapon; end
+      lastWeapon = pActiveWeapon:GetClass();
+    end
+
+    -- Should HUD draw?
     if (iCurSlot == 0 or not cl_drawhud:GetBool() or hud_fastswitch:GetInt() > 0) then
   		return
   	end
 
-  	local pPlayer = LocalPlayer()
+  	local pPlayer = LocalPlayer();
 
   	-- Don't draw in vehicles unless weapons are allowed to be used
   	-- Or while dead!
@@ -150,7 +163,6 @@ if CLIENT then
   end)
 
   -- Bind press
-  local lastInv = nil;
   local lSlot = 0;
   hook_Add("PlayerBindPress", "HOLOHUD_GS_WeaponSelector", function(pPlayer, sBind, bPressed)
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
@@ -400,7 +412,6 @@ if CLIENT then
 
   			-- If the weapon still exists and isn't the player's active weapon
   			if (pWeapon:IsValid() and pWeapon ~= pPlayer:GetActiveWeapon()) then
-          lastInv = pPlayer:GetActiveWeapon():GetClass();
   				input_SelectWeapon(pWeapon)
   			end
 

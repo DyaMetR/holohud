@@ -224,9 +224,17 @@ if CLIENT then
     local attacker = net.ReadString();
     local attTeam = net.ReadFloat();
     local suicide = net.ReadBool();
-    local weapon = net.ReadString();
-    local same = net.ReadBool();
     local isWeapon = net.ReadBool();
+    local weapon = "player";
+    if (isWeapon) then
+      local ent = net.ReadEntity();
+      if (IsValid(ent) and ent ~= nil) then
+        weapon = ent:GetPrintName();
+      end
+    else
+      weapon = net.ReadString();
+    end
+    local same = net.ReadBool();
     local victim = net.ReadString();
     local vicTeam = net.ReadFloat();
 
@@ -290,13 +298,13 @@ if SERVER then
     -- Weapon used
 
     if (inflictor:IsPlayer() and IsValid(inflictor:GetActiveWeapon())) then
-      net.WriteString(inflictor:GetActiveWeapon():GetPrintName());
-      net.WriteBool(false);
-      net.WriteBool(true);
+      net.WriteBool(true); -- Is it a weapon?
+      net.WriteEntity(inflictor:GetActiveWeapon()); -- Send the entity
+      net.WriteBool(false); -- Was it a suicide?
     else
-      net.WriteString(inflictor:GetClass());
-      net.WriteBool(inflictor == attacker);
-      net.WriteBool(false);
+      net.WriteBool(false); -- Is it a weapon?
+      net.WriteString(inflictor:GetClass()); -- Send the class name
+      net.WriteBool(inflictor == attacker); -- Was it a suicide?
     end
 
     -- Victim's name and team
