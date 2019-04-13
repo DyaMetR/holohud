@@ -152,7 +152,9 @@ if CLIENT then
 
     -- Draw the panel
     if (HOLOHUD:CanDisplayPanel(PANEL_NAME) or not animation) then
+      if (animation and HOLOHUD:GetFlashOpacity() < 1) then surface.SetAlphaMultiplier(1 - HOLOHUD:GetFlashPanel(PANEL_NAME).flash); end
       HOLOHUD:DrawFragmentPanel(x, y, width, height, DrawWeaponPanel, colour, alpha, nil, width, animation, header, weapon, wepCol, ammoType, ammoType2, clip, reserve, alt, maxAmmo, maxAlt);
+      surface.SetAlphaMultiplier(1);
     else
       HOLOHUD:TriggerHighlight(WEAPON);
       name = 0;
