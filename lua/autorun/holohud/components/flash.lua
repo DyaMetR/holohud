@@ -34,8 +34,9 @@ if CLIENT then
   function HOLOHUD:DrawFlashRect(x, y, w, h, amount)
     local u, v = self:GetSway();
     local x, y = x + u * BACKGROUND_DIST, y + v * BACKGROUND_DIST;
-    draw.RoundedBox(0, x, y, w, h, Color(255, 255, 255, 255 * amount));
-    surface.SetDrawColor(Color(0, 0, 0, 43 * amount));
+    local b = HOLOHUD:GetFlashBrightness();
+    draw.RoundedBox(0, x, y, w, h, Color(255 * b, 255 * b, 255 * b, 255 * amount * HOLOHUD:GetFlashOpacity()));
+    surface.SetDrawColor(Color(0, 0, 0, 43 * amount * HOLOHUD:GetFlashOpacity()));
     surface.SetTexture(center);
     surface.DrawTexturedRect(x, y - 1, w, h + 2);
   end
@@ -178,12 +179,13 @@ if CLIENT then
     @void
   ]]
   local function Animate()
+    local anim_on, anim_off = HOLOHUD:GetFlashDeploySpeed(), HOLOHUD:GetFlashRetractSpeed();
     if (tick < CurTime()) then
       for k, panel in pairs(HOLOHUD.FlashPanels) do
         if (panel.active or HOLOHUD.EditMode and not panel.force) then
           if (panel.anim < 1) then
             panel.flash = 1;
-            HOLOHUD.FlashPanels[k].anim = math.Clamp(panel.anim + ANIM_ON_SPEED, 0, 1);
+            HOLOHUD.FlashPanels[k].anim = math.Clamp(panel.anim + anim_on, 0, 1);
           else
             if (panel.flash > 0) then
               HOLOHUD.FlashPanels[k].flash = math.Clamp(panel.flash - ANIM_FLASH_SPEED, 0, 1);
@@ -192,7 +194,7 @@ if CLIENT then
         else
           if (panel.anim > 0) then
             if (panel.flash < 1) then
-              HOLOHUD.FlashPanels[k].flash = math.Clamp(panel.flash + ANIM_OFF_SPEED, 0, 1);
+              HOLOHUD.FlashPanels[k].flash = math.Clamp(panel.flash + anim_off, 0, 1);
             else
               HOLOHUD.FlashPanels[k].anim = math.Clamp(panel.anim - ANIM_FLASH_SPEED, 0, 1);
             end

@@ -53,6 +53,12 @@ if CLIENT then
     }, DrawWeaponHUD
   );
 
+  -- Make sure it draws when the camera is equipped
+  hook.Add("DrawOverlay", "holohud_camera_weapon_selector", function()
+    if (not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() ~= "gmod_camera") then return; end
+    DrawWeaponHUD(function(param) return HOLOHUD.ELEMENTS:ConfigValue("weapon_selector", param); end);
+  end);
+
   --[[ Implementation ]]--
 
   -- Initialize tables with slot number

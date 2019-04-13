@@ -49,6 +49,12 @@ if CLIENT then
   		}
   	);
 
+    panel:AddControl( "CheckBox", {
+  		Label = "Hide HUD upon dying",
+      Command = "holohud_death"
+  		}
+  	);
+
     panel:AddControl( "Slider", {
       Label = "Swaying",
       Type = "Float",
@@ -71,6 +77,38 @@ if CLIENT then
       Min = "0",
       Max = "2",
       Command = "holohud_blur_quality"}
+    );
+
+    panel:AddControl( "Slider", {
+      Label = "Flash brightness",
+      Type = "Float",
+      Min = "0",
+      Max = "1",
+      Command = "holohud_flash_bright"}
+    );
+
+    panel:AddControl( "Slider", {
+      Label = "Flash opacity",
+      Type = "Float",
+      Min = "0",
+      Max = "1",
+      Command = "holohud_flash_alpha"}
+    );
+
+    panel:AddControl( "Slider", {
+      Label = "Panel deploy speed",
+      Type = "Float",
+      Min = "0",
+      Max = "1",
+      Command = "holohud_flash_speed_on"}
+    );
+
+    panel:AddControl( "Slider", {
+      Label = "Panel retract speed",
+      Type = "Float",
+      Min = "0",
+      Max = "1",
+      Command = "holohud_flash_speed_off"}
     );
 
     panel:AddControl( "Slider", {

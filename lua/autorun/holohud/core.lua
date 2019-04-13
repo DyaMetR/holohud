@@ -113,14 +113,17 @@ if CLIENT then
     HOLOHUD:ResetWelcomeAnimation();
   end);
 
+  -- Draw HUD ConVar
+  local cl_drawhud = GetConVar("cl_drawhud");
+
   -- Draw HUD
   hook.Add("HUDPaint", "holohud_draw", function()
-    if (HOLOHUD:IsHUDEnabled()) then HOLOHUD.ELEMENTS:DrawElements(); end
+    if (HOLOHUD:IsHUDEnabled() and cl_drawhud:GetInt() > 0) then HOLOHUD.ELEMENTS:DrawElements(); end
   end);
 
   -- Hide default HUD
   hook.Add( "HUDShouldDraw", "holohud_hide_default_hud", function( name )
-    if ( HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS:DefaultHUDHideElements()[ name ] ) then return false end;
+    if ( HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS:DefaultHUDHideElements()[ name ] and cl_drawhud:GetInt() > 0 ) then return false end;
   end );
 
 end

@@ -88,7 +88,7 @@ if CLIENT then
     apLerp = Lerp(FrameTime() * 4, apLerp, armour);
 
     -- Get health panel size
-    local width = HOLOHUD:GetNumberSize(3);
+    local width = HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(health) + 1), 3));
 
     -- Decide whether to display kevlar icon
     local offset = 0; -- Armour offset

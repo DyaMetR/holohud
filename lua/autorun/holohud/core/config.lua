@@ -18,6 +18,10 @@ if CLIENT then
     ["holohud_blur"] = 1,
     ["holohud_background_opacity"] = 1,
     ["holohud_blur_quality"] = 1,
+    ["holohud_flash_bright"] = 1,
+    ["holohud_flash_speed_on"] = 0.13,
+    ["holohud_flash_speed_off"] = 0.076,
+    ["holohud_flash_alpha"] = 1,
     ["holohud_ca_enabled"] = 0,
     ["holohud_ca_distance"] = 1,
     ["holohud_death"] = 1,
@@ -129,6 +133,38 @@ if CLIENT then
   ]]
   function HOLOHUD:GetContextMenuKey()
     return values.holohud_contextmenu:GetInt();
+  end
+
+  --[[
+    Returns the flashing panel brightness
+    @return {number} brightness
+  ]]
+  function HOLOHUD:GetFlashBrightness()
+    return values.holohud_flash_bright:GetFloat();
+  end
+
+  --[[
+    Returns the flashing panel opacity
+    @return {number} opacity
+  ]]
+  function HOLOHUD:GetFlashOpacity()
+    return values.holohud_flash_alpha:GetFloat();
+  end
+
+  --[[
+    Returns the panel's deploy speed
+    @return {number} speed
+  ]]
+  function HOLOHUD:GetFlashDeploySpeed()
+    return values.holohud_flash_speed_on:GetFloat();
+  end
+
+  --[[
+    Returns the panel's retract speed
+    @return {number} speed
+  ]]
+  function HOLOHUD:GetFlashRetractSpeed()
+    return values.holohud_flash_speed_off:GetFloat();
   end
 
   --[[

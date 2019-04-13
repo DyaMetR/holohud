@@ -30,7 +30,7 @@ if CLIENT then
   ]]
   local apLerp = 0;
   local function DrawIndicators(x, y, w, h, health, armour, hideArmour)
-    local healthWidth = HOLOHUD:GetNumberSize(3, FONT) + CROSS_W - 5;
+    local healthWidth = HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(health) + 1), 3), FONT) + CROSS_W - 5;
 
     local hColour, hBright = HEALTH:GetHealthColour(), HOLOHUD:GetHighlight(DEFAULT);
     local aColour, aBright = HEALTH:GetArmourColour(), HOLOHUD:GetHighlight(ARMOUR);
@@ -61,8 +61,8 @@ if CLIENT then
     if (hideArmour and armour <= 0) then displayArmour = 0; end
 
     -- Calculate panel size
-    local armourWidth = SUIT_W + HOLOHUD:GetNumberSize(3, FONT) - 4;
-    local width = HOLOHUD:GetNumberSize(3, FONT) + CROSS_W + 16 + (armourWidth * displayArmour);
+    local armourWidth = SUIT_W + HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(armour) + 1), 3), FONT) - 4;
+    local width = HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(health) + 1), 3), FONT) + CROSS_W + 16 + (armourWidth * displayArmour);
 
     -- Draw
     HOLOHUD:DrawFragment(HEALTH_PANEL_OFFSET, ScrH() - (HEALTH_PANEL_OFFSET + HEALTH_PANEL_H), width, HEALTH_PANEL_H, DrawIndicators, PANEL_NAME, health, armour, hideArmour);

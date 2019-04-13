@@ -46,7 +46,11 @@ if CLIENT then
   ]]
   function HOLOHUD.ELEMENTS:AddElement(id, title, subtitle, hideElements, defaultConfig, drawFunction, enabled)
     if (enabled == nil) then enabled = true; end
-    HOLOHUD.ELEMENTS.Elements[id] = { title = title, subtitle = subtitle, hide = hideElements, enabled = enabled, config = defaultConfig, drawFunction = drawFunction };
+    HOLOHUD.ELEMENTS.Elements[id] = {
+      title = title, subtitle = subtitle, hide = hideElements, enabled = enabled,
+      config = defaultConfig, drawFunction = drawFunction,
+      configProxy = function(param) return HOLOHUD.ELEMENTS:ConfigValue(id, param); end 
+    };
   end
 
   --[[
@@ -205,7 +209,7 @@ if CLIENT then
   function HOLOHUD.ELEMENTS:DrawElements()
     for id, element in pairs(HOLOHUD.ELEMENTS.Elements) do
       if (HOLOHUD.ELEMENTS:IsElementEnabled(id) and HOLOHUD.ELEMENTS:CanDrawElement(id)) then
-        local w, h = HOLOHUD.ELEMENTS:GetElement(id).drawFunction(function(param) return HOLOHUD.ELEMENTS:ConfigValue(id, param); end);
+        local w, h = HOLOHUD.ELEMENTS:GetElement(id).drawFunction(element.configProxy);
         HOLOHUD.ELEMENTS:GetElement(id).w = w or 0;
         HOLOHUD.ELEMENTS:GetElement(id).h = h or 0;
       end

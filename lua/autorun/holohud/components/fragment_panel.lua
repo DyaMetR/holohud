@@ -25,7 +25,9 @@ if CLIENT then
       if (data == nil) then return; end
 
       if (data.anim >= 1) then
+        if (HOLOHUD:GetFlashOpacity() < 1) then surface.SetAlphaMultiplier(1 - data.flash); end
         HOLOHUD:DrawFragmentPanel(x, y, w, h, func, colour, alpha, blurQuality, ...);
+        surface.SetAlphaMultiplier(1);
       end
 
       if (data.flash > 0) then

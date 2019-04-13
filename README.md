@@ -22,7 +22,7 @@ Customizable holographic themed heads up display (HUD) for Garry's Mod.
 + Target ID
 + Welcome screen
 
-# Customization inclues
+# Customization includes
 + Each elements has their own array of options
 + Font family and offsets customization
 + Blur intensity and opacity

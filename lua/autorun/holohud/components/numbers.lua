@@ -29,10 +29,22 @@ if CLIENT then
   function HOLOHUD:DrawNumber(x, y, number, colour, zeros, bright, font, off, align, vertical_align)
       font = font or DEFAULT_FONT;
       bright = bright or 0;
-      zeros = zeros or "000";
       colour = colour or Color(255, 255, 255);
       align = align or TEXT_ALIGN_LEFT;
       vertical_align = vertical_align or TEXT_ALIGN_CENTER;
+
+      -- More digits than zeros
+      if (not zeros) then
+        if (math.floor(math.log10(number)) + 1 > 3 and type(number) == "number") then
+          zeros = "";
+          local digits = math.max(math.floor(math.log10(number)) + 1, 3);
+          for i=1, digits do
+            zeros = zeros .. "0";
+          end
+        else
+          zeros = "000";
+        end
+      end
 
       -- Font offset
       local u, v = HOLOHUD.CONFIG.FONTS:GetFontOffset(font);

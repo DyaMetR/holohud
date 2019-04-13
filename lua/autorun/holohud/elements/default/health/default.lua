@@ -35,7 +35,7 @@ if CLIENT then
 
     -- Draw
     HOLOHUD:DrawSilhouette(x, y, HEALTH:GetArmourColour(), apLerp * 0.01, HOLOHUD:GetHighlight(ARMOUR));
-    HOLOHUD:DrawNumber(x + 28 - offset, y + 20, armour, HEALTH:GetArmourColour(), nil, HOLOHUD:GetHighlight(ARMOUR), "holohud_small", armour <= 0);
+    HOLOHUD:DrawNumber(x + 28 - offset, y + 20, armour, HEALTH:GetArmourColour(), nil, HOLOHUD:GetHighlight(ARMOUR), "holohud_small", armour <= 0, TEXT_ALIGN_LEFT);
   end
 
   --[[
@@ -56,7 +56,7 @@ if CLIENT then
 
     --  Draw
     DrawArmour(x + 4, y + 3, armour);
-    HOLOHUD:DrawNumber(x + 37 + armourMargin, y + 23, math.Clamp(health, 0, health), HEALTH:GetHealthColour(), nil, HOLOHUD:GetHighlight(DEFAULT));
+    HOLOHUD:DrawNumber(x + w - 7, y + 23, math.Clamp(health, 0, health), HEALTH:GetHealthColour(), nil, HOLOHUD:GetHighlight(DEFAULT), nil, nil, TEXT_ALIGN_RIGHT);
     HOLOHUD:DrawBar(x + 7, y + 49, w + 1, 23, HEALTH:GetHealthColour(), hpLerp * 0.01, HOLOHUD:GetHighlight(DEFAULT));
   end
 
@@ -69,7 +69,7 @@ if CLIENT then
     @void
   ]]
   function HOLOHUD.ELEMENTS.HEALTH:DefaultPanel(health, armour)
-    local hpW, apW = HOLOHUD:GetNumberSize(3), HOLOHUD:GetNumberSize(3, "holohud_small");
+    local hpW, apW = HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(health) + 1), 3)), HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(armour) + 1), 3), "holohud_small");
     local width = 44 + hpW + apW;
     HOLOHUD:DrawFragment(HEALTH_PANEL_OFFSET, ScrH() - (HEALTH_PANEL_H + HEALTH_PANEL_OFFSET), width, HEALTH_PANEL_H, DrawHealth, PANEL_NAME, health, armour, apW);
 
