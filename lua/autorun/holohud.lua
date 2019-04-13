@@ -1,6 +1,6 @@
 --[[------------
      H0L-D4
- Version 1.2.0
+ Version 1.2.1
     13/04/19
 By DyaMetR
 ]]--------------
@@ -10,7 +10,7 @@ HOLOHUD = {};
 
 -- Version and patch notes
 HOLOHUD.Version = {
-  Major = 1, Minor = 2, Patch = 0
+  Major = 1, Minor = 2, Patch = 1
 };
 
 --[[
