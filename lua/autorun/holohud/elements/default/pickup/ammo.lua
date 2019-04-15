@@ -42,7 +42,7 @@ if CLIENT then
 
     -- Add new pickup
     local pickup = PICKUP.ammoPickups[ammoType];
-    if (pickup == nil || PICKUP.pickups[pickup] == nil) then
+    if (pickup == nil or PICKUP.pickups[pickup] == nil) then
       PICKUP:AddPickup(PICKUP.PickupType.AMMO, {ammoType = ammoType, amount = amount, tick = 0, anim1 = 0, anim2 = 0, lerp = 0, displayAmmo = displayName, displayTitle = displayTitle}, w, h);
       PICKUP.ammoPickups[ammoType] = table.Count(PICKUP.pickups);
       HOLOHUD:AddHighlight(PICKUP.PANEL_SUBFIX .. ammoType);
