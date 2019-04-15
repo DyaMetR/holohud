@@ -20,7 +20,7 @@ if CLIENT then
 
   -- Parameters
   local HIGHLIGHT = "damage_generic";
-  local MAX_COUNT = 3; -- Maximum amount of arrows at the same time
+  local MAX_COUNT = 6; -- Maximum amount of arrows at the same time
   local MAX_TIME = 7; -- Maximum amount of time an arrow will be present on screen
   local MIN_TIME = 2.66; -- Minimum amount of time an arrow will be present on screen
 
@@ -70,12 +70,14 @@ if CLIENT then
 		"CHudDamageIndicator",
 		{
       distance = { name = "Distance from center", value = 1, minValue = 0, maxValue = 10 },
-      colour = { name = "Colour", value = Color(255, 0, 0) }
+      colour = { name = "Colour", value = Color(255, 0, 0) },
+      maxCount = { name = "Damage indicators at once", desc = "How many damage indicators can be at once before forcefully flushing the old ones", value = MAX_COUNT }
     },
 		DrawPanel
 	);
 
   net.Receive(NET, function(len)
+    local maxCount = HOLOHUD.ELEMENTS:ConfigValue("damage", "maxCount");
     local relative = Vector(LocalPlayer():GetPos().x, LocalPlayer():GetPos().y, 0);
     local yaw = Angle(0, LocalPlayer():EyeAngles().y, 0);
 
@@ -83,8 +85,10 @@ if CLIENT then
       local pos = WorldToLocal(net.ReadVector(), Angle(0, 0, 0), relative, yaw);
       local amount = net.ReadFloat();
       table.insert(damage, {damage = amount, angle = pos:Angle().y, anim = 0, bright = 0, faded = false, fade = 0, brighted = false, time = CurTime() + math.Clamp(MIN_TIME + MAX_TIME * (amount * 0.01), MIN_TIME, MAX_TIME)});
-      if (table.Count(damage) >= MAX_COUNT) then
-        damage[1].time = CurTime();
+      if (table.Count(damage) >= maxCount) then
+        for i=1, table.Count(damage) - maxCount do
+          damage[i].time = -1;
+        end
       end
     else
       HOLOHUD:TriggerHighlight(HIGHLIGHT);

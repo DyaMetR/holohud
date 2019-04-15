@@ -53,7 +53,9 @@ if CLIENT then
           end
         else
           if (info.fade > 0) then
-            damage[i].fade = math.Clamp(info.fade - 0.01, 0, 1);
+            local fade = 0.01;
+            if (damage[i].time <= -1) then fade = 0.04; end
+            damage[i].fade = math.Clamp(info.fade - fade, 0, 1);
           else
             table.remove(damage, i);
           end

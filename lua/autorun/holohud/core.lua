@@ -7,6 +7,7 @@
 -- Inner systems
 HOLOHUD:IncludeFile("core/gamemode.lua");
 HOLOHUD:IncludeFile("core/config.lua");
+HOLOHUD:IncludeFile("core/fontlist.lua");
 
 -- Util
 HOLOHUD:IncludeFile("util/death.lua");
