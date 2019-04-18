@@ -61,7 +61,7 @@ if CLIENT then
       align = TEXT_ALIGN_RIGHT;
 
       -- Draw the number
-      draw.SimpleText(zeros, font, x + offset, y, Color(255, 255, 255, 12), align, vertical_align);
+      draw.SimpleText(zeros, font, x + offset, y, Color(255, 255, 255, 12 * HOLOHUD:GetOffOpacity()), align, vertical_align);
       if (not off) then
           draw.SimpleText(number, font.."_bright", x + offset, y, Color(colour.r, colour.g, colour.b, ALPHA * MIN_BRIGHT), align, vertical_align);
 

@@ -131,7 +131,7 @@ if CLIENT then
   ]]
   function HOLOHUD:DrawBrightTexture(texture, brightTexture, x, y, w, h, colour, bright, off, draw_ca, force_on)
     if (off and not force_on) then
-      HOLOHUD:DrawTexture(texture, x, y, w, h, OFF_COLOUR, false, true);
+      HOLOHUD:DrawTexture(texture, x, y, w, h, Color(OFF_COLOUR.r, OFF_COLOUR.g, OFF_COLOUR.b, OFF_COLOUR.a * HOLOHUD:GetOffOpacity()), false, true);
     else
       HOLOHUD:DrawTexture(brightTexture, x, y, w, h, Color(colour.r, colour.g, colour.b, colour.a * MIN_BRIGHT), false);
       HOLOHUD:DrawTexture(texture, x, y, w, h, colour, draw_ca);
@@ -161,7 +161,7 @@ if CLIENT then
   function HOLOHUD:DrawBrightTextureUV(texture, brightTexture, x, y, w, h, u1, v1, u2, v2, colour, bright, off, draw_ca, force_on)
     bright = bright or 0;
     if (off and not force_on) then
-      HOLOHUD:DrawTexture(texture, x, y, w, h, OFF_COLOUR, false, true);
+      HOLOHUD:DrawTexture(texture, x, y, w, h, Color(OFF_COLOUR.r, OFF_COLOUR.g, OFF_COLOUR.b, OFF_COLOUR.a * HOLOHUD:GetOffOpacity()), false, true);
     else
       HOLOHUD:DrawTextureUV(brightTexture, x, y, w, h, u1, v1, u2, v2, Color(colour.r, colour.g, colour.b, colour.a * MIN_BRIGHT), false);
       HOLOHUD:DrawTextureUV(texture, x, y, w, h, u1, v1, u2, v2, colour, draw_ca);
@@ -187,7 +187,7 @@ if CLIENT then
   ]]
   function HOLOHUD:DrawBrightTextureRotated(texture, brightTexture, x, y, w, h, rot, colour, bright, off, draw_ca, force_on)
     if (off and not force_on) then
-      HOLOHUD:DrawTextureRotated(texture, x, y, w, h, rot, OFF_COLOUR, false, true);
+      HOLOHUD:DrawTextureRotated(texture, x, y, w, h, rot, Color(OFF_COLOUR.r, OFF_COLOUR.g, OFF_COLOUR.b, OFF_COLOUR.a * HOLOHUD:GetOffOpacity()), false, true);
     else
       HOLOHUD:DrawTextureRotated(brightTexture, x, y, w, h, rot, Color(colour.r, colour.g, colour.b, colour.a * MIN_BRIGHT), false);
       HOLOHUD:DrawTextureRotated(texture, x, y, w, h, rot, colour, draw_ca);
@@ -238,7 +238,7 @@ if CLIENT then
     end
 
     -- Draw
-    HOLOHUD:DrawTexture(texture, x, y, w, h, OFF_COLOUR, false);
+    HOLOHUD:DrawTexture(texture, x, y, w, h, Color(OFF_COLOUR.r, OFF_COLOUR.g, OFF_COLOUR.b, OFF_COLOUR.a * HOLOHUD:GetOffOpacity()), false);
 
     if (not off) then
       HOLOHUD:DrawBrightTextureUV(texture, brightTexture, x + u, y + r, width, height, u1, v1, u2, v2, colour, bright, nil, draw_ca);

@@ -17,6 +17,7 @@ if CLIENT then
     ["holohud_sway"] = 1,
     ["holohud_blur"] = 1,
     ["holohud_background_opacity"] = 1,
+    ["holohud_off_opacity"] = 1,
     ["holohud_blur_quality"] = 1,
     ["holohud_flash_bright"] = 1,
     ["holohud_flash_speed_on"] = 0.13,
@@ -165,6 +166,14 @@ if CLIENT then
   ]]
   function HOLOHUD:GetFlashRetractSpeed()
     return values.holohud_flash_speed_off:GetFloat();
+  end
+
+  --[[
+    Returns the opacity for elements that are turned off
+    @return {number} off opacity
+  ]]
+  function HOLOHUD:GetOffOpacity()
+    return values.holohud_off_opacity:GetFloat();
   end
 
   --[[

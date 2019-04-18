@@ -154,7 +154,7 @@ if CLIENT then
     end
 
     HOLOHUD:SetPanelActive(PANEL_NAME, LocalPlayer():InVehicle());
-    HOLOHUD:DrawFragment(x, y, w, H, DrawForeground, PANEL_NAME, config("mph"), unit, config("damage"), config("hide_bar"), config("colour"), config("bg_col"));
+    HOLOHUD:DrawFragment(x - config("x_offset"), y - config("y_offset"), w, H, DrawForeground, PANEL_NAME, config("mph"), unit, config("damage"), config("hide_bar"), config("colour"), config("bg_col"));
 
     return w, h;
   end
@@ -173,7 +173,9 @@ if CLIENT then
       bg_col = { name = "Brackets colour", value = Color(255, 112, 66) },
       good_colour = { name = "Good state colour", value = GOOD_COLOUR },
       warn_colour = { name = "Warning colour", value = WARN_COLOUR },
-      crit_colour = { name = "Critical colour", value = CRIT_COLOUR }
+      crit_colour = { name = "Critical colour", value = CRIT_COLOUR },
+      x_offset = { name = "Horizontal offset", value = 0, minValue = 0, maxValue = ScrW() },
+      y_offset = { name = "Vertical offset", value = 0, minValue = 0, maxValue = ScrH() }
     },
     DrawPanel
   );

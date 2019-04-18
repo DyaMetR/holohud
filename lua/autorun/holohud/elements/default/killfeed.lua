@@ -234,7 +234,6 @@ if CLIENT then
     else
       weapon = net.ReadString();
     end
-    print(isWeapon)
     local same = net.ReadBool();
     local victim = net.ReadString();
     local vicTeam = net.ReadFloat();

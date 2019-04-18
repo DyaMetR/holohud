@@ -80,6 +80,14 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
+      Label = "Turned off elements opacity",
+      Type = "Float",
+      Min = "0",
+      Max = "1",
+      Command = "holohud_off_opacity"}
+    );
+
+    panel:AddControl( "Slider", {
       Label = "Flash brightness",
       Type = "Float",
       Min = "0",

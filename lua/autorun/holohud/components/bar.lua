@@ -111,7 +111,7 @@ if CLIENT then
     y = y - 10;
 
     -- Background
-    ComposeBar(x, y, w, h, Color(255, 255, 255, 12), BACKGROUND_START, BACKGROUND_BODY, BACKGROUND_END, nil, true);
+    ComposeBar(x, y, w, h, Color(255, 255, 255, 12 * HOLOHUD:GetOffOpacity()), BACKGROUND_START, BACKGROUND_BODY, BACKGROUND_END, nil, true);
 
     -- Outline
     if (outline) then

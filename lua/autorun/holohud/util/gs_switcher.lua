@@ -55,7 +55,8 @@ if CLIENT then
 
   -- Make sure it draws when the camera is equipped
   hook.Add("DrawOverlay", "holohud_camera_weapon_selector", function()
-    if (LocalPlayer().GetActiveWeapon ~= nil and not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() ~= "gmod_camera") then return; end
+    if (LocalPlayer().GetActiveWeapon == nil) then return; end
+    if (not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() ~= "gmod_camera") then return; end
     DrawWeaponHUD(function(param) return HOLOHUD.ELEMENTS:ConfigValue("weapon_selector", param); end);
   end);
 
