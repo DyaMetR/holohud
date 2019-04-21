@@ -215,7 +215,7 @@ if CLIENT then
 
   -- Animate and enable edit mode
   local hasPressed = false;
-  hook.Add("HUDPaint", "holohud_panel_animation", function()
+  hook.Add("Think", "holohud_panel_animation", function()
     Animate();
     local pressed = input.IsKeyDown(HOLOHUD:GetContextMenuKey()) and HOLOHUD:IsContextMenuEnabled();
     if (pressed ~= hasPressed) then
