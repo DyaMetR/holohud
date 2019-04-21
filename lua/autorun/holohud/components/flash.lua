@@ -16,6 +16,7 @@ if CLIENT then
 
   -- Variables
   local tick = 0;
+  local hadSuit = true;
 
   -- Edit mode (display all panels)
   HOLOHUD.EditMode = false;
@@ -89,7 +90,7 @@ if CLIENT then
   ]]
   function HOLOHUD:SetPanelActive(panel, active, force)
     if (self.FlashPanels[panel] == nil) then return end;
-    if ((HOLOHUD.DEATH:ShouldHUDHide() or not LocalPlayer():IsSuitEquipped()) and not force) then active = false; end
+    if ((HOLOHUD.DEATH:ShouldHUDHide() or not hadSuit) and not force) then active = false; end
     force = force or false;
     self.FlashPanels[panel].active = active;
     self.FlashPanels[panel].force = force;
@@ -180,6 +181,13 @@ if CLIENT then
   ]]
   local function Animate()
     local anim_on, anim_off = HOLOHUD:GetFlashDeploySpeed(), HOLOHUD:GetFlashRetractSpeed();
+
+    -- Had suit?
+    if (LocalPlayer():Health() > 0) then
+      hadSuit = LocalPlayer():IsSuitEquipped();
+    end
+
+    -- Animate
     if (tick < CurTime()) then
       for k, panel in pairs(HOLOHUD.FlashPanels) do
         if (panel.active or HOLOHUD.EditMode and not panel.force) then
@@ -207,7 +215,7 @@ if CLIENT then
 
   -- Animate and enable edit mode
   local hasPressed = false;
-  hook.Add("Think", "holohud_panel_animation", function()
+  hook.Add("HUDPaint", "holohud_panel_animation", function()
     Animate();
     local pressed = input.IsKeyDown(HOLOHUD:GetContextMenuKey()) and HOLOHUD:IsContextMenuEnabled();
     if (pressed ~= hasPressed) then

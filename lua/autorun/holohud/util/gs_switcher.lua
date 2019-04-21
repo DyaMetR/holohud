@@ -158,6 +158,35 @@ if CLIENT then
   	end
   end)
 
+  --[[
+    Returns whether the current weapon is ACT3 based and whether the inventory is open
+    @return {boolean} is ACT3
+  ]]
+  local function isACT3()
+    local pActiveWeapon = LocalPlayer():GetActiveWeapon();
+    return not IsValid(pActiveWeapon) and (pActiveWeapon.ACT3Weapon ~= nil and pActiveWeapon.ACT3Weapon and pActiveWeapon.State == 4);
+  end
+
+  --[[
+    Returns whether the mouse wheel can be used
+    @return {boolean} can be used
+  ]]
+  local function canUseWheel()
+    local drone = LocalPlayer():GetNWEntity("DronesRewriteDrone");
+    local isDrone = IsValid(drone) and drone ~= nil;
+    return not isACT3() and not isDrone;
+  end
+
+  --[[
+    Returns whether the number for slots can be used
+    @return {boolean} can be used
+  ]]
+  local function canUseSlots()
+    local pActiveWeapon = LocalPlayer():GetActiveWeapon();
+    local isCW20 = not IsValid(pActiveWeapon) and (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
+    return not isCW20 and not isACT3();
+  end
+
   -- Bind press
   local lSlot = 0;
   hook_Add("PlayerBindPress", "HOLOHUD_GS_WeaponSelector", function(pPlayer, sBind, bPressed)
@@ -184,7 +213,7 @@ if CLIENT then
   	end
 
   	-- Move to the weapon before the current
-  	if (sBind == "invprev") then
+  	if (sBind == "invprev" and canUseWheel()) then
   		if (not bPressed) then
   			return true
   		end
@@ -247,7 +276,7 @@ if CLIENT then
   	end
 
   	-- Move to the weapon after the current
-  	if (sBind == "invnext") then
+  	if (sBind == "invnext" and canUseWheel()) then
   		if (not bPressed) then
   			return true
   		end
@@ -317,12 +346,8 @@ if CLIENT then
   		return true
   	end
 
-    -- Support for the CW2.0 weapons customization menu
-    local pActiveWeapon = pPlayer:GetActiveWeapon();
-    local isCW20 = not IsValid(pActiveWeapon) or (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
-
   	-- Keys 1-6
-    if (sBind:sub(1, 4) == "slot" and not isCW20) then
+    if (sBind:sub(1, 4) == "slot" and canUseSlots()) then
   		local iSlot = tonumber(sBind:sub(5))
 
   		-- If the command is slot#, use it for the weapon HUD
