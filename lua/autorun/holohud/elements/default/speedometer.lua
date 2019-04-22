@@ -31,6 +31,40 @@ if CLIENT then
   local lerp = 0;
 
   --[[
+    Returns the real current player velocity
+    @return {number} velocity length
+  ]]
+  local function GetVelocity()
+    if (LocalPlayer():InVehicle()) then
+      if (IsValid(LocalPlayer():GetVehicle():GetMoveParent())) then
+        return LocalPlayer():GetVehicle():GetMoveParent():GetVelocity():Length();
+      else
+        return LocalPlayer():GetVehicle():GetVelocity():Length();
+      end
+    else
+      return LocalPlayer():GetVelocity():Length();
+    end
+  end
+
+  --[[
+    Return the real health to display
+    @return {number} vehicle health
+  ]]
+  local function GetHealth()
+    if (not LocalPlayer():InVehicle()) then return -1, 0; end
+    if (IsValid(LocalPlayer():GetVehicle():GetMoveParent())) then
+      local ent = LocalPlayer():GetVehicle():GetMoveParent();
+      if (ent:Health() > ent:GetNWFloat("Health")) then
+        return ent:Health(), ent:GetMaxHealth();
+      else
+        return ent:GetNWFloat("Health"), ent:GetMaxHealth();
+      end
+    else
+      return LocalPlayer():GetVehicle():Health(), LocalPlayer():GetVehicle():GetMaxHealth();
+    end
+  end
+
+  --[[
     Returns the damage bar's colour
     @param {boolean} health bar as damage bar
     @return {Color} colour
@@ -54,9 +88,7 @@ if CLIENT then
     @param {boolean} health bar as damage bar
     @void
   ]]
-  local function DrawDamage(x, y, isDamage)
-    local vehicle = LocalPlayer():GetVehicle();
-    local health = vehicle:Health() / vehicle:GetMaxHealth();
+  local function DrawDamage(x, y, health, isDamage)
     -- Highlight
     if (lastDmg ~= health) then
       HOLOHUD:TriggerHighlight(PANEL_NAME);
@@ -88,38 +120,35 @@ if CLIENT then
     @param {Color} brackets colour
     @void
   ]]
-  local function DrawForeground(x, y, w, h, mph, unit, isDamage, hideBar, colour, bgCol)
+  local function DrawForeground(x, y, w, h, always, mph, unit, isDamage, hideBar, colour, bgCol)
     -- Get values
     local offset = 0;
-    local speed = 0;
     local hasDamage = false;
-    if (LocalPlayer():InVehicle()) then
-      local vehicle = LocalPlayer():GetVehicle();
+    local health, maxHealth = GetHealth();
 
-      -- Get speed
-      speed = vehicle:GetVelocity():Length();
-      if (mph) then
-        speed = speed * MPH;
-      else
-        speed = speed * MPH * KPH;
-      end
+    -- Get speed
+    local speed = GetVelocity();
+    if (mph) then
+      speed = speed * MPH;
+    else
+      speed = speed * MPH * KPH;
+    end
 
-      -- Is vehicle damagable
-      if (vehicle:GetMaxHealth() > 0 and not hideBar) then
-        offset = BAR_MARGIN;
-        hasDamage = true;
-      end
+    -- Is vehicle damagable
+    if (maxHealth > 0 and not hideBar) then
+      offset = BAR_MARGIN;
+      hasDamage = true;
     end
 
     -- Draw speed
     HOLOHUD:DrawBracket(x + offset - 3, y - 3, false, bgCol);
-    HOLOHUD:DrawNumber(x + offset + 17, y + (h * 0.5), math.Round(speed), colour, "000", 0, "holohud_main", not LocalPlayer():InVehicle());
+    HOLOHUD:DrawNumber(x + offset + 17, y + (h * 0.5), math.Round(speed), colour, "000", 0, "holohud_main", not LocalPlayer():InVehicle() and not always);
     HOLOHUD:DrawText(x + offset + HOLOHUD:GetNumberSize(3) + 22, y + h - 9, unit, "holohud_pickup", colour, nil, nil, TEXT_ALIGN_BOTTOM);
     HOLOHUD:DrawBracket(x + w - 31, y - 3, true, bgCol);
 
     -- Draw damage bar
     if (hasDamage and not hideBar) then
-      DrawDamage(x, y + 1, isDamage);
+      DrawDamage(x, y + 1, health/maxHealth, isDamage);
     end
   end
 
@@ -142,7 +171,8 @@ if CLIENT then
     surface.SetFont("holohud_pickup");
     local unitWidth = surface.GetTextSize(unit);
     local w = (W * 2) + HOLOHUD:GetNumberSize(3) + unitWidth;
-    if (LocalPlayer():InVehicle() and LocalPlayer():GetVehicle():GetMaxHealth() > 0 and not config("hide_bar")) then
+    local health, maxHealth = GetHealth();
+    if (LocalPlayer():InVehicle() and maxHealth > 0 and not config("hide_bar")) then
       w = w + BAR_MARGIN;
     end
 
@@ -153,8 +183,8 @@ if CLIENT then
       y = ScrH() - SCREEN_OFFSET - H;
     end
 
-    HOLOHUD:SetPanelActive(PANEL_NAME, LocalPlayer():InVehicle());
-    HOLOHUD:DrawFragment(x - config("x_offset"), y - config("y_offset"), w, H, DrawForeground, PANEL_NAME, config("mph"), unit, config("damage"), config("hide_bar"), config("colour"), config("bg_col"));
+    HOLOHUD:SetPanelActive(PANEL_NAME, LocalPlayer():InVehicle() or config("always"));
+    HOLOHUD:DrawFragment(x - config("x_offset"), y - config("y_offset"), w, H, DrawForeground, PANEL_NAME, config("always"), config("mph"), unit, config("damage"), config("hide_bar"), config("colour"), config("bg_col"));
 
     return w, h;
   end
@@ -175,7 +205,8 @@ if CLIENT then
       warn_colour = { name = "Warning colour", value = WARN_COLOUR },
       crit_colour = { name = "Critical colour", value = CRIT_COLOUR },
       x_offset = { name = "Horizontal offset", value = 0, minValue = 0, maxValue = ScrW() },
-      y_offset = { name = "Vertical offset", value = 0, minValue = 0, maxValue = ScrH() }
+      y_offset = { name = "Vertical offset", value = 0, minValue = 0, maxValue = ScrH() },
+      always = { name = "Display outside of vehicle", value = false }
     },
     DrawPanel
   );
