@@ -159,6 +159,25 @@ if CLIENT then
   end)
 
   --[[
+    Override AddPlayerOption so it doesn't conflict with the weapon selector
+    @experimental
+  ]]
+  local MetaPlayer = FindMetaTable("Player");
+  local addOptionFunction = MetaPlayer.AddPlayerOption;
+  local votes = {};
+  function MetaPlayer:AddPlayerOption(title, timeout, usrCallback, optionsDraw)
+    votes[title] = true;
+    function callback(num)
+      local result = usrCallback(num);
+      if result then
+        votes[title] = nil;
+      end
+      return result;
+    end
+    addOptionFunction(self, title, timeout, callback, optionsDraw);
+  end
+
+  --[[
     Returns whether the current weapon is ACT3 based and whether the inventory is open
     @return {boolean} is ACT3
   ]]
@@ -174,6 +193,7 @@ if CLIENT then
   local function canUseWheel()
     local drone = LocalPlayer():GetNWEntity("DronesRewriteDrone");
     local isDrone = IsValid(drone) and drone ~= nil;
+
     return not isACT3() and not isDrone;
   end
 
@@ -184,7 +204,8 @@ if CLIENT then
   local function canUseSlots()
     local pActiveWeapon = LocalPlayer():GetActiveWeapon();
     local isCW20 = not IsValid(pActiveWeapon) and (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
-    return not isCW20 and not isACT3();
+
+    return not isCW20 and not isACT3() and table.Count(votes) <= 0;
   end
 
   -- Bind press
@@ -193,8 +214,10 @@ if CLIENT then
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
 
     -- Don't show if physgun is in use
-    local physgun = IsValid(pPlayer:GetActiveWeapon()) and pPlayer:KeyDown(IN_ATTACK) and pPlayer:GetActiveWeapon():GetClass() == "weapon_physgun";
-  	if (not pPlayer:Alive() or pPlayer:InVehicle() and not pPlayer:GetAllowWeaponsInVehicle() or physgun) then
+    local hasPhysgun = IsValid(pPlayer:GetActiveWeapon()) and (pPlayer:KeyDown(IN_ATTACK) or pPlayer:KeyDown(IN_ATTACK2)) and pPlayer:GetActiveWeapon():GetClass() == "weapon_physgun";
+    if (hasPhysgun and (sBind == "invprev" or sBind == "invnext")) then return true; end
+
+    if (not pPlayer:Alive() or (pPlayer:InVehicle() and not pPlayer:GetAllowWeaponsInVehicle())) then
   		return
   	end
 
