@@ -280,10 +280,14 @@ if SERVER then
     end
 
     if (not IsValid(inflictor)) then
-      inflictor = victim;
+      inflictor = attacker;
     end
 
     -- Attacker's name and team
+    if (not attacker:IsPlayer() and IsValid(attacker:GetOwner()) and attacker:GetOwner():IsPlayer()) then
+      attacker = attacker:GetOwner();
+    end
+
     if (attacker:IsPlayer()) then
       net.WriteString(attacker:Name());
       net.WriteFloat(attacker:Team());
@@ -307,7 +311,7 @@ if SERVER then
     else
       net.WriteBool(false); -- Is it a weapon?
       net.WriteString(inflictor:GetClass()); -- Send the class name
-      net.WriteBool(inflictor == attacker); -- Was it a suicide?
+      net.WriteBool(inflictor == attacker or inflictor == victim); -- Was the inflictor not a weapon?
     end
 
     -- Victim's name and team
