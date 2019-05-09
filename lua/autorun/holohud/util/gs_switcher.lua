@@ -205,7 +205,7 @@ if CLIENT then
     local pActiveWeapon = LocalPlayer():GetActiveWeapon();
     local isCW20 = not IsValid(pActiveWeapon) and (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
 
-    return not isCW20 and not isACT3() and table.Count(votes) <= 0;
+    return not isCW20 and not isACT3() and table.IsEmpty(votes);
   end
 
   -- Bind press

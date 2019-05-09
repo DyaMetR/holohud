@@ -243,7 +243,7 @@ if CLIENT then
     end
 
     -- No data is found
-    if (table.Count(files) <= 0) then print("   + No user data found. Default parameters loaded."); end
+    if (table.IsEmpty(files)) then print("   + No user data found. Default parameters loaded."); end
   end
 
   --[[

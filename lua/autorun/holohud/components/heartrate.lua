@@ -84,7 +84,7 @@ if CLIENT then
     end
 
     -- If monitor is empty, start up the sequence
-    if (table.Count(pulse) <= 0) then
+    if (table.IsEmpty(pulse)) then
       AddPulse(GetPulse(hp), damage > MINIMUM_DAMAGE);
     end
 
