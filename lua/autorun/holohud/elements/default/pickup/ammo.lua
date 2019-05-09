@@ -19,6 +19,9 @@ if CLIENT then
     @void
   ]]
   function PICKUP:AddAmmoPickup(ammoType, amount, displayTitle, configDisplayName)
+    configDisplayName = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayAmmo");
+    displayTitle = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayTitle");
+
     -- Name size
     local u, v = 0, 0;
     local n, m = HOLOHUD:GetNumberSize(4, "holohud_med_sm");

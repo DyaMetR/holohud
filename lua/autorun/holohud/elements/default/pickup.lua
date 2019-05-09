@@ -178,20 +178,14 @@ if CLIENT then
   -- Item pickup hooks
   hook.Add("HUDWeaponPickedUp", "holohud_pickup_weapon", function(weapon)
     if (HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS:IsElementEnabled("item_history")) then
-      local showName = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayWeapon");
-      local showTitle = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayTitle");
-
-      HOLOHUD.ELEMENTS.PICKUP:AddWeaponPickup(weapon, showTitle, showName);
+      HOLOHUD.ELEMENTS.PICKUP:AddWeaponPickup(weapon);
       return true;
     end
   end);
 
   hook.Add("HUDAmmoPickedUp", "holohud_pickup_ammo", function(ammo, amount)
     if (HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS:IsElementEnabled("item_history")) then
-      local showName = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayAmmo");
-      local showTitle = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayTitle");
-
-      HOLOHUD.ELEMENTS.PICKUP:AddAmmoPickup(ammo, amount, showTitle, showName);
+      HOLOHUD.ELEMENTS.PICKUP:AddAmmoPickup(ammo, amount);
       return true;
     end
   end);
@@ -201,7 +195,7 @@ if CLIENT then
       if (HOLOHUD.ELEMENTS.PICKUP:IsHealthItem(item)) then
         HOLOHUD.ELEMENTS.PICKUP:AddHealthPickup(item);
       else
-        HOLOHUD.ELEMENTS.PICKUP:AddItemPickup(item, HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayTitle"));
+        HOLOHUD.ELEMENTS.PICKUP:AddItemPickup(item);
       end
       return true;
     end

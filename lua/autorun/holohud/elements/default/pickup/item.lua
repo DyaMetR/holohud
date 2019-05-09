@@ -17,6 +17,7 @@ if CLIENT then
     @void
   ]]
   function PICKUP:AddItemPickup(item, displayTitle)
+    displayTitle = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayTitle");
     local iconH = 0;
 
     -- Get icon size

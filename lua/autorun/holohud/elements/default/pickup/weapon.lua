@@ -18,6 +18,8 @@ if CLIENT then
   ]]
   function PICKUP:AddWeaponPickup(weapon, displayTitle, displayWeapon)
     if (not IsValid(weapon)) then return; end
+    displayWeapon = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayWeapon");
+    displayTitle = HOLOHUD.ELEMENTS:ConfigValue("item_history", "displayTitle");
 
     surface.SetFont("holohud_weapon_name");
     local u, v = 0, 0;
