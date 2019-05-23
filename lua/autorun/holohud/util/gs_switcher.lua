@@ -183,7 +183,7 @@ if CLIENT then
   ]]
   local function isACT3()
     local pActiveWeapon = LocalPlayer():GetActiveWeapon();
-    return not IsValid(pActiveWeapon) and (pActiveWeapon.ACT3Weapon ~= nil and pActiveWeapon.ACT3Weapon and pActiveWeapon.State == 4);
+    return IsValid(pActiveWeapon) and (pActiveWeapon.ACT3Weapon ~= nil and pActiveWeapon.ACT3Weapon and pActiveWeapon.State == 4);
   end
 
   --[[
@@ -203,7 +203,7 @@ if CLIENT then
   ]]
   local function canUseSlots()
     local pActiveWeapon = LocalPlayer():GetActiveWeapon();
-    local isCW20 = not IsValid(pActiveWeapon) and (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
+    local isCW20 = IsValid(pActiveWeapon) and (pActiveWeapon.CW20Weapon ~= nil and pActiveWeapon.CW20Weapon and pActiveWeapon.dt.State == 4);
 
     return not isCW20 and not isACT3() and table.IsEmpty(votes);
   end
