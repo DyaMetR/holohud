@@ -199,7 +199,7 @@ if CLIENT then
     local isWire = false;
     if (IsValid(pActiveWeapon)) then
       wireEnt = pActiveWeapon.CurrentEntity or pActiveWeapon:GetOwner():GetEyeTrace().Entity;
-      if (LocalPlayer():GetTool("wire_adv").GetPorts ~= nil and wireEnt ~= nil) then inp, outs = LocalPlayer():GetTool("wire_adv"):GetPorts(wireEnt); end
+      if (LocalPlayer():GetTool("wire_adv") ~= nil and LocalPlayer():GetTool("wire_adv").GetPorts ~= nil and wireEnt ~= nil) then inp, outs = LocalPlayer():GetTool("wire_adv"):GetPorts(wireEnt); end
       isWire = pActiveWeapon:GetClass() == "gmod_tool" and (inp ~= nil and outs ~= nil);
     end
 
