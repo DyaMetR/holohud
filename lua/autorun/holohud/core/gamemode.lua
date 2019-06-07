@@ -43,7 +43,7 @@ if CLIENT then
   function HOLOHUD.GAMEMODE:IsConfigOverriden(element, config)
     local gamemode = GAMEMODE_NAME or DEFAULT_GAMEMODE;
     local override = HOLOHUD.GAMEMODE.GamemodeConfigOverride[gamemode];
-    return override ~= nil and override[element].config[config] ~= nil;
+    return override ~= nil and override[element] and override[element].config[config] ~= nil;
   end
 
   --[[

@@ -49,7 +49,7 @@ if CLIENT then
     HOLOHUD.ELEMENTS.Elements[id] = {
       title = title, subtitle = subtitle, hide = hideElements, enabled = enabled,
       config = defaultConfig, drawFunction = drawFunction,
-      configProxy = function(param) return HOLOHUD.ELEMENTS:ConfigValue(id, param); end 
+      configProxy = function(param) return HOLOHUD.ELEMENTS:ConfigValue(id, param); end
     };
   end
 

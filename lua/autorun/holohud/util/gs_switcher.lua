@@ -193,8 +193,17 @@ if CLIENT then
   local function canUseWheel()
     local drone = LocalPlayer():GetNWEntity("DronesRewriteDrone");
     local isDrone = IsValid(drone) and drone ~= nil;
+    local pActiveWeapon = LocalPlayer():GetActiveWeapon();
+    local wireEnt = nil;
+    local inp, outs = nil, nil;
+    local isWire = false;
+    if (IsValid(pActiveWeapon)) then
+      wireEnt = pActiveWeapon.CurrentEntity or pActiveWeapon:GetOwner():GetEyeTrace().Entity;
+      if (LocalPlayer():GetTool("wire_adv").GetPorts ~= nil and wireEnt ~= nil) then inp, outs = LocalPlayer():GetTool("wire_adv"):GetPorts(wireEnt); end
+      isWire = pActiveWeapon:GetClass() == "gmod_tool" and (inp ~= nil and outs ~= nil);
+    end
 
-    return not isACT3() and not isDrone;
+    return not isACT3() and not isDrone and not isWire;
   end
 
   --[[

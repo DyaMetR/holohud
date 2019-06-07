@@ -66,11 +66,12 @@ if CLIENT then
     @void
   ]]
   function HOLOHUD.ICONS:DrawWeapon(x, y, weapon, w, h, colour, bright)
+    if (not IsValid(weapon)) then return; end
     colour = colour or Color(255, 255, 255, 200);
     if (HOLOHUD.ICONS:HasWeaponIcon(weapon:GetClass())) then
       HOLOHUD.ICONS:DrawWeaponIcon(x, y, weapon:GetClass(), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, colour, bright);
     else
-      if (weapon.DrawWeaponSelection ~= nil) then
+      if (weapon:IsScripted() and weapon.DrawWeaponSelection ~= nil) then
         -- Transform icons into plain ones
         local bounce, bubble = weapon.BounceWeaponIcon, weapon.DrawWeaponInfoBox;
         weapon.BounceWeaponIcon = false;
