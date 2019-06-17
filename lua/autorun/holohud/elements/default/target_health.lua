@@ -5,6 +5,15 @@
 
 local SHARED_VALUE = "holohud_maxHealth";
 
+--[[
+  Returns whether the entity is a non-player-character
+  @param {Entity} entity
+  @return {boolean} is NPC
+]]
+local function IsNPC(entity)
+  return IsValid(entity) and (entity:IsNPC() or (entity:IsScripted() and entity.Type == "nextbot"));
+end
+
 if CLIENT then
 
   -- Parameters
@@ -90,7 +99,7 @@ if CLIENT then
         name = target:Nick();
         barCol = GetHealthColour();
         AnimateColour(health);
-      elseif (target:IsNPC()) then
+      elseif (IsNPC(target)) then
         maxHealth = target:GetNWInt(SHARED_VALUE);
         name = language.GetPhrase(target:GetClass());
         if (IsFriendEntityName(target:GetClass())) then
@@ -133,7 +142,7 @@ if CLIENT then
     local trace = LocalPlayer():GetEyeTrace();
 
     -- Is entity valid
-    if (trace ~= nil and IsValid(trace.Entity) and (trace.Entity:IsPlayer() or trace.Entity:IsNPC())) then
+    if (trace ~= nil and IsValid(trace.Entity) and (trace.Entity:IsPlayer() or IsNPC(trace.Entity))) then
       index = trace.Entity:EntIndex();
       time = CurTime() + TIME;
     end
@@ -162,7 +171,7 @@ if CLIENT then
     -- Activate and draw panel
     local align = TEXT_ALIGN_TOP;
     if (IsValid(entity) and entity:IsPlayer()) then align = TEXT_ALIGN_BOTTOM; end
-    HOLOHUD:SetPanelActive(PANEL_NAME, IsValid(entity) and (entity:IsPlayer() or entity:IsNPC()) and time > CurTime());
+    HOLOHUD:SetPanelActive(PANEL_NAME, IsValid(entity) and (entity:IsPlayer() or IsNPC(entity)) and time > CurTime());
     HOLOHUD:DrawFragmentAlign((ScrW() * 0.5) - (w * 0.5), offset, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("enemy"), config("ally"), config("name"), config("armour"));
   end
 
@@ -197,9 +206,9 @@ if SERVER then
 
   -- Use a networked value to know maximum health
   hook.Add("OnEntityCreated", "holohud_target_maxhealth", function(ent)
-    if (not IsValid(ent) or ent == NULL or not ent:IsNPC() or ent.Health == nil) then return; end
+    if (not IsValid(ent) or ent == NULL or not IsNPC(ent) or ent.Health == nil) then return; end
     timer.Simple(0.1, function()
-      if (not IsValid(ent) or ent == NULL or not ent:IsNPC() or ent.Health == nil) then return; end
+      if (not IsValid(ent) or ent == NULL or not IsNPC(ent) or ent.Health == nil) then return; end
       ent:SetNWInt(SHARED_VALUE, ent:Health());
     end);
   end);

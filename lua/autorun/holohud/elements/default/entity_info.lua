@@ -160,7 +160,7 @@ if CLIENT then
     local validEntity = not LocalPlayer():InVehicle() and
                         ((config("physgun") and physgun) or not config("physgun")) and
                         IsValid(ent) and ent ~= nil and
-                        not ent:IsPlayer() and not ent:IsNPC() and
+                        not ent:IsPlayer() and not ent:IsNPC() and not (ent:IsScripted() and ent.Type == "nextbot") and
                         BLACKLIST[ent:GetClass()] == nil;
 
     -- Trigger panel if a valid ent is found
