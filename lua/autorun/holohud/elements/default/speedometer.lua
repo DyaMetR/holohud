@@ -9,7 +9,7 @@ if CLIENT then
 
   -- Parameters
   local PANEL_NAME = "speedometer";
-  local KPH_UNIT, MPH_UNIT = "km/h", "MPH";
+  local KPH_UNIT, MPH_UNIT, UPS_UNIT = "km/h", "MPH", "ups";
   local KPH, MPH = 1.6093, 0.056818181;
   local W, H = 17, 50;
   local SCREEN_OFFSET = 20;
@@ -120,7 +120,7 @@ if CLIENT then
     @param {Color} brackets colour
     @void
   ]]
-  local function DrawForeground(x, y, w, h, always, mph, unit, isDamage, hideBar, colour, bgCol)
+  local function DrawForeground(x, y, w, h, always, unittype, unit, isDamage, hideBar, colour, bgCol)
     -- Get values
     local offset = 0;
     local hasDamage = false;
@@ -128,10 +128,12 @@ if CLIENT then
 
     -- Get speed
     local speed = GetVelocity();
-    if (mph) then
+    if unittype == 2 then
       speed = speed * MPH;
-    else
+    elseif unittype == 1 then
       speed = speed * MPH * KPH;
+    else -- ups
+      speed = speed;
     end
 
     -- Is vehicle damagable
@@ -141,9 +143,17 @@ if CLIENT then
     end
 
     -- Draw speed
+    local zeros = "000";
+    local unitoffset = 22;
+    local bracketoffset = 31;
+    if unittype == 3 then 
+      zeros = "0000";
+      unitoffset = 44;
+      bracketoffset = 15;
+    end;
     HOLOHUD:DrawBracket(x + offset - 3, y - 3, false, bgCol);
-    HOLOHUD:DrawNumber(x + offset + 17, y + (h * 0.5), math.Round(speed), colour, "000", 0, "holohud_main", not LocalPlayer():InVehicle() and not always);
-    HOLOHUD:DrawText(x + offset + HOLOHUD:GetNumberSize(3) + 22, y + h - 9, unit, "holohud_pickup", colour, nil, nil, TEXT_ALIGN_BOTTOM);
+    HOLOHUD:DrawNumber(x + offset + 17, y + (h * 0.5), math.Round(speed), colour, zeros, 0, "holohud_main", not LocalPlayer():InVehicle() and not always);
+    HOLOHUD:DrawText(x + offset + HOLOHUD:GetNumberSize(3) + unitoffset, y + h - 9, unit, "holohud_pickup", colour, nil, nil, TEXT_ALIGN_BOTTOM);
     HOLOHUD:DrawBracket(x + w - 31, y - 3, true, bgCol);
 
     -- Draw damage bar
@@ -167,10 +177,21 @@ if CLIENT then
 
     -- Get size
     local unit = KPH_UNIT;
-    if (config("mph")) then unit = MPH_UNIT; end
+    local unitcommon = 0;
+    local panelmul = 2;
+    if LocalPlayer():InVehicle() then
+      unitcommon = config("unitveh");
+    else
+      unitcommon = config("unitfoot");
+    end
+    if (unitcommon == 2) then unit = MPH_UNIT; end
+    if (unitcommon == 3) then
+      unit = UPS_UNIT;
+      panelmul = 3.4;
+    end
     surface.SetFont("holohud_pickup");
     local unitWidth = surface.GetTextSize(unit);
-    local w = (W * 2) + HOLOHUD:GetNumberSize(3) + unitWidth;
+    local w = (W * panelmul) + HOLOHUD:GetNumberSize(3) + unitWidth;
     local health, maxHealth = GetHealth();
     if (LocalPlayer():InVehicle() and maxHealth > 0 and not config("hide_bar")) then
       w = w + BAR_MARGIN;
@@ -184,7 +205,7 @@ if CLIENT then
     end
 
     HOLOHUD:SetPanelActive(PANEL_NAME, LocalPlayer():InVehicle() or config("always"));
-    HOLOHUD:DrawFragment(x - config("x_offset"), y - config("y_offset"), w, H, DrawForeground, PANEL_NAME, config("always"), config("mph"), unit, config("damage"), config("hide_bar"), config("colour"), config("bg_col"));
+    HOLOHUD:DrawFragment(x - config("x_offset"), y - config("y_offset"), w, H, DrawForeground, PANEL_NAME, config("always"), unitcommon, unit, config("damage"), config("hide_bar"), config("colour"), config("bg_col"));
 
     return w, h;
   end
@@ -195,7 +216,8 @@ if CLIENT then
     "When in a vehicle, it'll track its speed",
     nil,
     {
-      mph = { name = "MPH", value = false },
+      unitveh = { name = "Unit (in vehicle)", value = 1, options = {"km/h", "mph", "ups"} },
+      unitfoot = { name = "Unit (on foot)", value = 3, options = {"km/h", "mph", "ups"} },
       damage = { name = "Health bar as damage", desc = "Health meter with count the amount of damage instead of the health left", value = false},
       hide_bar = { name = "Don't show damage bar", value = false },
       center = { name = "Centered", value = false },
@@ -206,7 +228,7 @@ if CLIENT then
       crit_colour = { name = "Critical colour", value = CRIT_COLOUR },
       x_offset = { name = "Horizontal offset", value = 0, minValue = 0, maxValue = ScrW() },
       y_offset = { name = "Vertical offset", value = 0, minValue = 0, maxValue = ScrH() },
-      always = { name = "Display outside of vehicle", value = false }
+      always = { name = "Display on foot", value = false }
     },
     DrawPanel
   );
