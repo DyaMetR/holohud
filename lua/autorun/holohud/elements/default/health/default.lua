@@ -56,7 +56,7 @@ if CLIENT then
 
     --  Draw
     DrawArmour(x + 4, y + 3, armour);
-    HOLOHUD:DrawNumber(x + w - 7, y + 23, math.Clamp(health, 0, health), HEALTH:GetHealthColour(), nil, HOLOHUD:GetHighlight(DEFAULT), nil, nil, TEXT_ALIGN_RIGHT);
+    HOLOHUD:DrawNumber(x + w - 7, y + 23, health, HEALTH:GetHealthColour(), nil, HOLOHUD:GetHighlight(DEFAULT), nil, nil, TEXT_ALIGN_RIGHT);
     HOLOHUD:DrawBar(x + 7, y + 49, w + 1, 23, HEALTH:GetHealthColour(), hpLerp * 0.01, HOLOHUD:GetHighlight(DEFAULT));
   end
 

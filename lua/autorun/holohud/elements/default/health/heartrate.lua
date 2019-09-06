@@ -28,10 +28,12 @@ if CLIENT then
     @param {number} y
     @param {number} armour
     @param {number} bright
+    @param {boolean} hide numbers
     @void
   ]]
-  local function DrawArmourBar(x, y, armour, bright)
+  local function DrawArmourBar(x, y, armour, bright, hide)
     HOLOHUD:DrawVerticalBar(x, y, HEALTH:GetArmourColour(), apLerp * 0.01, bright);
+    if (hide) then return; end
     HOLOHUD:DrawNumber(x - 7, y + 14, armour, HEALTH:GetArmourColour(), nil, bright, "holohud_small", nil, TEXT_ALIGN_RIGHT);
   end
 
@@ -58,20 +60,23 @@ if CLIENT then
     @param {number} h
     @param {number} health
     @param {number} armour
-    @param {number} is kevlar icon enabled
+    @param {boolean} is kevlar icon enabled
+    @param {boolean} should hide numbers
     @void
   ]]
-  local function DrawHeartbeat(x, y, w, h, health, armour, kevlar)
+  local function DrawHeartbeat(x, y, w, h, health, armour, kevlar, hide)
     local offset = 0;
 
     -- Display armour
     if (armour > 0 and not kevlar) then
-      DrawArmourBar(x + 104, y + 1, armour, HOLOHUD:GetHighlight(ARMOUR));
+      DrawArmourBar(x + 104, y + 1, armour, HOLOHUD:GetHighlight(ARMOUR), hide);
       offset = HEART_ARMOUR_OFFSET;
     end
 
     -- Display health
     HOLOHUD:DrawHeartMonitor(x - 3, y - 3, HEALTH:GetHealthColour(), HOLOHUD:GetHighlight(DEFAULT));
+
+    if (hide) then return; end
     HOLOHUD:DrawNumber(x + 114 + offset, y + 24, health, HEALTH:GetHealthColour(), nil, HOLOHUD:GetHighlight(DEFAULT));
   end
 
@@ -79,16 +84,23 @@ if CLIENT then
     Draws the heart monitor panel
     @param {number} health
     @param {number} armour
-    @param {number} width
-    @param {number} height
+    @param {boolean} should display kevlar
+    @param {boolean} should hide numbers
     @void
   ]]
-  function HOLOHUD.ELEMENTS.HEALTH:HeartratePanel(health, armour, kevlar)
+  function HOLOHUD.ELEMENTS.HEALTH:HeartratePanel(health, armour, kevlar, hide)
     -- Animate armour indicator
     apLerp = Lerp(FrameTime() * 4, apLerp, armour);
 
     -- Get health panel size
     local width = HOLOHUD:GetNumberSize(math.max(math.floor(math.log10(health) + 1), 3));
+    if (hide) then
+      if (armour > 0) then
+        width = -12;
+      else
+        width = -18;
+      end
+    end
 
     -- Decide whether to display kevlar icon
     local offset = 0; -- Armour offset
@@ -108,7 +120,7 @@ if CLIENT then
     end
 
     -- Draw heart rate monitor
-    HOLOHUD:DrawFragment(HEALTH_PANEL_OFFSET, ScrH() - (HEART_PANEL_H + HEALTH_PANEL_OFFSET), HEART_PANEL_W + width + offset, HEART_PANEL_H, DrawHeartbeat, PANEL_NAME, health, armour, kevlar);
+    HOLOHUD:DrawFragment(HEALTH_PANEL_OFFSET, ScrH() - (HEART_PANEL_H + HEALTH_PANEL_OFFSET), HEART_PANEL_W + width + offset, HEART_PANEL_H, DrawHeartbeat, PANEL_NAME, health, armour, kevlar, hide);
 
     return width + offset, HEART_PANEL_H;
   end

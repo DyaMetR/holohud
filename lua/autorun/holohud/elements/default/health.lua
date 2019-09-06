@@ -152,11 +152,11 @@ if CLIENT then
 
 		-- Draw
 		if (mode == 1) then
-			return HOLOHUD.ELEMENTS.HEALTH:DefaultPanel(math.Clamp(health, 0, health), armour);
+			return HOLOHUD.ELEMENTS.HEALTH:DefaultPanel(math.max(health, 0), armour);
 		elseif (mode == 4) then
-			return HOLOHUD.ELEMENTS.HEALTH:ClassicPanel(math.Clamp(health, 0, health), armour, config("classic_hide_armour"));
+			return HOLOHUD.ELEMENTS.HEALTH:ClassicPanel(math.max(health, 0), armour, config("classic_hide_armour"));
 		else
-			return HOLOHUD.ELEMENTS.HEALTH:HeartratePanel(math.Clamp(health, 0, health), armour, mode == 3);
+			return HOLOHUD.ELEMENTS.HEALTH:HeartratePanel(math.max(health, 0), armour, mode == 3, config("heartrate_hide_number"));
 		end
 
 	end
@@ -171,6 +171,7 @@ if CLIENT then
 			mode = { name = "Mode", value = 1, options = {"Default", "Heart rate monitor", "Heart rate monitor w/ kevlar", "Classic FPS"} },
 			hide = { name = "Don't hide if health is under", desc = "Won't automatically hide the panel if the health is under the given amount", value = 50 },
 			classic_hide_armour = { name = "[Classic] Hide armour on 0%", value = false },
+			heartrate_hide_number = { name = "[Heart rate] Hide numbers", value = false},
 			health_good = { name = "Normal colour", value = HEALTH_GOOD },
 			health_warn = { name = "Warning colour", value = HEALTH_WARN },
 			health_crit = { name = "Critical colour", value = HEALTH_CRIT },
