@@ -178,7 +178,7 @@ if CLIENT then
     local align = TEXT_ALIGN_TOP;
     if (IsValid(entity) and entity:IsPlayer()) then align = TEXT_ALIGN_BOTTOM; end
     HOLOHUD:SetPanelActive(PANEL_NAME, IsValid(entity) and (entity:IsPlayer() or IsNPC(entity)) and time > CurTime());
-    HOLOHUD:DrawFragmentAlign((ScrW() * 0.5) - (w * 0.5), offset, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("enemy"), config("ally"), config("name"), config("armour"));
+    HOLOHUD:DrawFragmentAlign((ScrW() * 0.5) - (w * 0.5), offset, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("enemy"), config("ally"), config("name"), config("armour"), config("lerp"));
   end
 
   -- Add element
