@@ -79,8 +79,8 @@ if CLIENT then
 
         -- If icon is a png, give it the original size
         if (type(weapon.WepSelectIcon) == "IMaterial") then
-          w = weapon.WepSelectIcon:GetInt("$realwidth");
-          h = weapon.WepSelectIcon:GetInt("$realheight");
+          w = weapon.WepSelectIcon:GetInt("$realwidth") or 256;
+          h = weapon.WepSelectIcon:GetInt("$realheight") or 128;
         end
 
         surface.SetDrawColor(colour);

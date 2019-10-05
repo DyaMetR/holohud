@@ -146,13 +146,13 @@ if CLIENT then
     local zeros = "000";
     local unitoffset = 22;
     local bracketoffset = 31;
-    if unittype == 3 then 
+    if unittype == 3 then
       zeros = "0000";
       unitoffset = 44;
       bracketoffset = 15;
     end;
     HOLOHUD:DrawBracket(x + offset - 3, y - 3, false, bgCol);
-    HOLOHUD:DrawNumber(x + offset + 17, y + (h * 0.5), math.Round(speed), colour, zeros, 0, "holohud_main", not LocalPlayer():InVehicle() and not always);
+    HOLOHUD:DrawNumber(x + offset + 17, y + (h * 0.5), math.floor(speed), colour, zeros, 0, "holohud_main", not LocalPlayer():InVehicle() and not always);
     HOLOHUD:DrawText(x + offset + HOLOHUD:GetNumberSize(3) + unitoffset, y + h - 9, unit, "holohud_pickup", colour, nil, nil, TEXT_ALIGN_BOTTOM);
     HOLOHUD:DrawBracket(x + w - 31, y - 3, true, bgCol);
 

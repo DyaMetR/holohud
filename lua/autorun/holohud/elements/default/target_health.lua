@@ -82,9 +82,10 @@ if CLIENT then
     @param {Color} allies health colour
     @param {Color} name colour
     @param {Color} armour colour
+    @param {boolean} should lerp the value
     @void
   ]]
-  local function DrawHealth(x, y, w, h, target, barCol, allyCol, nameColour, armourCol)
+  local function DrawHealth(x, y, w, h, target, barCol, allyCol, nameColour, armourCol, shouldLerp)
     local bright = HOLOHUD:GetHighlight(PANEL_NAME);
     local name, health, maxHealth, armour = "", -1, -1, -1;
     barCol = barCol or Color(255, 100, 72, 200);
@@ -113,8 +114,13 @@ if CLIENT then
         lastHp = health;
       end
 
-      lerp = Lerp(FrameTime() * 4, lerp, health);
-      apLerp = Lerp(FrameTime() * 4, apLerp, armour);
+      if (shouldLerp) then
+        lerp = Lerp(FrameTime() * 4, lerp, health);
+        apLerp = Lerp(FrameTime() * 4, apLerp, armour);
+      else
+        lerp = health;
+        apLerp = armour;
+      end
     else
       lerp = -1;
       apLerp = -1;
@@ -190,7 +196,8 @@ if CLIENT then
       good_colour = { name = "Normal colour", value = HEALTH_GOOD },
       warn_colour = { name = "Warning colour", value = HEALTH_WARN },
       crit_colour = { name = "Critical colour", value = HEALTH_CRIT },
-      armour = { name = "Armour colour", value = ARMOUR_COLOUR }
+      armour = { name = "Armour colour", value = ARMOUR_COLOUR },
+      lerp = { name = "Enable smooth animation", value = true }
     },
     DrawPanel
   );
