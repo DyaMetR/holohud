@@ -55,6 +55,12 @@ if CLIENT then
   		}
   	);
 
+    panel:AddControl( "CheckBox", {
+  		Label = "Display even without Suit",
+      Command = "holohud_nosuit_enabled"
+  		}
+  	);
+
     panel:AddControl( "Slider", {
       Label = "Swaying",
       Type = "Float",

@@ -90,7 +90,7 @@ if CLIENT then
   ]]
   function HOLOHUD:SetPanelActive(panel, active, force)
     if (self.FlashPanels[panel] == nil) then return end;
-    if ((HOLOHUD.DEATH:ShouldHUDHide() or not hadSuit) and not force) then active = false; end
+    if ((HOLOHUD.DEATH:ShouldHUDHide() or (not hadSuit and not HOLOHUD:ShouldHUDDrawWithoutSuit())) and not force) then active = false; end
     force = force or false;
     self.FlashPanels[panel].active = active;
     self.FlashPanels[panel].force = force;

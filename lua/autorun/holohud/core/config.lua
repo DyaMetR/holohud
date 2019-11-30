@@ -16,6 +16,7 @@ if CLIENT then
     ["holohud_enabled"] = 1,
     ["holohud_sway"] = 1,
     ["holohud_blur"] = 1,
+    ["holohud_nosuit_enabled"] = 0,
     ["holohud_background_opacity"] = 1,
     ["holohud_off_opacity"] = 1,
     ["holohud_blur_quality"] = 1,
@@ -46,6 +47,14 @@ if CLIENT then
   ]]
   function HOLOHUD:IsHUDEnabled()
     return values.holohud_enabled:GetInt() >= 1;
+  end
+
+  --[[
+    Returns whether the HUD should display even without the HEV Suit
+    @return {boolean} should HUD draw without Suit
+  ]]
+  function HOLOHUD:ShouldHUDDrawWithoutSuit()
+    return values.holohud_nosuit_enabled:GetInt() >= 1;
   end
 
   --[[
