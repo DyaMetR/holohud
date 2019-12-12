@@ -36,7 +36,7 @@ if CLIENT then
     chxEnabled:SetPos(10, 54);
     chxEnabled:SetSize(14, 14);
     chxEnabled:SetChecked(HOLOHUD.ELEMENTS:IsElementEnabled(id));
-    chxEnabled.OnChange = function(value) HOLOHUD.ELEMENTS:ToggleElement(id, value:GetChecked()); end;
+    chxEnabled.OnChange = function(value) HOLOHUD.ELEMENTS:ToggleElement(id, value:GetChecked(), true); end;
 
     local lblCheck = vgui.Create("DLabel", panel);
     lblCheck:SetPos(30, 54);
