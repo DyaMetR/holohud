@@ -81,11 +81,11 @@ if CLIENT then
     if (w > (W * 1.5) and scale < w/(W * 1.5)) then scale = w/(W * 1.5); end
 
     -- Major
-    DrawGraduation(x, y, w, h, "N", nil, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "S", 180, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "S", -180, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "E", 90, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "W", -90, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "N", -90, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "S", 90, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "E", 0, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "W", 180, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "W", -180, nil, numbers, scale, degrees, colour);
 
     -- Minor
     for i=1,8 do -- North to east
