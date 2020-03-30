@@ -30,6 +30,7 @@ if CLIENT then
   -- Data containers
   HOLOHUD.ELEMENTS.Elements = {}; -- Elements default configuration
   HOLOHUD.ELEMENTS.ElementData = {}; -- Elements user generated configuration (loaded from disk)
+  HOLOHUD.ELEMENTS.DefaultHUDHideElements = {}; -- Generated default HUD elements to hide
   local elementConfig = {}; -- Actual configuration taking in account overrides
 
   --[[
@@ -106,25 +107,26 @@ if CLIENT then
   end
 
   --[[
-    Returns a list of HUD elements to hide
+    Generates the table to hide the default HUD elements conflicting with
+    the enabled elements
     @return {table} hide
   ]]
-  function HOLOHUD.ELEMENTS:DefaultHUDHideElements()
-    local hide = {};
+  function HOLOHUD.ELEMENTS:GenerateDefaultHUDHideList()
+    table.Empty(HOLOHUD.ELEMENTS.DefaultHUDHideElements);
     for id, element in pairs(HOLOHUD.ELEMENTS:GetElements()) do
       if (HOLOHUD.ELEMENTS:IsElementEnabled(id)) then
         if (element.hide ~= nil) then
           if type(element.hide) == "string" then
-            hide[element.hide] = true;
+            HOLOHUD.ELEMENTS.DefaultHUDHideElements[element.hide] = true;
           elseif type(element.hide) == "table" then
             for _, subElement in pairs(element.hide) do
-              hide[subElement] = true;
+              HOLOHUD.ELEMENTS.DefaultHUDHideElements[subElement] = true;
             end
           end
         end
       end
     end
-    return hide;
+    return HOLOHUD.ELEMENTS.DefaultHUDHideElements;
   end
 
   --[[
@@ -364,6 +366,7 @@ if CLIENT then
     if (value == nil) then value = not HOLOHUD.ELEMENTS.ElementData[id].enabled; end
     HOLOHUD.ELEMENTS.ElementData[id].enabled = value;
     if (save) then HOLOHUD.ELEMENTS:SaveUserConfiguration(id); end
+    HOLOHUD.ELEMENTS:GenerateDefaultHUDHideList();
   end
 
 end

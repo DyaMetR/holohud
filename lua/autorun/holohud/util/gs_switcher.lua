@@ -109,7 +109,7 @@ if CLIENT then
 
   		if (iSlot <= MAX_SLOTS) then
   			-- Cache number of weapons in each slot
-  			local iLen = tCacheLength[iSlot] + 1
+  			local iLen = tCacheLength[math.max(iSlot, 0)] + 1
   			tCacheLength[iSlot] = iLen
   			tCache[iSlot][iLen] = pWeapon
   		end

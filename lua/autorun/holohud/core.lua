@@ -54,6 +54,7 @@ HOLOHUD:IncludeFile("elements/default/player_count.lua");
 HOLOHUD:IncludeFile("elements/default/prop_count.lua");
 HOLOHUD:IncludeFile("elements/default/speedometer.lua");
 HOLOHUD:IncludeFile("elements/default/entity_info.lua");
+HOLOHUD:IncludeFile("elements/default/auxpower.lua");
 HOLOHUD:IncludeFile("elements/default/welcome.lua");
 
 
@@ -80,6 +81,7 @@ if CLIENT then
     if (table.Count(HOLOHUD.ELEMENTS.Elements) > 0) then
       print("  > " .. table.Count(HOLOHUD.ELEMENTS.Elements) .. " HUD elements found. Loading user configuration...");
       HOLOHUD.ELEMENTS:LoadUserConfiguration();
+      HOLOHUD.ELEMENTS:GenerateDefaultHUDHideList();
     else
       print("  > No HUD elements found. What did you do you little devil?");
     end
@@ -123,7 +125,7 @@ if CLIENT then
 
   -- Hide default HUD
   hook.Add( "HUDShouldDraw", "holohud_hide_default_hud", function( name )
-    if ( HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS:DefaultHUDHideElements()[ name ] and cl_drawhud:GetInt() > 0 ) then return false end;
+    if ( HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS.DefaultHUDHideElements[ name ] and cl_drawhud:GetInt() > 0 ) then return false end;
   end );
 
 end
