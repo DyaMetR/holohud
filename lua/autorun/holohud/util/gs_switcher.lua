@@ -49,7 +49,8 @@ if CLIENT then
       volume = {name = "Sound volume", value = 1, minValue = 0, maxValue = 2},
       colour = { name = "Colour", value = Color(255, 255, 255) },
       ammo_colour = { name = "Ammo bar colour", value = AMMO_COLOUR },
-      crit_colour = { name = "Out of ammo colour", value = Color(255, 0, 0)}
+      crit_colour = { name = "Out of ammo colour", value = Color(255, 0, 0)},
+      weapon_details = { name = "Draw weapon details", value = false }
     }, DrawWeaponHUD
   );
 

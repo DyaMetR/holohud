@@ -75,7 +75,7 @@ if CLIENT then
         -- Transform icons into plain ones
         local bounce, bubble = weapon.BounceWeaponIcon, weapon.DrawWeaponInfoBox;
         weapon.BounceWeaponIcon = false;
-        weapon.DrawWeaponInfoBox = false;
+        weapon.DrawWeaponInfoBox = HOLOHUD.ELEMENTS:ConfigValue('weapon_selector', 'weapon_details');
 
         -- If icon is a png, give it the original size
         if (type(weapon.WepSelectIcon) == "IMaterial") then
