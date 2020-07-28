@@ -163,7 +163,7 @@ if CLIENT then
       if (entity:IsPlayer()) then -- Player panel size and offset
         surface.SetFont("holohud_small");
         local u, v = surface.GetTextSize(entity:Nick());
-        h = math.Clamp(v, P_HEIGHT, v);
+        h = P_HEIGHT;
         w = u + MARGIN * 2;
         offset = ScrH() * config("player_offset");
       end

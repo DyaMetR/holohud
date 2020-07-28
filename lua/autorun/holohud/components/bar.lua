@@ -62,7 +62,13 @@ if CLIENT then
     v = v or 1;
     v = math.Clamp(v, 0, 1); -- Make sure it doesn't go out of bounds
 
-    local width = math.Round(w * v);
+    -- compensate beginning and end being pure glowing
+    local width = math.Round(6 + ((w - 14) * v));
+    if v > 0.99 then
+      width = w;
+    elseif v < 0.01 then
+      width = 0;
+    end
 
     -- Draw the start of the bar
     local sW = math.Clamp(width, 0, EXT_REAL_WIDTH);

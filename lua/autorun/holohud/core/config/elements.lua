@@ -262,6 +262,7 @@ if CLIENT then
     else
       HOLOHUD.ELEMENTS.ElementData[id] = nil;
       file.Delete(CONFIG_DIR .. "/" .. id .. DATA_EXTENSION);
+      HOLOHUD.ELEMENTS:SaveUserConfiguration(id, true);
 
       if (not suppress) then
         print(HOLOHUD.CONFIG.Signature .. " Configuration for '" .. id .. "' removed and set back to default.");

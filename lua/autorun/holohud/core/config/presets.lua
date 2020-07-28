@@ -61,6 +61,9 @@ if CLIENT then
         HOLOHUD.ELEMENTS:SaveUserConfiguration(id);
       end
 
+      -- regenerate hide list
+      HOLOHUD.ELEMENTS:GenerateDefaultHUDHideList();
+
       print(HOLOHUD.CONFIG.Signature .. " Preset loaded successfully.");
     else
       print(HOLOHUD.CONFIG.Signature .. " The given preset does not exist.");
