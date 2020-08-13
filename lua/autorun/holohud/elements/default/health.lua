@@ -152,7 +152,7 @@ if CLIENT then
 
 		-- Draw
 		if (mode == 1) then
-			return HOLOHUD.ELEMENTS.HEALTH:DefaultPanel(math.max(health, 0), armour);
+			return HOLOHUD.ELEMENTS.HEALTH:DefaultPanel(math.max(health, 0), armour, config("right_align"));
 		elseif (mode == 4) then
 			return HOLOHUD.ELEMENTS.HEALTH:ClassicPanel(math.max(health, 0), armour, config("classic_hide_armour"));
 		else
@@ -175,7 +175,8 @@ if CLIENT then
 			health_good = { name = "Normal colour", value = HEALTH_GOOD },
 			health_warn = { name = "Warning colour", value = HEALTH_WARN },
 			health_crit = { name = "Critical colour", value = HEALTH_CRIT },
-			armour = { name = "Armour colour", value = ARMOUR_COLOUR }
+			armour = { name = "Armour colour", value = ARMOUR_COLOUR },
+			right_align = { name = "Right aligned bar", value = false }
 		},
 		DrawPanel
 	);

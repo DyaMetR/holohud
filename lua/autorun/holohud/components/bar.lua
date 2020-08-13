@@ -98,6 +98,56 @@ if CLIENT then
 
   end
 
+
+  -- Right-aligned bar
+  -- @author D MAS
+  local function ComposeBarRight(x, y, w, h, colour, start, body, endi, v, off)
+    v = v or 1;
+    v = math.Clamp(v, 0, 1); -- Make sure it doesn't go out of bounds
+
+	-- bit tacky, but it works, thanks DyaMetR <3
+    -- compensate beginning and end being pure glowing
+    local width = math.Round(6 + ((w - 14) * v));
+    if v > 0.999 then
+      width = w;
+    elseif v < 0.001 then
+      width = 0;
+    end
+
+	-- mine's even tackier
+    local bodyWidth = w - (BODY_WIDTH - BODY_REAL_WIDTH);
+    local offset = bodyWidth + EXT_REAL_WIDTH;
+	local edge = 6
+
+    -- Draw the start of the bar
+    local sW = math.Clamp(width - offset + edge, 0, EXT_REAL_WIDTH);
+	local sx = x + EXT_REAL_WIDTH - sW
+
+    -- If cut is false, preserve extreme
+    --[[surface.SetTexture(start);
+    surface.DrawTexturedRectUV(x, y, sW, h, 0, 0, sW/EXT_WIDTH, 1);]]
+    HOLOHUD:DrawTextureUV(start, sx, y, sW, h, 0, 0, sW/EXT_WIDTH, 1, colour, not off);
+
+    local bW = math.Clamp(width - EXT_REAL_WIDTH, 0, bodyWidth);
+	local bx = x + bodyWidth - bW
+    -- Draw the middle of the bar
+    --[[surface.SetDrawColor(colour);
+    surface.SetTexture(body);
+    surface.DrawTexturedRectUV(x + EXT_REAL_WIDTH, y, bW, h, 0, 0, math.Clamp(bW/w, 0, BODY_REAL_WIDTH/BODY_WIDTH), 1);
+    ]]
+    HOLOHUD:DrawTextureUV(body, bx + EXT_REAL_WIDTH, y, bW, h, 0, 0, math.Clamp(bW/w, 0, BODY_REAL_WIDTH/BODY_WIDTH), 1, colour, not off);
+
+    -- Draw the end of the bar
+    local eW = math.Clamp(width - edge, 0, EXT_REAL_WIDTH);
+	local ex = x + offset
+
+    --[[surface.SetDrawColor(colour);
+    surface.SetTexture(endi);
+    surface.DrawTexturedRectUV(x + offset, y, eW, h, 0, 0, eW/EXT_REAL_WIDTH, 1);]]
+    HOLOHUD:DrawTextureUV(endi, ex, y, eW, h, 0, 0, eW/EXT_REAL_WIDTH, 1, colour, not off);
+
+  end
+
   --[[
     Draws a bar
     @param {number} x
@@ -135,6 +185,47 @@ if CLIENT then
 
     -- Gradient
     ComposeBar(x, y, w, h, Color(255, 255, 255, 8), GRADIENT_START, GRADIENT_BODY, GRADIENT_END, value);
+
+  end
+
+  --[[
+    Draws a right aligned bar
+    @author D MAS
+    @param {number} x
+    @param {number} y
+    @param {number} w
+    @param {number} h
+    @param {Color} colour
+    @param {number} value
+    @param {boolean} outline
+    @void
+  ]]
+  function HOLOHUD:DrawBarRight(x, y, w, h, colour, value, bright, outline)
+    if (outline == nil) then outline = false; end
+    colour = colour or Color(255, 255, 255);
+
+    x = x - 7;
+    y = y - 10;
+
+    -- Background
+    ComposeBar(x, y, w, h, Color(255, 255, 255, 12 * HOLOHUD:GetOffOpacity()), BACKGROUND_START, BACKGROUND_BODY, BACKGROUND_END, nil, true);
+
+    -- Outline
+    if (outline) then
+      local add = 50 * (1-bright)
+      ComposeBar(x, y, w, h, Color(colour.r + add, colour.g + add, colour.b + add, (50 * bright) + 50), OUTLINE_START, OUTLINE_BODY, OUTLINE_END);
+    else
+      ComposeBarRight(x, y, w, h, Color(colour.r, colour.g, colour.b, 50), OUTLINE_START, OUTLINE_BODY, OUTLINE_END, value);
+    end
+
+    -- Foreground
+    ComposeBarRight(x, y, w, h, colour, FOREGROUND_START, FOREGROUND_BODY, FOREGROUND_END, value);
+
+    -- Bright
+    ComposeBarRight(x, y, w, h, Color(colour.r, colour.g, colour.b, (30 * bright) + 10), BRIGHT_START, BRIGHT_BODY, BRIGHT_END, value);
+
+    -- Gradient
+    ComposeBarRight(x, y, w, h, Color(255, 255, 255, 8), GRADIENT_START, GRADIENT_BODY, GRADIENT_END, value);
 
   end
 

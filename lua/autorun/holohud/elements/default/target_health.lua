@@ -83,9 +83,10 @@ if CLIENT then
     @param {Color} name colour
     @param {Color} armour colour
     @param {boolean} should lerp the value
+    @param {boolean} right aligned bar
     @void
   ]]
-  local function DrawHealth(x, y, w, h, target, barCol, allyCol, nameColour, armourCol, shouldLerp)
+  local function DrawHealth(x, y, w, h, target, barCol, allyCol, nameColour, armourCol, shouldLerp, right_align)
     local bright = HOLOHUD:GetHighlight(PANEL_NAME);
     local name, health, maxHealth, armour = "", -1, -1, -1;
     barCol = barCol or Color(255, 100, 72, 200);
@@ -127,14 +128,18 @@ if CLIENT then
       maxHealth = 0;
     end
 
+    -- get the bar drawing function to use
+    local bar_func = HOLOHUD.DrawBar
+    if right_align then bar_func = HOLOHUD.DrawBarRight end
+
     -- If it's a player display it differently
     if (armour > -1) then
       HOLOHUD:DrawText(x + (w * 0.5), y + 3, name, "holohud_target", nameColour, bright, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP);
-      HOLOHUD:DrawBar(x + 6, y + h - 20, w + 4, 23, barCol, lerp / maxHealth, bright);
+      bar_func(HOLOHUD, x + 6, y + h - 20, w + 4, 23, barCol, lerp / maxHealth, bright);
       HOLOHUD:DrawHorizontalBar(x + w - SUIT_V - 5, y + h - 16, armourCol or ARMOUR_COLOUR, apLerp / 100, bright);
     else
       HOLOHUD:DrawText(x + (w * 0.5), y + 4, name, "holohud_weapon_name", nameColour, bright, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP);
-      HOLOHUD:DrawBar(x + 5, y + h - 11, w + 4, 23, barCol, lerp / maxHealth, bright);
+      bar_func(HOLOHUD, x + 5, y + h - 11, w + 4, 23, barCol, lerp / maxHealth, bright);
     end
   end
 
@@ -178,7 +183,7 @@ if CLIENT then
     local align = TEXT_ALIGN_TOP;
     if (IsValid(entity) and entity:IsPlayer()) then align = TEXT_ALIGN_BOTTOM; end
     HOLOHUD:SetPanelActive(PANEL_NAME, IsValid(entity) and (entity:IsPlayer() or IsNPC(entity)) and time > CurTime());
-    HOLOHUD:DrawFragmentAlign((ScrW() * 0.5) - (w * 0.5), offset, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("enemy"), config("ally"), config("name"), config("armour"), config("lerp"));
+    HOLOHUD:DrawFragmentAlign((ScrW() * 0.5) - (w * 0.5), offset, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("enemy"), config("ally"), config("name"), config("armour"), config("lerp"), config("right_align"));
   end
 
   -- Add element
@@ -197,7 +202,8 @@ if CLIENT then
       warn_colour = { name = "Warning colour", value = HEALTH_WARN },
       crit_colour = { name = "Critical colour", value = HEALTH_CRIT },
       armour = { name = "Armour colour", value = ARMOUR_COLOUR },
-      lerp = { name = "Enable smooth animation", value = true }
+      lerp = { name = "Enable smooth animation", value = true },
+      right_align = { name = "Right aligned bar", value = false }
     },
     DrawPanel
   );
