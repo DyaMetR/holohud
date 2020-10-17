@@ -188,6 +188,15 @@ if CLIENT then
   end
 
   --[[
+    Returns whether the current weapon is an ArcCW and the player is scoped in
+    @return {boolean} is ArcCW scoped in
+  ]]
+  local function isArcCWScope()
+    local pActiveWeapon = LocalPlayer():GetActiveWeapon();
+    return IsValid(pActiveWeapon) and pActiveWeapon.ArcCW and pActiveWeapon:GetState() == ArcCW.STATE_SIGHTS and pActiveWeapon:GetActiveSights().ScrollFunc == ArcCW.SCROLL_ZOOM
+  end
+
+  --[[
     Returns whether the mouse wheel can be used
     @return {boolean} can be used
   ]]
@@ -204,7 +213,7 @@ if CLIENT then
       isWire = pActiveWeapon:GetClass() == "gmod_tool" and (inp ~= nil and outs ~= nil);
     end
 
-    return not isACT3() and not isDrone and not isWire;
+    return not isACT3() and not isDrone and not isWire and not isArcCWScope();
   end
 
   --[[
