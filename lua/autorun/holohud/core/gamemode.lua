@@ -18,10 +18,13 @@ if CLIENT then
   HOLOHUD.GAMEMODE = {};
 
   local DEFAULT_GAMEMODE = "sandbox";
+  local TYPE_STRING = "string";
+  local TYPE_TABLE = "table";
+  local TYPE_FUNCTION = "function";
+  local TYPE_BOOL = "boolean";
 
   HOLOHUD.GAMEMODE.GamemodeElementOverride = {}; -- Determines which elements must be shown in which gamemode
   HOLOHUD.GAMEMODE.GamemodeConfigOverride = {}; -- Determines a forced configuration based on gamemode
-  local elementsOverriden = {}; -- Cache to find overriden elements
 
   --[[
     Returns whether the current gamemode overrides an element
@@ -31,7 +34,12 @@ if CLIENT then
   function HOLOHUD.GAMEMODE:IsElementOverriden(element)
     local gamemode = GAMEMODE_NAME or DEFAULT_GAMEMODE;
     local override = HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode];
-    return (elementsOverriden[element] and (override == nil or not override.elements[element]));
+    if not override then return false end
+    if override.whitelist then
+      return override.elements[element] == nil;
+    else
+      return override.elements[element] ~= nil;
+    end
   end
 
   --[[
@@ -67,7 +75,12 @@ if CLIENT then
     local gamemode = GAMEMODE_NAME or DEFAULT_GAMEMODE;
     local override = HOLOHUD.GAMEMODE.GamemodeConfigOverride[gamemode];
     if (override == nil or override[element] == nil or override[element].config[config] == nil) then return nil; end
-    return override[element].config[config];
+    local value = override[element].config[config];
+    if (type(value) == TYPE_FUNCTION) then
+      return value(element, config);
+    else
+      return value;
+    end
   end
 
   --[[
@@ -78,13 +91,11 @@ if CLIENT then
   local function AddElementOverride(gamemode, element)
     if (HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode] == nil) then HOLOHUD.GAMEMODE:SetElementOverride(gamemode, {[element] = true}, false); end
     if (HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode].whitelist) then return; end
-    if (type(element) == "string" ) then
+    if (type(element) == TYPE_STRING ) then
       HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode].elements[element] = true;
-      elementsOverriden[element] = true;
-    elseif (type(element) == "table") then
+    elseif (type(element) == TYPE_TABLE) then
       for _, name in pairs(elements) do
         HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode].elements[name] = true;
-        elementsOverriden[element] = true;
       end
     end
   end
@@ -96,11 +107,11 @@ if CLIENT then
     @void
   ]]
   function HOLOHUD.GAMEMODE:AddElementOverride(gamemode, elements)
-    if (type(gamemode) == "table") then
+    if (type(gamemode) == TYPE_TABLE) then
       for _, name in pairs(gamemode) do
         AddElementOverride(name, elements);
       end
-    elseif (type(gamemode) == "string") then
+    elseif (type(gamemode) == TYPE_STRING) then
       AddElementOverride(gamemode, elements);
     end
   end
@@ -118,9 +129,8 @@ if CLIENT then
     if (whitelist or HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode] == nil) then HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode] = {elements = {}, whitelist = whitelist}; end
     for i, element in pairs(elements) do
       local key, value = element, whitelist;
-      if (type(element) == "boolean") then key = i; value = element; end
+      if (type(element) == TYPE_BOOL) then key = i; value = element; end
       HOLOHUD.GAMEMODE.GamemodeElementOverride[gamemode].elements[key] = value;
-      elementsOverriden[element] = true;
     end
   end
 

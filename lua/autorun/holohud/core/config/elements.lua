@@ -168,8 +168,9 @@ if CLIENT then
     @return {boolean} true if enabled, false otherwise
   ]]
   function HOLOHUD.ELEMENTS:IsElementEnabled(id)
+    if (HOLOHUD.GAMEMODE:IsElementOverriden(id)) then return false; end
     if (not HOLOHUD.ELEMENTS:ElementHasUserData(id)) then return HOLOHUD.ELEMENTS:GetElement(id).enabled; end
-    return not HOLOHUD.GAMEMODE:IsElementOverriden(id) and HOLOHUD.ELEMENTS:GetElementData(id).enabled;
+    return HOLOHUD.ELEMENTS:GetElementData(id).enabled;
   end
 
   --[[
