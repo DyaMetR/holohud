@@ -150,6 +150,39 @@ HOLOHUD.GAMEMODE:AddConfigOverride( 'terrortown', 'ammunition', { mode = 3 }, tr
 
 ```
 
+### Cheat sheet for element's modes
+#### Health
+```
+1 = Default
+2 = Heartbeat with armour bar
+3 = Heartbeat with kevlar icon
+4 = Classic
+```
+#### Ammunition
+```
+1 = Default
+2 = Minimalist
+3 = Compact
+```
+#### Clock
+```
+1 = Simple
+2 = Digital
+3 = Simple with date
+```
+#### Speed-o-meter (units for both in foot and in vehicle)
+```
+1 = km/h
+2 = mph
+3 = ups
+```
+#### Auxiliary power (for both the aux. power and the ep2 flashlight)
+```
+1 = Default
+2 = Icon with background
+3 = Icon only
+```
+
 ## Setup panel
 
 "Panels" are the rectangles used as background to draw stuff. They can be opened or closed, which will play an animation in the process.
