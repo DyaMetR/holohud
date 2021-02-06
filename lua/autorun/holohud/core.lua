@@ -9,6 +9,7 @@ HOLOHUD:IncludeFile("core/gamemode.lua");
 HOLOHUD:IncludeFile("core/config.lua");
 
 -- Util
+HOLOHUD:IncludeFile("util/hook.lua");
 HOLOHUD:IncludeFile("util/death.lua");
 HOLOHUD:IncludeFile("util/sway.lua");
 HOLOHUD:IncludeFile("util/fonts.lua");
@@ -37,7 +38,8 @@ HOLOHUD:IncludeFile("components/progress_icons.lua");
 
 -- Weapon selector (requires the HUD element to exist)
 HOLOHUD:IncludeFile("elements/default/weapon_selector.lua");
-HOLOHUD:IncludeFile("util/gs_switcher.lua");
+HOLOHUD:IncludeFile("util/weapon_switcher.lua");
+--HOLOHUD:IncludeFile("util/gs_switcher.lua");
 
 -- Default HUD elements
 HOLOHUD:IncludeFile("elements/default/damage.lua");
