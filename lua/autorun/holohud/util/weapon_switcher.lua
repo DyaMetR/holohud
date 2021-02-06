@@ -52,9 +52,12 @@ HOLOHUD.ELEMENTS:AddElement("weapon_selector",
 
 local HOOK_NAME = 'dmr_weapon_switch_holohud' -- name used by hooks -- change it to avoid conflicts!
 local MAX_SLOTS = 6 -- maximum amount of slots in the weapons inventory
-local MOVE_SOUND = "Player.WeaponSelectionMoveSlot" -- sound played when moving through a slot
-local SELECT_SOUND = "Player.WeaponSelected" -- sound played when selecting a weapon
-local CANCEL_SOUND = "" -- sound played when the player closes the inventory
+local UNABLE_SOUND = "buttons/button2.wav";
+local START_SOUND = "buttons/button3.wav";
+local CANCEL_SOUND = "buttons/button10.wav";
+local MOVE_SOUND = "buttons/button14.wav"; --"Player.WeaponSelectionMoveSlot"
+local SELECT_SOUND = "buttons/button17.wav"; --"Player.WeaponSelected"
+local SOUND_LEVEL = 60;
 local OVERRIDE_CL_DRAWHUD = false -- whether it should still draw with cl_drawhud disabled
 local TIME = 6 -- how much time until it automatically closes -- 0 is never
 
@@ -65,7 +68,7 @@ local TIME = 6 -- how much time until it automatically closes -- 0 is never
 ]]--------------------------------------------------------------------
 local function IsEnabled()
 
-  return HOLOHUD:IsHUDEnabled()
+  return HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled('weapon_selector')
 
 end
 
@@ -257,6 +260,8 @@ end
   @param {number} slot
 ]]--------------------------------------------------------------------
 local function SelectSlot(slot)
+  if not slot_length[slot] or slot_length[slot] <= 0 then return end
+
   -- move slot cursor if is not there
   if slot ~= cur_slot then
     cur_pos = 1
@@ -293,10 +298,13 @@ local function PlayerBindPress(player, bind, pressed)
 
   bind = string.lower(bind)
 
+  -- get the sound volume
+  local volume = HOLOHUD.ELEMENTS:ConfigValue('weapon_selector', 'volume')
+
   -- close menu
   if (bind == CANCEL_SELECT or bind == ATTACK2) and cur_slot > 0 then
     cur_slot = 0
-    player:EmitSound( CANCEL_SOUND )
+    player:EmitSound(CANCEL_SOUND, SOUND_LEVEL, 166, math.Clamp(0.88 * volume, 0, 1), CHAN_AUTO)
     if bind == ATTACK2 then return true end -- override only if secondary attack is pressed
   end
 
@@ -318,8 +326,18 @@ local function PlayerBindPress(player, bind, pressed)
     if slot ~= nil then
       -- make sure it doesn't go out of bounds
       if slot >= 1 and slot <= MAX_SLOTS then
+        -- make sound
+        if weapon_count <= 0 or slot_length[slot] <= 0 then
+          player:EmitSound(UNABLE_SOUND, SOUND_LEVEL, 175, math.Clamp(0.46 * volume, 0, 1), CHAN_AUTO)
+        else
+          if cur_slot == 0 and (slot_length[slot] == nil or slot_length[slot] > 0) then
+            player:EmitSound(START_SOUND, SOUND_LEVEL, 50, math.Clamp(0.33 * volume, 0, 1))
+          else
+            player:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(0.66 * volume, 0, 1), CHAN_AUTO)
+          end
+        end
+        -- select
         SelectSlot( slot )
-        player:EmitSound( MOVE_SOUND )
         return true
       end
     end
@@ -330,7 +348,7 @@ local function PlayerBindPress(player, bind, pressed)
   if bind == ATTACK and pressed and cur_slot > 0 and weapons[cur_slot][cur_pos] then
     input.SelectWeapon( weapons[cur_slot][cur_pos] )
     cur_slot = 0
-    player:EmitSound( SELECT_SOUND )
+    player:EmitSound(SELECT_SOUND, SOUND_LEVEL, 200, math.Clamp(0.33 * volume, 0, 1), CHAN_AUTO)
     return true
   end
 
@@ -340,14 +358,14 @@ local function PlayerBindPress(player, bind, pressed)
   -- next weapon
   if bind == INV_NEXT then
     MoveCursor( true )
-    player:EmitSound( MOVE_SOUND )
+    player:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
     return true
   end
 
   -- previous weapon
   if bind == INV_PREV then
     MoveCursor( false )
-    player:EmitSound( MOVE_SOUND )
+    player:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
     return true
   end
 end
@@ -387,7 +405,7 @@ hook.Add('DrawOverlay', HOOK_NAME, function()
   DrawHUD()
 
   -- draw HOLOHUD
-  DrawWeaponHUD(function(param) return HOLOHUD.ELEMENTS:ConfigValue("weapon_selector", param); end);
+  DrawWeaponHUD(function(param) return HOLOHUD.ELEMENTS:ConfigValue('weapon_selector', param); end);
 end)
 
 end

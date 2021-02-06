@@ -470,5 +470,5 @@ if CLIENT then
   			return true
   		end
   	end
-  end);
+  end, 2);
 end
