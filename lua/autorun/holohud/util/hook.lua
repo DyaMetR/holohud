@@ -19,7 +19,7 @@ local hooks = {}
   @return {boolean} there's a conflict
 ]]--------------------------------------------------------------------
 local function detectConflicts()
-  return _G.DLib ~= nil
+  return _G.DLib ~= nil or ix ~= nil
 end
 
 --[[------------------------------------------------------------------
