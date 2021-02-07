@@ -232,6 +232,9 @@ if CLIENT then
   hook_Add("PlayerBindPress", "HOLOHUD_GS_WeaponSelector", function(pPlayer, sBind, bPressed)
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
 
+    -- Arctic Stims
+    if input.IsKeyDown(input.GetKeyCode(input.LookupBinding('+arc_vm_medshot'))) then return end
+
     -- Don't show if physgun is in use
     local hasPhysgun = IsValid(pPlayer:GetActiveWeapon()) and (pPlayer:KeyDown(IN_ATTACK) or pPlayer:KeyDown(IN_ATTACK2)) and pPlayer:GetActiveWeapon():GetClass() == "weapon_physgun";
     if (hasPhysgun and (sBind == "invprev" or sBind == "invnext")) then return true; end
@@ -470,5 +473,5 @@ if CLIENT then
   			return true
   		end
   	end
-  end, 2);
+  end);
 end
