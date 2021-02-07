@@ -233,7 +233,8 @@ if CLIENT then
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
 
     -- Arctic Stims
-    if input.IsKeyDown(input.GetKeyCode(input.LookupBinding('+arc_vm_medshot'))) then return end
+    local arcStimBind = input.LookupBinding('+arc_vm_medshot')
+    if arcStimBind and input.IsKeyDown(input.GetKeyCode(arcStimBind)) then return end
 
     -- Don't show if physgun is in use
     local hasPhysgun = IsValid(pPlayer:GetActiveWeapon()) and (pPlayer:KeyDown(IN_ATTACK) or pPlayer:KeyDown(IN_ATTACK2)) and pPlayer:GetActiveWeapon():GetClass() == "weapon_physgun";
