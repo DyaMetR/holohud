@@ -234,16 +234,20 @@ if CLIENT then
   hook_Add("PlayerBindPress", "HOLOHUD_GS_WeaponSelector", function(pPlayer, sBind, bPressed, code)
     if (not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled("weapon_selector") or hud_fastswitch:GetInt() > 0) then return; end
 
-    -- Register Arctic Stims bind
-    if sBind == ARC_STIMS_BIND then
-      arcStimsBind[code] = true
-    else
-      arcStimsBind[code] = nil
-    end
+    if code ~= nil then -- make sure the code isn't nil so it doesn't break the check
 
-    -- Check whether the Arctic Stims menu is being used
-    for _code, _ in pairs(arcStimsBind) do
-      if input.IsKeyDown(_code) then return end
+      -- Register Arctic Stims bind
+      if sBind == ARC_STIMS_BIND then
+        arcStimsBind[code] = true
+      else
+        arcStimsBind[code] = nil
+      end
+
+      -- Check whether the Arctic Stims menu is being used
+      for _code, _ in pairs(arcStimsBind) do
+        if input.IsKeyDown(_code) then return end
+      end
+
     end
 
     -- Don't show if physgun is in use
