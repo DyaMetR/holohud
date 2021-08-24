@@ -50,7 +50,8 @@ if CLIENT then
       colour = { name = "Colour", value = Color(255, 255, 255) },
       ammo_colour = { name = "Ammo bar colour", value = AMMO_COLOUR },
       crit_colour = { name = "Out of ammo colour", value = Color(255, 0, 0)},
-      weapon_details = { name = "Draw weapon details", value = false }
+      weapon_details = { name = "Draw weapon details", value = false },
+      timeout = {name = "Auto-close delay", desc = "How much time does it stand idle before closing. (0 for infinite)", value = 5}
     }, DrawWeaponHUD
   );
 
@@ -108,6 +109,9 @@ if CLIENT then
   		-- Here, we will start at "1" to match the slot binds
   		local iSlot = pWeapon:GetSlot() + 1
 
+      -- Single out weapons with negative slot
+      if iSlot < 0 then continue end
+
   		if (iSlot <= MAX_SLOTS) then
   			-- Cache number of weapons in each slot
   			local iLen = tCacheLength[math.max(iSlot, 0)] + 1
@@ -133,6 +137,16 @@ if CLIENT then
   			end
   		end
   	end
+  end
+
+  -- Initiate the auto-close timer (if enabled)
+  local function autoCloseTimer()
+    local timeout = HOLOHUD.ELEMENTS:ConfigValue("weapon_selector", "timeout") or 5
+    if timeout <= 0 then return end
+    -- create a timer to decide when to automatically close the weapon selector
+    timer.Create("weapon_selector", timeout, 1, function()
+      iCurSlot = 0
+    end)
   end
 
   local cl_drawhud = GetConVar("cl_drawhud");
@@ -331,6 +345,7 @@ if CLIENT then
 
   		flSelectTime = RealTime()
   		pPlayer:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
+      autoCloseTimer()
 
   		return true
   	end
@@ -402,6 +417,7 @@ if CLIENT then
 
   		flSelectTime = RealTime()
   		pPlayer:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
+      autoCloseTimer()
 
   		return true
   	end
