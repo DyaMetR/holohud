@@ -321,6 +321,7 @@ if CLIENT then
 
   					flSelectTime = RealTime()
   					pPlayer:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
+            autoCloseTimer()
 
   					return true
   				end
@@ -389,6 +390,7 @@ if CLIENT then
 
   					flSelectTime = RealTime()
   					pPlayer:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
+            autoCloseTimer()
 
   					return true
   				end
@@ -440,6 +442,7 @@ if CLIENT then
 
       if (iCurSlot == 0 and (tCacheLength[iSlot] == nil or tCacheLength[iSlot] > 0)) then
         pPlayer:EmitSound(START_SOUND, SOUND_LEVEL, 50, math.Clamp(0.33 * volume, 0, 1));
+        autoCloseTimer()
       end
 
   		-- Play a sound even if there aren't any weapons in that slot for "haptic" (really auditory) feedback
@@ -453,6 +456,7 @@ if CLIENT then
   		if (iSlot <= MAX_SLOTS) then
         if (iCurSlot > 0) then
           pPlayer:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(0.66 * volume, 0, 1), CHAN_AUTO);
+          autoCloseTimer()
         end
 
   			-- If the slot is already open
