@@ -1,411 +1,359 @@
 --[[------------------------------------------------------------------
-  DyaMetR's Weapon Switcher
-  A script that mimics the weapon selector logic without overriding
-  any other addons that use the inventory binds.
-  https://github.com/DyaMetR/Weapon-Switcher
+  DyaMetR's weapon switcher script
+  September 19th, 2021
 
-  Use the 'DrawHUD' function to display your custom weapon selector!
-  Use the rest of functions below CONFIGURATION to customize it to your liking
-  If you're not including this anywhere, place it on 'lua/autorun/client'
-
-  Inspired by code_gs's weapon switcher skeleton:
-  https://github.com/Kefta/Weapon-Switcher-Skeleton/blob/master/gs_switcher.lua
+  API to be used in a custom weapon selector.
 ]]--------------------------------------------------------------------
 
-if CLIENT then
+if SERVER then return end -- do not run on server
 
---[[ VARIABLES -- used when drawing the HUD component ]]--
+-- Configuration
+local MAX_SLOTS = 6 -- maximum number of weapon slots
 
-local temp = {} -- table used when sorting weapons per slot position
-local slot_cache = {} -- weapons divided in slots
-local slot_length = {} -- amount of weapons per slot
-local weapons_slot = {} -- where each weapon is in the cache
-local weapon_count = 0 -- total amount of cached weapons
-local last_slot_occupied = 0 -- the last slot with weapons
-local cur_slot = 0 -- current slot selected -- 0 is invalid, won't show the HUD
-local cur_pos = 1 -- position inside the slot
+-- Constants
+local PHYSICS_GUN, CAMERA = 'weapon_physgun', 'gmod_camera'
+local SLOT, INV_PREV, INV_NEXT, ATTACK, ATTACK2 = 'slot', 'invprev', 'invnext', '+attack', '+attack2'
 
---[[ HOLOHUD ]]--
+-- Variables
+local curSlot = 0 -- current slot selected
+local curPos = 0 -- current weapon position selected
+local weaponCount = 0 -- current weapon count
+local cache = {} -- cached weapons sorted per slot
+local cacheLength = {} -- how many weapons are there in each slot
+local weaponPos = {} -- assigned table position in slot
 
--- declare draw function
-local function DrawWeaponHUD(config) HOLOHUD:DrawWeaponSelector(config("x"), config("y"), slot_cache, cur_slot, cur_pos, slot_length, config); end
-
--- add element
-HOLOHUD.ELEMENTS:AddElement("weapon_selector",
-  "Weapon selector",
-  "Allows the user to switch between the weapons they currently hold",
-  nil,
-  {
-    alpha = {name = "Background opacity", value = 0.1725, maxValue = 1},
-    animation = {name = "Toggle animations", desc = "Animations that play every time you open and/or navigate the inventory", value = true},
-    x = {name = "Horizontal margin", value = ScrH() * 0.1, maxValue = ScrW()},
-    y = {name = "Vertical margin", value = ScrH() * 0.1, maxValue = ScrH()},
-    volume = {name = "Sound volume", value = 1, minValue = 0, maxValue = 2},
-    colour = { name = "Colour", value = Color(255, 255, 255) },
-    ammo_colour = { name = "Ammo bar colour", value = AMMO_COLOUR },
-    crit_colour = { name = "Out of ammo colour", value = Color(255, 0, 0)},
-    weapon_details = { name = "Draw weapon details", value = false }
-  }, DrawWeaponHUD
-);
-
---[[ CONFIGURATION -- what you mainly want to put your hands on ]]--
-
-local HOOK_NAME = 'dmr_weapon_switch_holohud' -- name used by hooks -- change it to avoid conflicts!
-local MAX_SLOTS = 6 -- maximum amount of slots in the weapons inventory
-local UNABLE_SOUND = "buttons/button2.wav";
-local START_SOUND = "buttons/button3.wav";
-local CANCEL_SOUND = "buttons/button10.wav";
-local MOVE_SOUND = "buttons/button14.wav"; --"Player.WeaponSelectionMoveSlot"
-local SELECT_SOUND = "buttons/button17.wav"; --"Player.WeaponSelected"
-local SOUND_LEVEL = 60;
-local OVERRIDE_CL_DRAWHUD = false -- whether it should still draw with cl_drawhud disabled
-local TIME = 6 -- how much time until it automatically closes -- 0 is never
-
-
---[[------------------------------------------------------------------
-  Called to check whether the weapon switcher should work at all
-  @return {boolean} should work
-]]--------------------------------------------------------------------
-local function IsEnabled()
-
-  return HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled('weapon_selector')
-
+-- Initialize cache
+for slot = 1, MAX_SLOTS do
+  cache[slot] = {}
+  cacheLength[slot] = 0
 end
 
 --[[------------------------------------------------------------------
-  How much time is the inventory open
-  @return {number} time
+  Sorting function to order a weapon inventory slot by slot position
+  @param {Weapon} a
+  @param {Weapon} b
 ]]--------------------------------------------------------------------
-local function GetTime()
-
-  return TIME
-
+local function sortWeaponSlot(a, b)
+  return a:GetSlotPos() < b:GetSlotPos()
 end
 
 --[[------------------------------------------------------------------
-  Weapon table to select weapon from
-  @return {table} weapon table
+  Caches the current weapons the player has
+  @param {boolean} force cache
 ]]--------------------------------------------------------------------
-local function GetWeaponTable()
+local function cacheWeapons(force)
+  -- get current weapons
+  local weapons = LocalPlayer():GetWeapons()
 
-    return slot_cache
+  -- only cache when weapon count is different
+  if not force and weaponCount == #weapons then return end
 
-end
-
---[[------------------------------------------------------------------
-  Called when the HUD is painted -- draw your own selector here!
-]]--------------------------------------------------------------------
-local function DrawHUD() return end
-
---[[------------------------------------------------------------------
-  Called on the slot clearing process before registering weapons
-  @param {number} slot
-]]--------------------------------------------------------------------
-local function ClearSlot(slot)
-end
-
---[[------------------------------------------------------------------
-  Called when a weapon is registered
-  @param {Weapon} weapon
-  @param {number} slot
-  @param {number} position in slot
-]]--------------------------------------------------------------------
-local function WeaponRegistered(weapon, slot, pos)
-end
-
---[[ IMPLEMENTATION -- do not touch unless you know what you're doing! ]]--
-
-local WEAPON_PHYSGUN = 'weapon_physgun' -- physgun weapon class
-local GMOD_CAMERA = 'gmod_camera' -- camera weapon class
-local CANCEL_SELECT = 'cancelselect' -- command to close inventory
-local INV_NEXT = 'invnext' -- command to move inventory cursor forward
-local INV_PREV = 'invprev' -- command to move inventory backwards
-local SLOT = 'slot' -- command to select an inventory slot
-local LAST_INV = 'lastinv' -- command to select the last weapon used
-local ATTACK, ATTACK2 = '+attack', '+attack2' -- commands to select or cancel selection
-local DRAWHUD = GetConVar('cl_drawhud')
-local FASTSWITCH = GetConVar('hud_fastswitch') -- weapons fast switch console variable
-local last_weapon_count = 0 -- variable to check for weapon table changes
-local time = 0 -- time until the HUD decides to hide
-
--- initialize weapons table with empty values
-for i=1, MAX_SLOTS do
-  temp[i] = {}
-  slot_cache[i] = {}
-  slot_length[i] = 0
-end
-
---[[------------------------------------------------------------------
-  Puts the inventory cursor on the currently active weapon
-]]--------------------------------------------------------------------
-local function SetCursorOnActiveWeapon()
-  local weapon = LocalPlayer():GetActiveWeapon()
-  if IsValid( weapon ) then
-    local cur_weapon = weapons_slot[weapon:GetClass()]
-    cur_slot = cur_weapon[1]
-    cur_pos = cur_weapon[2]
-  else
-    cur_slot = 0
-    cur_pos = 1
-  end
-end
-
---[[------------------------------------------------------------------
-  Saves the given weapons into an ordered table by slot and slot position
-]]--------------------------------------------------------------------
-local function CacheWeapons()
-  local weapons = table.Copy(LocalPlayer():GetWeapons()) -- defaults to LocalPlayer's weapons
-
-  -- update the current weapon count
-  weapon_count = #weapons
-
-  -- reset the cache
-  last_slot_occupied = 0
-  for i=1, MAX_SLOTS do
-    -- empty the cached weapons on the given slot
-    table.Empty(slot_cache[i])
-    -- reset the slot's length
-    slot_length[i] = 0
-
-    ClearSlot(i)
-  end
-
-   -- do not cache weapons if there are none
-  if weapon_count <= 0 then
-    cur_slot = 0
-    cur_pos = 1
-    return
-  end
-
-  -- sort weapons by their slot position
-  for i=1, weapon_count do
-    -- get weapon slot
-    local slot = weapons[i]:GetSlot() + 1
-    -- get next position
-    local pos = slot_length[slot] + 1
-    slot_length[slot] = pos
-    -- add weapon to temporary cache
-    temp[slot][pos] = weapons[i]
-    -- sort slot
-    table.sort( temp[slot], function( a, b ) return a:GetSlotPos() < b:GetSlotPos() end )
-  end
-
-  -- store weapons in cache
-  for slot, _weapons in pairs(temp) do
-    for pos, _weapon in pairs(_weapons) do
-      slot_cache[slot][pos] = _weapon -- store in cache
-      weapons_slot[_weapon:GetClass()] = { slot, pos } -- store position and slot per weapon
-      last_slot_occupied = math.max(last_slot_occupied, slot)
-      WeaponRegistered(_weapon, slot, pos) -- call custom function
+  -- reset cache
+  for slot = 1, MAX_SLOTS do
+    for pos = 0, cacheLength[slot] do
+      cache[slot][pos] = nil
     end
-    -- empty the temporary cache once finished
-    table.Empty(temp[slot])
+    cacheLength[slot] = 0
+  end
+  table.Empty(weaponPos)
+
+  -- update weapon count
+  weaponCount = #weapons
+
+  -- add weapons
+  for _, weapon in pairs(weapons) do
+    -- weapon slots start at 0, so we need to make it start at 1 because of lua tables
+    local slot = weapon:GetSlot() + 1
+
+    -- do not add if the slot is out of bounds
+    if slot <= 0 or slot > MAX_SLOTS then continue end
+
+    -- cache weapon
+    table.insert(cache[slot], weapon)
+    cacheLength[slot] = cacheLength[slot] + 1
   end
 
-  -- check whether the cursor is out of bounds
-  if cur_slot > 0 and ( slot_length[cur_slot] <= 0 or not slot_cache[cur_slot][cur_pos] ) then
-    SetCursorOnActiveWeapon()
-  end
-end
+  -- sort slots
+  for slot = 1, MAX_SLOTS do
+    table.sort(cache[slot], sortWeaponSlot)
 
---[[------------------------------------------------------------------
-  Moves the position cursor by one; will move slots if bounds are met
-  @param {boolean} move cursor forward
-]]--------------------------------------------------------------------
-local function MoveCursor(forward)
-  -- open inventory
-  if cur_slot <= 0 then
-    SetCursorOnActiveWeapon()
+    -- get sorted weapons' positions
+    for pos, weapon in pairs(cache[slot]) do
+      weaponPos[weapon] = pos
+    end
   end
-  -- move cursor
-  if forward then
-    if cur_pos >= slot_length[cur_slot] then
-      cur_pos = 1
 
-      -- look for the next slot with weapons
-      repeat
-        if cur_slot >= MAX_SLOTS then
-          cur_slot = 1
-        else
-          cur_slot = cur_slot + 1
-        end
-      until( slot_length[cur_slot] > 0 )
+  -- check whether we're out of bounds
+  if curSlot > 0 then
+    if weaponCount <= 0 then
+      curSlot = 0
+      curPos = 1
     else
-      cur_pos = math.min(cur_pos + 1, slot_length[cur_slot])
+      curPos = math.min(curPos, cacheLength[curSlot])
     end
-  else
-    if cur_pos <= 1 then
-      -- look for the next slot with weapons
-      repeat
-        if cur_slot <= 1 then
-          cur_slot = MAX_SLOTS
-        else
-          cur_slot = cur_slot - 1
-        end
-      until( slot_length[cur_slot] > 0 )
+  end
+end
 
-      -- put the cursor on the last weapon
-      cur_pos = slot_length[cur_slot]
+--[[------------------------------------------------------------------
+  Finds the next slot with weapons
+  @param {number} starting slot
+  @param {boolean} move forward
+  @return {number} slot found
+]]--------------------------------------------------------------------
+local function findSlot(slot, forward)
+  -- do not search if there are no weapons
+  if weaponCount <= 0 then return slot end
+
+  -- otherwise, search for the next slot with weapons
+  while (not cacheLength[slot] or cacheLength[slot] <= 0) do
+    if forward then
+      if slot < MAX_SLOTS then
+        slot = slot + 1
+      else
+        slot = 1
+      end
     else
-      cur_pos = math.max(cur_pos - 1, 1)
-    end
-  end
-
-  -- reset timer
-  time = CurTime() + GetTime()
-end
-
---[[------------------------------------------------------------------
-  Cycles between the weapons of the given slot
-  @param {number} slot
-]]--------------------------------------------------------------------
-local function SelectSlot(slot)
-  if not slot_length[slot] or slot_length[slot] <= 0 then return end
-
-  -- move slot cursor if is not there
-  if slot ~= cur_slot then
-    cur_pos = 1
-    cur_slot = slot
-  else
-    -- cycle through slot weapons
-    if cur_pos < slot_length[slot] then
-      cur_pos = math.min(cur_pos + 1, slot_length[slot])
-    else
-      cur_pos = 1
-    end
-  end
-
-  -- reset timer
-  time = CurTime() + GetTime()
-end
-
---[[------------------------------------------------------------------
-  Whether the weapon selector should draw
-  @return {boolean} should draw
-]]--------------------------------------------------------------------
-local function ShouldDraw()
-  return IsEnabled() and (OVERRIDE_CL_DRAWHUD or DRAWHUD:GetBool())
-end
-
---[[------------------------------------------------------------------
-  Processes PlayerBindPress event
-  @param {Player} player
-  @param {string} bind
-  @param {boolean} pressed
-]]--------------------------------------------------------------------
-local function PlayerBindPress(player, bind, pressed)
-  if not pressed or not ShouldDraw() or FASTSWITCH:GetBool() or not player:Alive() or (player:InVehicle() and not player:GetAllowWeaponsInVehicle()) then return end
-
-  bind = string.lower(bind)
-
-  -- get the sound volume
-  local volume = HOLOHUD.ELEMENTS:ConfigValue('weapon_selector', 'volume')
-
-  -- close menu
-  if (bind == CANCEL_SELECT or bind == ATTACK2) and cur_slot > 0 then
-    cur_slot = 0
-    player:EmitSound(CANCEL_SOUND, SOUND_LEVEL, 166, math.Clamp(0.88 * volume, 0, 1), CHAN_AUTO)
-    if bind == ATTACK2 then return true end -- override only if secondary attack is pressed
-  end
-
-  -- last weapon
-  if bind == LAST_INV then
-    local last_weapon = player:GetPreviousWeapon()
-    if last_weapon:IsWeapon() then
-      input.SelectWeapon(last_weapon)
-    end
-  end
-
-  if weapon_count <= 0 then return end -- don't do anything past this point if there are no weapons present
-
-  -- slot
-  if string.sub(bind, 1, 4) == SLOT then
-    local slot = tonumber(string.sub(bind, 5, 6))
-
-    -- check whether there's a valid slot
-    if slot ~= nil then
-      -- make sure it doesn't go out of bounds
-      if slot >= 1 and slot <= MAX_SLOTS then
-        -- make sound
-        if weapon_count <= 0 or slot_length[slot] <= 0 then
-          player:EmitSound(UNABLE_SOUND, SOUND_LEVEL, 175, math.Clamp(0.46 * volume, 0, 1), CHAN_AUTO)
-        else
-          if cur_slot == 0 and (slot_length[slot] == nil or slot_length[slot] > 0) then
-            player:EmitSound(START_SOUND, SOUND_LEVEL, 50, math.Clamp(0.33 * volume, 0, 1))
-          else
-            player:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(0.66 * volume, 0, 1), CHAN_AUTO)
-          end
-        end
-        -- select
-        SelectSlot( slot )
-        return true
+      if slot > 1 then
+        slot = slot - 1
+      else
+        slot = MAX_SLOTS
       end
     end
   end
 
-  -- select weapon
-  local weapons = GetWeaponTable()
-  if bind == ATTACK and pressed and cur_slot > 0 and weapons[cur_slot][cur_pos] then
-    input.SelectWeapon( weapons[cur_slot][cur_pos] )
-    cur_slot = 0
-    player:EmitSound(SELECT_SOUND, SOUND_LEVEL, 200, math.Clamp(0.33 * volume, 0, 1), CHAN_AUTO)
-    return true
+  return slot
+end
+
+--[[------------------------------------------------------------------
+  Finds the next weapon with ammo to select
+  @param {number} starting slot
+  @param {number} starting slot position
+  @param {boolean} move forward
+  @return {number} slot found
+  @return {number} slot position found
+]]--------------------------------------------------------------------
+local function findWeapon(slot, pos, forward)
+  -- do not search if there are no weapons
+  if weaponCount <= 0 then return slot, pos end
+
+  if forward then
+    if pos < cacheLength[slot] then
+      pos = pos + 1
+    else
+      pos = 1
+      slot = findSlot(slot + 1, true)
+    end
+  else
+    if pos > 1 then
+      pos = pos - 1
+    else
+      slot = findSlot(slot - 1, false)
+      pos = cacheLength[slot]
+    end
   end
 
-  -- disable mousewheel functions if the physgun is being used
-  if IsValid(player:GetActiveWeapon()) and player:GetActiveWeapon():GetClass() == WEAPON_PHYSGUN and player:KeyDown(IN_ATTACK) then return end
+  return slot, pos
+end
 
-  -- next weapon
-  if bind == INV_NEXT then
-    MoveCursor( true )
-    player:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
-    return true
+--[[------------------------------------------------------------------
+  Moves the cursor one position going to across all slots
+  @param {boolean} move forward
+]]--------------------------------------------------------------------
+local function moveCursor(forward)
+  -- do not move cursor if there are no weapons to cycle through
+  if weaponCount <= 0 then return end
+
+  -- if slot is out of bounds, get the current weapon's
+  if curSlot <= 0 then
+    local weapon = LocalPlayer():GetActiveWeapon()
+
+    -- if there are no weapons equipped, start at the first slot
+    if IsValid(weapon) then
+      -- check if the weapon has been cached -- otherwise recache again
+      if not weaponPos[weapon] then cacheWeapons(true) end
+
+      -- get weapon data
+      curSlot = weapon:GetSlot() + 1
+      curPos = weaponPos[weapon]
+    else
+      curSlot = 1
+      curPos = 0
+    end
   end
 
-  -- previous weapon
+  -- move cursor
+  curSlot, curPos = findWeapon(curSlot, curPos, forward)
+end
+
+--[[------------------------------------------------------------------
+  Moves the cursor inside a slot
+  @param {number} slot
+]]--------------------------------------------------------------------
+local function cycleSlot(slot)
+  -- do not move cursor if there are no weapons to cycle through
+  if cacheLength[slot] <= 0 then
+    curSlot = slot
+    curPos = 0
+    return
+  end
+
+  -- if current slot is out of bounds
+  if curSlot <= 0 then
+    local weapon = LocalPlayer():GetActiveWeapon()
+
+    -- if there are no weapons equipped, start at the first pos
+    if IsValid(weapon) and weapon:GetSlot() == slot - 1 then
+      curPos = weaponPos[weapon] - 1
+    else
+      curPos = 0
+    end
+
+    curSlot = slot
+  else
+    -- if the slot is different from what it was, reset position
+    if curSlot ~= slot then
+      curPos = 0
+      curSlot = slot
+    end
+  end
+
+  -- cycle through slot
+  if curPos < cacheLength[curSlot] then
+    curPos = curPos + 1
+  else
+    curPos = 1
+  end
+end
+
+--[[------------------------------------------------------------------
+  Selects the weapon highlighted in the switcher
+]]--------------------------------------------------------------------
+local function equipSelectedWeapon()
+  local weapon = cache[curSlot][curPos]
+  if not weapon or not IsValid(weapon) then return end
+  input.SelectWeapon(weapon)
+end
+
+--[[------------------------------------------------------------------
+  Implementation
+]]--------------------------------------------------------------------
+
+local cl_drawhud = GetConVar('cl_drawhud')
+local ELEMENT_NAME = 'weapon_selector'
+
+-- sounds
+local UNABLE_SOUND = 'buttons/button2.wav'
+local START_SOUND = 'buttons/button3.wav'
+local CANCEL_SOUND = 'buttons/button10.wav'
+local MOVE_SOUND = 'buttons/button14.wav'
+local SELECT_SOUND = 'buttons/button17.wav'
+local SOUND_LEVEL = 60
+
+-- Initiate the auto-close timer (if enabled)
+local function autoCloseTimer()
+  local timeout = HOLOHUD.ELEMENTS:ConfigValue(ELEMENT_NAME, 'timeout') or 5
+  if timeout <= 0 then return end
+  -- create a timer to decide when to automatically close the weapon selector
+  timer.Create('holohud_' .. ELEMENT_NAME, timeout, 1, function()
+    curSlot = 0
+  end)
+end
+
+-- emits a sound from the weapon selector
+local function emitSound(sound, pitch)
+  local volume = HOLOHUD.ELEMENTS:ConfigValue(ELEMENT_NAME, 'volume')
+  LocalPlayer():EmitSound(sound, SOUND_LEVEL, pitch, volume, CHAN_WEAPON)
+end
+
+-- draws the weapon selector
+local function drawHUD(config)
+  -- cache weapons
+  cacheWeapons()
+
+  -- draw
+  HOLOHUD:DrawWeaponSelector(config('x'), config('y'), cache, curSlot, curPos, cacheLength, config)
+end
+
+-- add element
+HOLOHUD.ELEMENTS:AddElement(ELEMENT_NAME,
+  'Weapon selector',
+  'Allows the user to switch between the weapons they currently hold',
+  nil,
+  {
+    alpha = {name = 'Background opacity', value = 0.1725, maxValue = 1},
+    animation = {name = 'Toggle animations', desc = 'Animations that play every time you open and/or navigate the inventory', value = true},
+    x = {name = 'Horizontal margin', value = ScrH() * 0.1, maxValue = ScrW()},
+    y = {name = 'Vertical margin', value = ScrH() * 0.1, maxValue = ScrH()},
+    volume = {name = 'Sound volume', value = 1, minValue = 0, maxValue = 2},
+    colour = { name = 'Colour', value = Color(255, 255, 255) },
+    ammo_colour = { name = 'Ammo bar colour', value = AMMO_COLOUR },
+    crit_colour = { name = 'Out of ammo colour', value = Color(255, 0, 0)},
+    weapon_details = { name = 'Draw weapon details', value = false },
+    timeout = {name = 'Auto-close delay', desc = 'How much time does it stand idle before closing. (0 for infinite)', value = 5}
+  }, drawHUD
+)
+
+-- paint into overlay if the camera is out
+hook.Add('DrawOverlay', 'holohud_switcher_overlay', function()
+  if not LocalPlayer or not LocalPlayer().GetActiveWeapon then return end -- avoid pre-init errors
+  local weapon = LocalPlayer():GetActiveWeapon()
+  if not IsValid(weapon) or weapon:GetClass() ~= CAMERA or gui.IsGameUIVisible() then return end
+  drawHUD(function(param) return HOLOHUD.ELEMENTS:ConfigValue(ELEMENT_NAME, param) end)
+end)
+
+-- select
+UnintrusiveBindPress.add('holohud_legacy', function(_player, bind, pressed, code)
+  if not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled(ELEMENT_NAME) or not cl_drawhud:GetBool() then return end -- ignore if it shouldn't draw
+  if not pressed then return end -- ignore if bind was not pressed
+
+  -- check whether the physics gun is in use
+  local weapon = LocalPlayer():GetActiveWeapon()
+  if IsValid(weapon) and weapon:GetClass() == PHYSICS_GUN and LocalPlayer():KeyDown(IN_ATTACK) and (bind == INV_PREV or bind == INV_NEXT) then return true end
+
+  -- move backwards
   if bind == INV_PREV then
-    MoveCursor( false )
-    player:EmitSound(MOVE_SOUND, SOUND_LEVEL, 200, math.Clamp(volume, 0, 1), CHAN_AUTO)
+    moveCursor(false)
+    emitSound(MOVE_SOUND, 200)
+    autoCloseTimer()
     return true
   end
-end
 
--- add hook with priority -- DLib support
-hook.Add('PlayerBindPress', HOOK_NAME, PlayerBindPress, 2)
-
--- seek for weapon table changes
-hook.Add('PostDrawHUD', HOOK_NAME, function()
-  if not ShouldDraw() or LocalPlayer().GetWeapons == nil then return end
-  -- check if weapons changed
-  if last_weapon_count ~= #LocalPlayer():GetWeapons() then
-    CacheWeapons()
-    last_weapon_count = weapon_count
+  -- move forward
+  if bind == INV_NEXT then
+    moveCursor(true)
+    emitSound(MOVE_SOUND, 200)
+    autoCloseTimer()
+    return true
   end
-  -- close inventory
-  if GetTime() > 0 and time < CurTime() then
-    cur_slot = 0
+
+  -- cycle through slot
+  if string.sub(bind, 1, 4) == SLOT then
+    if curSlot <= 0 then
+      emitSound(START_SOUND, 50)
+    else
+      emitSound(MOVE_SOUND, 200)
+    end
+    cycleSlot(tonumber(string.sub(bind, 5)))
+    autoCloseTimer()
+    return true
+  end
+
+  -- select
+  if curSlot > 0 and bind == ATTACK then
+    if curPos > 0 then
+      emitSound(SELECT_SOUND, 200)
+    else
+      emitSound(UNABLE_SOUND, 175)
+    end
+    equipSelectedWeapon()
+    curSlot = 0
+    return true
+  end
+
+  -- cancel
+  if curSlot > 0 and bind == ATTACK2 then
+    emitSound(CANCEL_SOUND, 166)
+    curSlot = 0
+    return true
   end
 end)
-
--- draw the HUD
-hook.Add('HUDPaint', HOOK_NAME, function()
-  -- don't draw if hud_fastswitch is enabled or if the inventory is closed
-  if not ShouldDraw() or FASTSWITCH:GetBool() or cur_slot <= 0 then return end
-
-  -- draw HUD
-  DrawHUD()
-end)
-
--- only draw on overlay if the camera is equipped, otherwise draw it behind Derma
-hook.Add('DrawOverlay', HOOK_NAME, function()
-  -- don't draw if either fastswitch is enabled, the menu's up, inventory is inactive or the player isn't using the camera
-  if not ShouldDraw() or gui.IsGameUIVisible() or not IsValid(LocalPlayer():GetActiveWeapon()) or LocalPlayer():GetActiveWeapon():GetClass() ~= GMOD_CAMERA or FASTSWITCH:GetBool() or cur_slot <= 0 then return end
-
-  -- draw HUD
-  DrawHUD()
-
-  -- draw HOLOHUD
-  DrawWeaponHUD(function(param) return HOLOHUD.ELEMENTS:ConfigValue('weapon_selector', param); end);
-end)
-
-end

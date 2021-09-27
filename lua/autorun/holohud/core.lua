@@ -17,6 +17,7 @@ HOLOHUD:IncludeFile("util/intersect.lua");
 HOLOHUD:IncludeFile("util/icons.lua");
 HOLOHUD:IncludeFile("util/hazards.lua");
 HOLOHUD:IncludeFile("util/texture.lua");
+HOLOHUD:IncludeFile("util/bind_press.lua");
 
 -- Default data
 HOLOHUD:IncludeFile("data/fonts.lua");
@@ -37,7 +38,7 @@ HOLOHUD:IncludeFile("components/progress_icons.lua");
 
 -- Weapon selector (requires the HUD element to exist)
 HOLOHUD:IncludeFile("elements/default/weapon_selector.lua");
-HOLOHUD:IncludeFile("util/gs_switcher.lua");
+HOLOHUD:IncludeFile("util/weapon_switcher.lua");
 
 -- Default HUD elements
 HOLOHUD:IncludeFile("elements/default/damage.lua");
