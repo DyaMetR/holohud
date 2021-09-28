@@ -241,6 +241,7 @@ end
 ]]--------------------------------------------------------------------
 
 local cl_drawhud = GetConVar('cl_drawhud')
+local hud_fastswitch = GetConVar('hud_fastswitch')
 local ELEMENT_NAME = 'weapon_selector'
 
 -- sounds
@@ -305,7 +306,7 @@ end)
 
 -- select
 UnintrusiveBindPress.add('holohud_legacy', function(_player, bind, pressed, code)
-  if not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled(ELEMENT_NAME) or not cl_drawhud:GetBool() then return end -- ignore if it shouldn't draw
+  if not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled(ELEMENT_NAME) or hud_fastswitch:GetBool() or not cl_drawhud:GetBool() then return end -- ignore if it shouldn't draw
   if not pressed then return end -- ignore if bind was not pressed
 
   -- check whether the physics gun is in use
