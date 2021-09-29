@@ -331,14 +331,17 @@ UnintrusiveBindPress.add('holohud_legacy', function(_player, bind, pressed, code
 
   -- cycle through slot
   if string.sub(bind, 1, 4) == SLOT then
-    if curSlot <= 0 then
-      emitSound(START_SOUND, 50)
-    else
-      emitSound(MOVE_SOUND, 200)
+    local slot = tonumber(string.sub(bind, 5))
+    if slot > 0 and slot <= MAX_SLOTS then
+      if curSlot <= 0 then
+        emitSound(START_SOUND, 50)
+      else
+        emitSound(MOVE_SOUND, 200)
+      end
+      cycleSlot(slot)
+      autoCloseTimer()
+      return true
     end
-    cycleSlot(tonumber(string.sub(bind, 5)))
-    autoCloseTimer()
-    return true
   end
 
   -- select
