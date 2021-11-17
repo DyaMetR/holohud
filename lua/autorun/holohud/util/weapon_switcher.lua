@@ -308,6 +308,7 @@ end)
 UnintrusiveBindPress.add('holohud_legacy', function(_player, bind, pressed, code)
   if not HOLOHUD:IsHUDEnabled() or not HOLOHUD.ELEMENTS:IsElementEnabled(ELEMENT_NAME) or hud_fastswitch:GetBool() or not cl_drawhud:GetBool() then return end -- ignore if it shouldn't draw
   if not pressed then return end -- ignore if bind was not pressed
+  if LocalPlayer():InVehicle() then return end -- ignore if player is in a vehicle
 
   -- check whether the physics gun is in use
   local weapon = LocalPlayer():GetActiveWeapon()
