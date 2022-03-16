@@ -3,7 +3,9 @@
   Display's current health of the target you're looking at
 ]]--------------------------------------------------------------------
 
-local SHARED_VALUE = "holohud_maxHealth";
+local MAX_HEALTH = "holohud_max_health";
+local CLASS_NEXTBOT = "nextbot";
+local NET = "holohud_target";
 
 --[[
   Returns whether the entity is a non-player-character
@@ -11,7 +13,7 @@ local SHARED_VALUE = "holohud_maxHealth";
   @return {boolean} is NPC
 ]]
 local function IsNPC(entity)
-  return IsValid(entity) and (entity:IsNPC() or (entity:IsScripted() and entity.Type == "nextbot"));
+  return IsValid(entity) and (entity:IsNPC() or (entity:IsScripted() and entity.Type == CLASS_NEXTBOT));
 end
 
 if CLIENT then
@@ -100,18 +102,17 @@ if CLIENT then
     @param {Color} armour colour
     @param {boolean} should lerp the value
     @param {boolean} right aligned bar
+		@param {boolean} is dynamic sizing enabled
     @void
   ]]
-  local function DrawHealth(x, y, w, h, target, barCol, enemyCol, nameColour, armourCol, shouldLerp, right_align, var_length)
+  local function DrawHealth(x, y, w, h, target, barCol, enemyCol, nameColour, armourCol, shouldLerp, right_align, bar_length)
     local bright = HOLOHUD:GetHighlight(PANEL_NAME);
-    -- local name, health, maxHealth, armour = "", -1, -1, -1;
     local name, maxHealth, armour = "", -1, -1;
     barCol = barCol or Color(100, 255, 100, 200);
     nameColour = nameColour or Color(255, 255, 255, 200);
 
     -- Check if target is valid
     if (IsValid(target) and target:Health() > 0) then
-      -- health = target:Health();
       if (target:IsPlayer()) then
         maxHealth = 100;
         armour = target:Armor();
@@ -121,9 +122,7 @@ if CLIENT then
       elseif (IsNPC(target)) then
         maxHealth = target:GetNWInt(SHARED_VALUE);
         name = language.GetPhrase(target:GetClass());
-        -- if (IsFriendEntityName(target:GetClass())) then
         if (enemy) then
-          -- barCol = allyCol or Color(100, 255, 100, 200);
           barCol = enemyCol or Color(255, 100, 72, 200);
         end
       end
@@ -158,43 +157,50 @@ if CLIENT then
       HOLOHUD:DrawHorizontalBar(x + w - SUIT_V - 5, y + h - 16, armourCol or ARMOUR_COLOUR, apLerp / 100, bright);
     else
       HOLOHUD:DrawText(x + (w * 0.5), y + 4, name, "holohud_weapon_name", nameColour, bright, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP);
-	  if var_length then
-		  local bar = HEALTH_MAX
-		  local l = lerp
-		  local i = 1
-		  local ihatenamingvariables = maxHealth -- don't judge me
-		  local offset = 0
-		  local hp = health
-		  -- while maxHealth > i*bar and i <= 39 do
-		  while maxHealth > i*bar and i <= 39 do
-			offset = 6
-			if hp > bar then
-				l = l - bar
-				ihatenamingvariables = ihatenamingvariables - bar
-				if i == 1 then
-				  barCol.a = 50
-				  bar_func(HOLOHUD, x + 7, y + h - 11 - offset, HEALTH_MAX * HEALTH_LENGTH, 23, barCol, 1, bright);
+		  if bar_length then
+			  local bar = HEALTH_MAX
+			  local l = lerp
+			  local i = 1
+			  local barMaxHealth = maxHealth
+			  local offset = 0
+			  local hp = health
+			  while maxHealth > i*bar and i <= 39 do
+					offset = 6
+					if hp > bar then
+						l = l - bar
+						barMaxHealth = barMaxHealth - bar
+						if i == 1 then
+						  barCol.a = 50
+						  bar_func(HOLOHUD, x + 7, y + h - 11 - offset, HEALTH_MAX * HEALTH_LENGTH, 23, barCol, 1, bright);
+						end
+					end
+					hp = hp - bar
+					barCol.a = 255
+					bar_func(HOLOHUD, x + (HEALTH_MAX * HEALTH_LENGTH) - (i*18) - 12, y + h - 4, 33, 15, barCol, hp > 0 and 1 or 0, bright);
+					i = i + 1
+			  end
+
+				local w2 = math.Clamp(barMaxHealth, 10, HEALTH_MAX) * HEALTH_LENGTH
+
+				-- compensate for right side alignment
+				if right_align then
+					x = x + w - w2
 				end
-			end
-			hp = hp - bar
-			barCol.a = 255
-			bar_func(HOLOHUD, x + (HEALTH_MAX * HEALTH_LENGTH) - (i*18) - 12, y + h - 4, 33, 15, barCol, hp > 0 and 1 or 0, bright);
-			i = i + 1
+
+				-- draw bar on the foreground
+			  bar_func(HOLOHUD, x + 7, y + h - 11 - offset, w2, 23, barCol, l / math.min(barMaxHealth, bar), bright);
+		  else
+				bar_func(HOLOHUD, x + 5, y + h - 11, w + 4, 23, barCol, lerp / maxHealth, bright);
 		  end
-		  w2 = math.Clamp(ihatenamingvariables, 10, HEALTH_MAX) * HEALTH_LENGTH
-		  bar_func(HOLOHUD, x + w - w2 + 7, y + h - 11 - offset, w2, 23, barCol, l / math.min(ihatenamingvariables, bar), bright);
-	  else
-		bar_func(HOLOHUD, x + 5, y + h - 11, w + 4, 23, barCol, lerp / maxHealth, bright);
-	  end
     end
   end
 
-  net.Receive("holohud_target_whatever", function(len, ply)
-	index = net.ReadInt(32)
-	health = net.ReadFloat()
-	enemy = net.ReadBool()
+	-- Receive enemy information
+  net.Receive(NET, function(len, ply)
+		index = net.ReadInt(32)
+		health = net.ReadFloat()
+		enemy = net.ReadBool()
     time = CurTime() + TIME
-	-- print("test")
   end)
 
   --[[
@@ -204,33 +210,21 @@ if CLIENT then
   ]]
   local offset = 0;
   local function DrawPanel(config)
-    -- local trace = LocalPlayer():GetEyeTrace();
-
-    -- -- Is entity valid
-    -- if (trace ~= nil and IsValid(trace.Entity) and (trace.Entity:IsPlayer() or IsNPC(trace.Entity))) then
-      -- index = trace.Entity:EntIndex();
-      -- time = CurTime() + TIME;
-    -- end
-
     local entity = ents.GetByIndex(index) or nil;
 
     -- Get screen offset and panel size
     local w, h = WIDTH, HEIGHT;
-    -- local x, y = HOLOHUD.ELEMENTS:GetElementSize("compass");
-	-- slightly more efficient way of calculating offsets
-	local x = MARGIN
-	local y = MARGIN + (ScrH() - MARGIN*2 - h) * config("npc_offset")
+		local x = MARGIN
+		local y = MARGIN + (ScrH() - MARGIN*2 - h) * config("npc_offset")
     if (entity ~= nil) then
-	  if IsValid(entity) and config("var_length") then
+	  if IsValid(entity) and config("bar_length") then
 		  local maxHealth = entity:GetNWInt(SHARED_VALUE);
 		  if maxHealth <= 0 then
-			maxHealth = entity:GetMaxHealth()
+				maxHealth = entity:GetMaxHealth()
 		  end
-		  -- w = math.Clamp(maxHealth * HEALTH_LENGTH, WIDTH_MIN, HEALTH_MAX)
 		  w = math.Clamp(maxHealth * HEALTH_LENGTH, WIDTH_MIN, HEALTH_MAX * HEALTH_LENGTH)
-		  -- if maxHealth > HEALTH_MAX / HEALTH_LENGTH then
 		  if maxHealth > HEALTH_MAX then
-			h = h + 6
+				h = h + 6
 		  end
 	  end
 
@@ -239,7 +233,7 @@ if CLIENT then
         local u, v = surface.GetTextSize(entity:Nick());
         h = P_HEIGHT;
         w = u + MARGIN * 2;
-		y = MARGIN + (ScrH() - MARGIN*2 - h) * config("player_offset")
+				y = MARGIN + (ScrH() - MARGIN*2 - h) * config("player_offset")
       end
 
       -- Remove reference if time passed
@@ -248,14 +242,14 @@ if CLIENT then
       end
 
     end
-	
-	x = x + (ScrW() - MARGIN*2 - w) * config("h_offset")
+
+		x = x + (ScrW() - MARGIN*2 - w) * config("h_offset")
 
     -- Activate and draw panel
     local align = TEXT_ALIGN_TOP;
     if (IsValid(entity) and entity:IsPlayer()) then align = TEXT_ALIGN_BOTTOM; end
     HOLOHUD:SetPanelActive(PANEL_NAME, IsValid(entity) and (entity:IsPlayer() or IsNPC(entity)) and time > CurTime());
-    HOLOHUD:DrawFragmentAlign(x, y, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("ally"), config("enemy"), config("name"), config("armour"), config("lerp"), config("right_align"), config("var_length"));
+    HOLOHUD:DrawFragmentAlign(x, y, w, h, DrawHealth, PANEL_NAME, align, nil, config("alpha"), nil, entity, config("ally"), config("enemy"), config("name"), config("armour"), config("lerp"), config("right_align"), config("bar_length"));
   end
 
   -- Add element
@@ -278,7 +272,7 @@ if CLIENT then
       armour = { name = "Armour colour", value = ARMOUR_COLOUR },
       lerp = { name = "Enable smooth animation", value = true },
       right_align = { name = "Right aligned bar", value = false },
-      var_length = { name = "More health = longer/multiple bars", value = false }
+      bar_length = { name = "Dynamic bar sizing", value = false }
     },
     DrawPanel
   );
@@ -291,39 +285,43 @@ if CLIENT then
 end
 
 if SERVER then
-  util.AddNetworkString("holohud_target_whatever")
-  
+	-- register network string
+  util.AddNetworkString(NET)
+
+	--[[
+		Sends the NPC's information to the player.
+		@param {Entity} entity
+		@param {Player} player
+	]]
   local function SendTarget(ent, ply)
-	if !IsValid(ent) or (!ent:IsPlayer() and !IsNPC(ent)) then return end
-	local i = ent:EntIndex()
-	local health = ent:Health()
-	local enemy = ent:IsNPC() and ent:Disposition(ply) == D_HT
-	-- print(ents.GetByIndex(i), health)
-	net.Start("holohud_target_whatever")
-	net.WriteInt(i, 32)
-	net.WriteFloat(health)
-	net.WriteBool(enemy)
-	net.Send(ply)
+		if not IsNPC(ent) then return; end
+		local i = ent:EntIndex();
+		local health = ent:Health();
+		local enemy = ent:IsNPC() and ent:Disposition(ply) == D_HT;
+		net.Start(NET);
+		net.WriteInt(i, 32);
+		net.WriteFloat(health);
+		net.WriteBool(enemy);
+		net.Send(ply);
   end
-  
+
   -- checks players serverside
   hook.Add("Think", "holohud_target_think", function()
-    for k, p in pairs(player.GetAll()) do
-	  local trace = p:GetEyeTrace();
-	  if trace ~= nil then
-		local ent = trace.Entity
-		SendTarget(ent, p)
-	  end
-	end
+    for _, p in pairs(player.GetAll()) do
+		  local trace = p:GetEyeTrace();
+		  if trace and trace.Hit then
+				SendTarget(trace.Entity, p);
+		  end
+		end
   end)
 
   -- upon dealing damage, display health momentarily
   hook.Add("PostEntityTakeDamage", "holohud_target_damage", function(target, dmginfo, took)
-	if !took then return end
-	local attacker = dmginfo:GetAttacker()
-	if IsValid(attacker) and attacker:IsPlayer() and attacker != target then
-	  SendTarget(target, attacker)
-	end
+		if !took then return; end
+		local attacker = dmginfo:GetAttacker();
+		if IsValid(attacker) and attacker:IsPlayer() and attacker != target then
+		  SendTarget(target, attacker);
+		end
   end)
 
 
