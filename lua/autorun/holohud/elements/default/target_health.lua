@@ -3,7 +3,7 @@
   Display's current health of the target you're looking at
 ]]--------------------------------------------------------------------
 
-local MAX_HEALTH = "holohud_max_health";
+local SHARED_VALUE = "holohud_max_health";
 local CLASS_NEXTBOT = "nextbot";
 local NET = "holohud_target";
 
