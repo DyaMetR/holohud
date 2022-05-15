@@ -24,7 +24,9 @@ if CLIENT then
     surface.SetFont("holohud_weapon_name");
     local u, v = 0, 0;
     if (displayWeapon) then
-      u, v = surface.GetTextSize(weapon:GetPrintName());
+			local name = weapon:GetClass();
+			if weapon.GetPrintName then name = weapon:GetPrintName(); end
+      u, v = surface.GetTextSize(language.GetPhrase(name));
     end
 
     local w, h = math.Clamp(u + 13, WEAPON_WIDTH, ScrW()), WEAPON_HEIGHT + v;
@@ -68,7 +70,9 @@ if CLIENT then
 
     -- Weapon name
     if (displayWeapon) then
-      HOLOHUD:DrawText(x + 5, y + h - 4, string.sub(language.GetPhrase(weapon:GetPrintName()), 1, anim1), "holohud_weapon_name", colour, nil, nil, TEXT_ALIGN_BOTTOM);
+			local name = weapon:GetClass();
+			if weapon.GetPrintName then name = weapon:GetPrintName(); end
+      HOLOHUD:DrawText(x + 5, y + h - 4, string.sub(language.GetPhrase(name), 1, anim1), "holohud_weapon_name", colour, nil, nil, TEXT_ALIGN_BOTTOM);
     end
   end
 

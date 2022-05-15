@@ -1,0 +1,14 @@
+{
+	"title"	:	"H0L-D4: Holographic Heads Up Display",
+	"type"	:	"effects",
+	"tags"	:	[ "fun", "movie" ],
+	"ignore"	:
+	[
+		"*.psd",
+		"*.vcproj",
+		"*.svn*",
+		"*.git*",
+		"LICENSE",
+		"README.md"
+	]
+}

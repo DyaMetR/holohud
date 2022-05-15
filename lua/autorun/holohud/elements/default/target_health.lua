@@ -112,13 +112,14 @@ if CLIENT then
     nameColour = nameColour or Color(255, 255, 255, 200);
 
     -- Check if target is valid
-    if (IsValid(target) and target:Health() > 0) then
+    if IsValid(target) then
       if (target:IsPlayer()) then
-        maxHealth = 100;
+        maxHealth = target:GetMaxHealth();
+				health = target:Health()
         armour = target:Armor();
         name = target:Nick();
         barCol = GetHealthColour();
-        AnimateColour(health);
+        AnimateColour(health / maxHealth);
       elseif (IsNPC(target)) then
         maxHealth = target:GetNWInt(SHARED_VALUE);
         name = language.GetPhrase(target:GetClass());
@@ -133,7 +134,7 @@ if CLIENT then
         lastHp = health;
       end
 
-      if (shouldLerp) and lerp >= 0 then -- update immediately if we're not focused, otherwise it takes a while
+      if (shouldLerp and lerp >= 0) then -- update immediately if we're not focused, otherwise it takes a while
         lerp = Lerp(FrameTime() * 4, lerp, health);
         apLerp = Lerp(FrameTime() * 4, apLerp, armour);
       else
@@ -210,6 +211,15 @@ if CLIENT then
   ]]
   local offset = 0;
   local function DrawPanel(config)
+		local trace = LocalPlayer():GetEyeTrace()
+
+		-- check whether we're looking at a player
+		if trace.Hit and trace.Entity:IsPlayer() then
+			time = CurTime() + TIME;
+			index = trace.Entity:EntIndex();
+		end
+
+		-- get entity
     local entity = ents.GetByIndex(index) or nil;
 
     -- Get screen offset and panel size
@@ -217,16 +227,16 @@ if CLIENT then
 		local x = MARGIN
 		local y = MARGIN + (ScrH() - MARGIN*2 - h) * config("npc_offset")
     if (entity ~= nil) then
-	  if IsValid(entity) and config("bar_length") then
-		  local maxHealth = entity:GetNWInt(SHARED_VALUE);
-		  if maxHealth <= 0 then
-				maxHealth = entity:GetMaxHealth()
+		  if IsValid(entity) and config("bar_length") then
+			  local maxHealth = entity:GetNWInt(SHARED_VALUE);
+			  if maxHealth <= 0 then
+					maxHealth = entity:GetMaxHealth()
+			  end
+			  w = math.Clamp(maxHealth * HEALTH_LENGTH, WIDTH_MIN, HEALTH_MAX * HEALTH_LENGTH)
+			  if maxHealth > HEALTH_MAX then
+					h = h + 6
+			  end
 		  end
-		  w = math.Clamp(maxHealth * HEALTH_LENGTH, WIDTH_MIN, HEALTH_MAX * HEALTH_LENGTH)
-		  if maxHealth > HEALTH_MAX then
-				h = h + 6
-		  end
-	  end
 
       if (entity:IsPlayer()) then -- Player panel size and offset
         surface.SetFont("holohud_small");
@@ -235,12 +245,6 @@ if CLIENT then
         w = u + MARGIN * 2;
 				y = MARGIN + (ScrH() - MARGIN*2 - h) * config("player_offset")
       end
-
-      -- Remove reference if time passed
-      if (time < CurTime() and (not HOLOHUD:IsPanelActive(PANEL_NAME) or HOLOHUD.EditMode)) then
-        entity = nil;
-      end
-
     end
 
 		x = x + (ScrW() - MARGIN*2 - w) * config("h_offset")

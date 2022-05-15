@@ -67,66 +67,61 @@ end
 
 if CLIENT then
 
-  hook.Add("Initialize", "holohud_load", function()
-    print(" --------- H0L-D4 --------- "); -- Header
+	--[[
+	  Loads the configuration.
+	  @void
+	]]--
+	local function initialize()
+		-- header and version
+		print(" --------- H0L-D4 --------- \n  Version " .. HOLOHUD.Version.Major .. "." .. HOLOHUD.Version.Minor);
+		if HOLOHUD.Version.Patch > 0 then print("  " .. HOLOHUD.Version.Patch .. " patches were issued for this version."); end
 
-    -- Version
-    print("  Version " .. HOLOHUD.Version.Major .. "." .. HOLOHUD.Version.Minor);
+		-- elements
+		if not table.IsEmpty(HOLOHUD.ELEMENTS.Elements) then
+			print("\n  > " .. table.Count(HOLOHUD.ELEMENTS.Elements) .. " HUD elements found. Loading user configuration...");
+			HOLOHUD.ELEMENTS:LoadUserConfiguration();
+			HOLOHUD.ELEMENTS:GenerateDefaultHUDHideList();
+		else
+			print("\n  > No HUD elements found. What did you do this time?");
+		end
 
-    if (HOLOHUD.Version.Patch > 0) then
-      print(HOLOHUD.Version.Patch .. " patches were issued for this version.");
-    end
+		-- presets
+		if HOLOHUD.CONFIG.PRESETS:HasPresets() then
+			print("\n  > Scanning configuration presets...");
+			HOLOHUD.CONFIG.PRESETS:LoadPresets();
+		else
+			print("\n  > No user generated presets available.")
+		end
 
-    -- Load element configuration
-    print();
-    if (table.Count(HOLOHUD.ELEMENTS.Elements) > 0) then
-      print("  > " .. table.Count(HOLOHUD.ELEMENTS.Elements) .. " HUD elements found. Loading user configuration...");
-      HOLOHUD.ELEMENTS:LoadUserConfiguration();
-      HOLOHUD.ELEMENTS:GenerateDefaultHUDHideList();
-    else
-      print("  > No HUD elements found. What did you do you little devil?");
-    end
+		-- fonts
+		if HOLOHUD.CONFIG.FONTS:HasFontPresets() then
+			print("\n  > Scanning font configuration presets...");
+			HOLOHUD.CONFIG.FONTS:LoadFontPresets();
+		else
+			print("\n  > No font presets available.");
+		end
 
-    -- Load presets
-    print();
-    if (HOLOHUD.CONFIG.PRESETS:HasPresets()) then
-      print("  > Scanning configuration presets...");
-      HOLOHUD.CONFIG.PRESETS:LoadPresets();
-    else
-      print("  > No user generated presets available.");
-    end
+		-- footer
+		print("\n  > All set. Have fun!\n -------------------------- ");
+	end
 
-    -- Load font configurations
-    print();
-    HOLOHUD.CONFIG.FONTS:LoadCurrentFont();
-    if (HOLOHUD.CONFIG.FONTS:HasFontPresets()) then
-      print("  > Scanning font configuration presets...");
-      HOLOHUD.CONFIG.FONTS:LoadFontPresets();
-    else
-      print("  > No font presets available.");
-    end
+	-- initialize configuration
+	initialize();
 
-    -- Greet the player when everything's loaded
-    print();
-    print("  > All set. Have fun!");
-
-    print(" -------------------------- "); -- Footer
-
-    -- Set off the welcome animation
-    HOLOHUD:ResetWelcomeAnimation();
-  end);
+	-- print welcome message
+	hook.Add("Initialize", "holohud_welcome", function() HOLOHUD:ResetWelcomeAnimation(); end);
 
   -- Draw HUD ConVar
   local cl_drawhud = GetConVar("cl_drawhud");
 
   -- Draw HUD
   hook.Add("HUDPaint", "holohud_draw", function()
-    if (HOLOHUD:IsHUDEnabled() and cl_drawhud:GetInt() > 0) then HOLOHUD.ELEMENTS:DrawElements(); end
+    if (HOLOHUD:IsHUDEnabled() and cl_drawhud:GetBool()) then HOLOHUD.ELEMENTS:DrawElements(); end
   end);
 
   -- Hide default HUD
   hook.Add( "HUDShouldDraw", "holohud_hide_default_hud", function( name )
-    if ( HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS.DefaultHUDHideElements[ name ] and cl_drawhud:GetInt() > 0 ) then return false end;
+    if ( HOLOHUD:IsHUDEnabled() and HOLOHUD.ELEMENTS.DefaultHUDHideElements[ name ] and cl_drawhud:GetBool() ) then return false end;
   end );
 
 end
