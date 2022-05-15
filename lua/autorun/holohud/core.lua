@@ -85,6 +85,9 @@ if CLIENT then
 			print("\n  > No HUD elements found. What did you do this time?");
 		end
 
+		-- load font configuration
+		HOLOHUD.CONFIG.FONTS:LoadCurrentFont()
+
 		-- presets
 		if HOLOHUD.CONFIG.PRESETS:HasPresets() then
 			print("\n  > Scanning configuration presets...");
