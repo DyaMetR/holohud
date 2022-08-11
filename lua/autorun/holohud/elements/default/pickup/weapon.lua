@@ -10,6 +10,19 @@ if CLIENT then
   -- Parameters
   local WEAPON_WIDTH, WEAPON_HEIGHT, WEAPON_HEIGHT_MARGIN = 192, 96;
   local ACQUIRED = "ACQUIRED";
+	local NONE = "";
+
+	--[[
+		Returns the weapon's print name
+		@param {Weapon} weapon
+		@return {string} print name
+	]]
+	local function getWeaponName(weapon)
+		if not IsValid(weapon) then return NONE; end
+		local name = weapon:GetClass();
+		if weapon.GetPrintName then name = weapon:GetPrintName(); end
+		return language.GetPhrase(name);
+	end
 
   --[[
     Adds a weapon pickup to the history
@@ -24,9 +37,7 @@ if CLIENT then
     surface.SetFont("holohud_weapon_name");
     local u, v = 0, 0;
     if (displayWeapon) then
-			local name = weapon:GetClass();
-			if weapon.GetPrintName then name = weapon:GetPrintName(); end
-      u, v = surface.GetTextSize(language.GetPhrase(name));
+      u, v = surface.GetTextSize(getWeaponName(weapon));
     end
 
     local w, h = math.Clamp(u + 13, WEAPON_WIDTH, ScrW()), WEAPON_HEIGHT + v;
@@ -70,9 +81,7 @@ if CLIENT then
 
     -- Weapon name
     if (displayWeapon) then
-			local name = weapon:GetClass();
-			if weapon.GetPrintName then name = weapon:GetPrintName(); end
-      HOLOHUD:DrawText(x + 5, y + h - 4, string.sub(language.GetPhrase(name), 1, anim1), "holohud_weapon_name", colour, nil, nil, TEXT_ALIGN_BOTTOM);
+      HOLOHUD:DrawText(x + 5, y + h - 4, string.sub(getWeaponName(weapon), 1, anim1), "holohud_weapon_name", colour, nil, nil, TEXT_ALIGN_BOTTOM);
     end
   end
 
@@ -83,6 +92,7 @@ if CLIENT then
   ]]
   function PICKUP:WeaponAnimation(i, animate)
     local pickup = PICKUP.pickups[i];
+		local name = getWeaponName(pickup.data.weapon)
 
     if (animate) then
       -- Delay text animation
@@ -102,14 +112,14 @@ if CLIENT then
             PICKUP.pickups[i].data.tick = CurTime() + 0.015;
           end
         else
-          if (pickup.data.anim1 < string.len(language.GetPhrase(pickup.data.weapon:GetPrintName()))) then
+          if (pickup.data.anim1 < string.len(name)) then
             PICKUP.pickups[i].data.anim1 = pickup.data.anim1 + 1;
             PICKUP.pickups[i].data.tick = CurTime() + 0.02
           end
         end
       end
     else
-      pickup.data.anim1 = string.len(language.GetPhrase(pickup.data.weapon:GetPrintName()));
+      pickup.data.anim1 = string.len(name);
       pickup.data.anim2 = string.len(ACQUIRED);
     end
   end

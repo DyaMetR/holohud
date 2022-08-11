@@ -173,8 +173,8 @@ local function moveCursor(forward)
       if not weaponPos[weapon] then cacheWeapons(true) end
 
       -- get weapon data
-      curSlot = weapon:GetSlot() + 1
-      curPos = weaponPos[weapon]
+      curSlot = math.Clamp(weapon:GetSlot() + 1, 1, MAX_SLOTS)
+      curPos = math.Clamp(weaponPos[weapon] or 0, 0, cacheLength[curSlot])
     else
       curSlot = 1
       curPos = 0
@@ -317,8 +317,8 @@ UnintrusiveBindPress.add('holohud_legacy', function(_player, bind, pressed, code
   -- move backwards
   if bind == INV_PREV then
     moveCursor(false)
-    emitSound(MOVE_SOUND, 200)
-    autoCloseTimer()
+  	emitSound(MOVE_SOUND, 200)
+  	autoCloseTimer()
     return true
   end
 
