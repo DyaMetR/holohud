@@ -1,7 +1,16 @@
-# H0L-D4
+# H0L-D4: Holographic Heads Up Display
+
+![](https://img.shields.io/github/v/release/DyaMetR/holohud)
+![](https://img.shields.io/steam/views/1705992410)
+![](https://img.shields.io/steam/downloads/1705992410)
+![](https://img.shields.io/steam/favorites/1705992410)
+![](https://img.shields.io/github/issues/DyaMetR/holohud)
+![](https://img.shields.io/github/license/DyaMetR/holohud)
+
 Customizable holographic themed heads up display (HUD) for Garry's Mod.
 
-# Features
+## Features
+
 + HUD swaying with camera movement
 + Chromatic aberration
 + Health indicator
@@ -22,14 +31,16 @@ Customizable holographic themed heads up display (HUD) for Garry's Mod.
 + Target ID
 + Welcome screen
 
-# Customization includes
+## Customization includes
+
 + Each elements has their own array of options
 + Font family and offsets customization
 + Blur intensity and opacity
 + Background opacity
 + Swaying
 
-# Credits
+## Credits
+
 + *DyaMetR*
    + Design
    + Code
@@ -40,19 +51,23 @@ Customizable holographic themed heads up display (HUD) for Garry's Mod.
 + *code_gs*
    + [Weapon selector skeleton](https://github.com/Kefta/Weapon-Switcher-Skeleton)
 
-# Adding custom content
-## Setup your configuration folder
+## Adding custom content
+
+### Setup your configuration folder
+
 To ensure that your configuration _loads correctly_, you'll have to make a **folder** inside your **addons** folder with a specific structure: `%YOUR_CONFIG_ADDON_FOLDER%/lua/autorun/holohud/add-ons`.
 
 Once you created your folder you'll be able to add as many `.lua` files as you wish and the HUD will load them all. Try to use **unique file names** in order to avoid conflicts with other addons.
 
-## Before you start writing code
+### Before you start writing code
+
 All of the custom files are loaded **shared**wise, meaning that it will work in both clientside and serverside, so I'd like to remind using `if CLIENT` and `if SERVER` respectively.
 
-## Utilizing the API
+### Utilizing the API
+
 H0L-D4 offers an ample API, but I will only list the most important functions, which are those in charge of adding elements and forcing settings.
 
-### Add element override
+#### Add element override
 
 `HOLOHUD.GAMEMODE:AddElementOverride( gamemode, elements )`
 > **CLIENT**
@@ -85,7 +100,7 @@ HOLOHUD.GAMEMODE:AddElementOverride( { 'sandbox', 'darkrp' }, 'prop_count' )
 
 ```
 
-### Set element override
+#### Set element override
 
 `HOLOHUD.GAMEMODE:SetElementOverride( gamemode, elements, whitelist )`
 > **CLIENT**
@@ -117,7 +132,7 @@ HOLOHUD.GAMEMODE:SetElementOverride( 'terrortown', { 'health', 'ammunition', 'tt
 HOLOHUD.GAMEMODE:SetElementOverride( { 'darkrp', 'terrortown' }, 'target_id' )
 ```
 
-## Add element configuration override
+### Add element configuration override
 
 `HOLOHUD.GAMEMODE:AddConfigOverride( gamemode, element, config, force_default )`
 > **CLIENT**
@@ -150,40 +165,50 @@ HOLOHUD.GAMEMODE:AddConfigOverride( 'terrortown', 'ammunition', { mode = 3 }, tr
 
 ```
 
-### Cheat sheet for element's modes
-#### Health
+#### Cheat sheet for element's modes
+
+##### Health
+
 ```
 1 = Default
 2 = Heartbeat with armour bar
 3 = Heartbeat with kevlar icon
 4 = Classic
 ```
-#### Ammunition
+
+##### Ammunition
+
 ```
 1 = Default
 2 = Minimalist
 3 = Compact
 ```
-#### Clock
+
+##### Clock
+
 ```
 1 = Simple
 2 = Digital
 3 = Simple with date
 ```
-#### Speed-o-meter (units for both in foot and in vehicle)
+
+##### Speed-o-meter (units for both in foot and in vehicle)
+
 ```
 1 = km/h
 2 = mph
 3 = ups
 ```
-#### Auxiliary power (for both the aux. power and the ep2 flashlight)
+
+##### Auxiliary power (for both the aux. power and the ep2 flashlight)
+
 ```
 1 = Default
 2 = Icon with background
 3 = Icon only
 ```
 
-## Setup panel
+### Setup panel
 
 "Panels" are the rectangles used as background to draw stuff. They can be opened or closed, which will play an animation in the process.
 
@@ -205,7 +230,7 @@ Example:
 HOLOHUD:AddFlashPanel( 'out_of_ammo' )
 ```
 
-## Open/close a panel
+### Open/close a panel
 
 `HOLOHUD:SetPanelActive( panel, active, force )`
 
@@ -237,7 +262,7 @@ local function TriggerOutOfAmmoPanel()
 end
 ```
 
-## Draw panel with contents
+### Draw panel with contents
 
 `HOLOHUD:DrawFragmentAlignSimple( x, y, w, h, func, flash, align, ... )`
 > **CLIENT**
@@ -283,7 +308,7 @@ local function DrawPanel( y )
 end
 ```
 
-## Draw panel with contents (with additional parameters)
+### Draw panel with contents (with additional parameters)
 
 `HOLOHUD:DrawFragmentAlign( x, y, w, h, func, flash, align, colour, alpha, blurQuality, ... )`
 > **CLIENT**
@@ -337,7 +362,7 @@ local function DrawPanel( y )
 end
 ```
 
-## Add a number/text/texture highlighting
+### Add a number/text/texture highlighting
 
 "Highlighting" refers to when a number/text/texture brights for a while and then goes back to normal.
 
@@ -353,7 +378,7 @@ Example:
 HOLOHUD:AddHighlight( 'out_of_ammo' )
 ```
 
-## Trigger a number/text/texture highlighting
+### Trigger a number/text/texture highlighting
 
 `HOLOHUD:TriggerHighlight( id )`
 > **CLIENT**
@@ -383,7 +408,7 @@ local function AnimateHighlight()
 end
 ```
 
-## Get a highlight value
+### Get a highlight value
 
 `HOLOHUD:GetHighlight( id )`
 > **CLIENT**
@@ -401,7 +426,7 @@ print( HOLOHUD:GetHighlight( 'out_of_ammo' ) )
 
 Result: `0`
 
-## Draw a number
+### Draw a number
 
 `HOLOHUD:DrawNumber( x, y, number, colour, zeros, bright, font, off, align, vertical_align )`
 > **CLIENT**
@@ -436,7 +461,7 @@ Example:
 HOLOHUD:DrawNumber( ScrW() * .25, ScrH() * .5, LocalPlayer():Health(), Color( 255, 100, 100 ), '0000', HOLOHUD:GetHighlight('health'), 'holohud_main', false, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 ```
 
-## Draw text
+### Draw text
 
 `HOLOHUD:DrawText(x, y, text, font, colour, bright, align, vertical_align, off, alpha)`
 > **CLIENT**
@@ -471,7 +496,7 @@ Example:
 HOLOHUD:DrawText( ScrW() * .5, ScrH() * .25, LocalPlayer():Name(), 'holohud_small', Color( 100, 255, 100 ), HOLOHUD:GetHighlight('health'), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, 150 )
 ```
 
-## Add an element
+### Add an element
 
 `HOLOHUD.ELEMENTS:AddElement( id, title, subtitle, hide_elements, default_config, draw_function, enabled )`
 > **CLIENT**
@@ -520,7 +545,7 @@ HOLOHUD.ELEMENTS:AddElement('out_of_ammo',
 )
 ```
 
-## 'Out of ammo' element full example
+### 'Out of ammo' element full example
 ```lua
 if CLIENT then
 

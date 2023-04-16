@@ -1,16 +1,16 @@
---[[------------
-     H0L-D4
- Version 1.10.4
-    12/08/22
-By DyaMetR
-]]--------------
+--[[------------------------------------------------------------------
+  H0L-D4: Holographic Heads Up Display
+  Version 1.10.5
+  April 16th, 2023
+  Made by DyaMetR
+]]--------------------------------------------------------------------
 
 -- Main framework table
 HOLOHUD = {};
 
 -- Version and patch notes
 HOLOHUD.Version = {
-  Major = 1, Minor = 10, Patch = 4
+  Major = 1, Minor = 10, Patch = 5
 };
 
 --[[

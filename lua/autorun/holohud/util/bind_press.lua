@@ -1,14 +1,11 @@
 --[[------------------------------------------------------------------
   DyaMetR's unintrusive key bind press
-  September 17th, 2021
-
+  April 16th, 2023
   Custom KeyBindPress hook used by HUDs that want to ease compatibility
   by giving priority to any other addon.
 ]]--------------------------------------------------------------------
 
-if SERVER then return end -- do not run on server
-
-local version = 1 -- current version of the bind press replacer
+local version = 2 -- current version of the bind press replacer
 
 -- check whether there's a newer version of this script
 if UnintrusiveBindPress and UnintrusiveBindPress.version >= version then return end
@@ -18,6 +15,36 @@ if not UnintrusiveBindPress then UnintrusiveBindPress = { hooks = {}, priorities
 
 -- update version
 UnintrusiveBindPress.version = version
+
+--[[------------------------------------------------------------------
+  Replaces the PlayerBindPress hook, initializing our system.
+]]--------------------------------------------------------------------
+function UnintrusiveBindPress.init()
+  -- do not replace again
+  if not UnintrusiveBindPress.bindPress then
+    UnintrusiveBindPress.bindPress = GAMEMODE.PlayerBindPress -- get original bind press
+  end
+
+  -- create a replacement function
+  GAMEMODE.PlayerBindPress = function(self, _player, bind, pressed, code)
+    -- go through each priority in order
+    for priority, hooks in pairs(UnintrusiveBindPress.priorities) do
+      -- go through each hook without order
+      for _, func in pairs(hooks) do
+        -- run hook
+        local result = func(_player, bind, pressed, code)
+
+        -- if this hook has returned a value, override the rest
+        if result ~= nil then
+          return result
+        end
+      end
+    end
+
+    -- call original function
+    return UnintrusiveBindPress.bindPress(self, _player, bind, pressed, code)
+  end
+end
 
 --[[------------------------------------------------------------------
   Adds an unintrusive bind press hook
@@ -68,29 +95,4 @@ function UnintrusiveBindPress.getTable(priority)
 end
 
 -- do hook replace upon initializing every script
-hook.Add('PostGamemodeLoaded', 'unintrusive_bind_press', function()
-  -- do not replace again
-  if not UnintrusiveBindPress.bindPress then
-    UnintrusiveBindPress.bindPress = GAMEMODE.PlayerBindPress -- get original bind press
-  end
-
-  -- create a replacement function
-  GAMEMODE.PlayerBindPress = function(self, _player, bind, pressed, code)
-    -- go through each priority in order
-    for priority, hooks in pairs(UnintrusiveBindPress.priorities) do
-      -- go through each hook without order
-      for _, func in pairs(hooks) do
-        -- run hook
-        local result = func(_player, bind, pressed, code)
-
-        -- if this hook has returned a value, override the rest
-        if result ~= nil then
-          return result
-        end
-      end
-    end
-
-    -- call original function
-    return UnintrusiveBindPress.bindPress(self, _player, bind, pressed, code)
-  end
-end)
+hook.Add('PostGamemodeLoaded', 'unintrusive_bind_press', UnintrusiveBindPress.init)
