@@ -11,13 +11,13 @@ if CLIENT then
   local TITLE_COLOUR = Color(133, 216, 255);
   local TEXTURE = surface.GetTextureID("gui/center_gradient");
   local MAX_SYS_LOG = 14;
-  local WELCOME = "Welcome";
+  local WELCOME = "#Welcome";
   local TITLE = "H0L-D4";
   local VERSION = HOLOHUD.Version.Major .. "." .. HOLOHUD.Version.Minor;
-  local PATCH = HOLOHUD.Version.Patch .. " patches applied.";
+  local PATCH = HOLOHUD.Version.Patch .. language.GetPhrase( "Welcome.X.Paches.Applied" );
   local LOG_SPEED = 0.3; -- How often do new entries appear
   local TIME = 2.33; -- How much time is given to the user to see the full log before fading out
-  local NO_PRESETS = "No presets found.";
+  local NO_PRESETS = language.GetPhrase( "Welcome.No_Presets" );
 
   -- Fonts
   HOLOHUD:CreateFont("holohud_welcome_title", 40, "Roboto", 0);
@@ -54,30 +54,30 @@ if CLIENT then
     local fonts = NO_PRESETS;
 
     if (table.Count(HOLOHUD.CONFIG.PRESETS:GetPresets()) > 0) then
-      presets = "Loaded " .. table.Count(HOLOHUD.CONFIG.PRESETS:GetPresets()) .. " presets.";
+      presets = language.GetPhrase( "Welcome.Loaded" ) .. table.Count(HOLOHUD.CONFIG.PRESETS:GetPresets()) .. language.GetPhrase( "Welcome.Loaded.X.Presets" );
     end
 
     if (table.Count(HOLOHUD.CONFIG.FONTS:GetFontPresets()) > 0) then
-      fonts = "Loaded " .. table.Count(HOLOHUD.CONFIG.FONTS:GetFontPresets()) .. " presets.";
+      fonts = language.GetPhrase( "Welcome.Loaded" ) .. table.Count(HOLOHUD.CONFIG.FONTS:GetFontPresets()) .. language.GetPhrase( "Welcome.Loaded.X.Presets" );
     end
 
     logQueue = {
-      table.Count(HOLOHUD.ELEMENTS:GetElements()) .. " HUD elements found.",
-      "Loading user configuration...",
-      "Layout configuration loaded.",
-      "Font configuration loaded.",
-      "Scanning layout presets...",
+      table.Count(HOLOHUD.ELEMENTS:GetElements()) .. language.GetPhrase( "Welcome.X.HUD.Elements.Found" ),
+      language.GetPhrase( "Welcome.Loading.User.Configuration" ),
+      language.GetPhrase( "Welcome.Configuration.Loaded" ),
+      language.GetPhrase( "Welcome.Font.Configuration.Loaded" ),
+      language.GetPhrase( "Welcome.Scanning.Layout.Presets" ),
       presets,
-      "Scanning font presets...",
+      language.GetPhrase( "Welcome.Scanning.Font.Presets" ),
       fonts,
       "",
-      "All set. Have fun!"
+      language.GetPhrase( "Welcome.All.Set.HF" )
     };
 
     -- By default, sys queue will consist of loading all elements
     for _, element in pairs(HOLOHUD.ELEMENTS:GetElements()) do
-      table.insert(sysQueue, "Loading " .. element.title .. "...");
-      table.insert(sysQueue, "Done.");
+      table.insert(sysQueue, language.GetPhrase( "Welcome.Loading.Element.X" ) .. element.title .. "...");
+      table.insert(sysQueue, language.GetPhrase( "Welcome.Loading.Element.X.Done" ));
     end
   end
   LoadLog(); -- In case something goes wrong, preload log
@@ -340,12 +340,12 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Welcome screen",
-    "Displays the boot-up sequence of the HUD",
+    language.GetPhrase( "Welcome.Settings.Title" ),
+    language.GetPhrase( "Welcome.Settings.Desc" ),
     nil,
     {
-      title = { name = "Title colour", value = TITLE_COLOUR },
-      text = { name = "Text colour", value = Color(255, 255, 255) }
+      title = { name = language.GetPhrase( "Welcome.Settings.Title.Coluor" ), value = TITLE_COLOUR },
+      text = { name = language.GetPhrase( "Welcome.Settings.Text.Coluor" ), value = Color(255, 255, 255) }
     },
     DrawPanel
   );
