@@ -9,7 +9,7 @@ if CLIENT then
 
   -- Parameters
   local ITEM_WIDTH, ITEM_HEIGHT = 192, 20;
-  local PICKED_UP = "PICKED UP";
+  local PICKED_UP = language.GetPhrase( "#HOL.Ammo.PickedUp" );
 
   --[[
     Adds an item pickup to the history
