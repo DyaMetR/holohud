@@ -341,11 +341,11 @@ if CLIENT then
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
     language.GetPhrase( "Welcome.Settings.Title" ),
-    language.GetPhrase( "Welcome.Settings.Desc" ),
+    "#Welcome.Settings.Desc",
     nil,
     {
-      title = { name = language.GetPhrase( "Welcome.Settings.Title.Coluor" ), value = TITLE_COLOUR },
-      text = { name = language.GetPhrase( "Welcome.Settings.Text.Coluor" ), value = Color(255, 255, 255) }
+      title = { name = "#Welcome.Settings.Title.Coluor", value = TITLE_COLOUR },
+      text = { name = "#Welcome.Settings.Text.Coluor", value = Color(255, 255, 255) }
     },
     DrawPanel
   );
