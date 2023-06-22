@@ -239,9 +239,9 @@ if CLIENT then
     fonts.Paint = function() end;
     HOLOHUD.MENU:Fonts(fonts);
 
-    sheet:AddSheet("Fonts", fonts, "icon16/font.png");
-    sheet:AddSheet("HUD elements", elements, "icon16/application_view_tile.png");
-    sheet:AddSheet("Presets", presets, "icon16/script.png");
+    sheet:AddSheet("#HOL.Customization.Menu.Fonts", fonts, "icon16/font.png");
+    sheet:AddSheet("#HOL.Customization.Menu.HUD.Elements", elements, "icon16/application_view_tile.png");
+    sheet:AddSheet("#HOL.Customization.Menu.Presets", presets, "icon16/script.png");
 
   end
   concommand.Add("holohud_menu", function(player, command, arguments) OpenMenu(); end);
