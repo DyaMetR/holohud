@@ -26,43 +26,43 @@ if CLIENT then
   local function buildMenuComposition( panel )
   	panel:ClearControls();
 
-    panel:AddControl( "Label" , { Text = "#HOL.Menu.Element.configuration"} );
+    panel:AddControl( "Label" , { Text = "Element configuration"} );
 
     panel:AddControl( "Button", {
-  		Label = "#HOL.Menu.Open.Customization.Menu",
+  		Label = "Open customization menu",
   		Command = "holohud_menu"
   		}
   	);
 
     panel:AddControl( "Label" , { Text = ""} );
-    panel:AddControl( "Label" , { Text = "#HOL.Menu.Overall.Configuration"} );
+    panel:AddControl( "Label" , { Text = "Overall configuration"} );
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Enabled",
+  		Label = "Enabled",
       Command = "holohud_enabled"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Configuration.Auto.Saving.Enabled",
+  		Label = "Configuration auto saving enabled",
       Command = "holohud_autosave_enabled"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Hide.HUD.Upon.Dying",
+  		Label = "Hide HUD upon dying",
       Command = "holohud_death"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Display.Even.Without.Suit",
+  		Label = "Display even without Suit",
       Command = "holohud_nosuit_enabled"
   		}
   	);
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Swaying",
+      Label = "Swaying",
       Type = "Float",
       Min = "0",
       Max = "4",
@@ -70,7 +70,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Blur",
+      Label = "Blur",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -78,7 +78,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Blur.Intensity",
+      Label = "Blur intensity",
       Type = "Float",
       Min = "0",
       Max = "2",
@@ -86,7 +86,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Turned.Off.Elements.Opacity",
+      Label = "Turned off elements opacity",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -94,7 +94,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Flash.Brightness",
+      Label = "Flash brightness",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -102,7 +102,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Flash.Opacity",
+      Label = "Flash opacity",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -110,7 +110,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Panel.Deploy.Speed",
+      Label = "Panel deploy speed",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -118,7 +118,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Panel.Retract.Speed",
+      Label = "Panel retract speed",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -126,7 +126,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Background.Opacity",
+      Label = "Background opacity",
       Type = "Float",
       Min = "0",
       Max = "6",
@@ -134,7 +134,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Color", {
-      Label = "#HOL.Menu.Background.Colour",
+      Label = "Background colour",
       Red = "holohud_background_r",
       Green = "holohud_background_g",
       Blue = "holohud_background_b"
@@ -142,13 +142,13 @@ if CLIENT then
     );
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Enable.Chromatic.Aberration",
+  		Label = "Enable chromatic aberration",
       Command = "holohud_ca_enabled"
   		}
   	);
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.CA.separation",
+      Label = "C.A. separation",
       Type = "Float",
       Min = "0",
       Max = "10",
@@ -156,19 +156,19 @@ if CLIENT then
     );
 
     panel:AddControl( "Button", {
-  		Label = "#HOL.Menu.Reset.To.Default",
+  		Label = "Reset to default",
   		Command = "holohud_reset"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.SAE.Shortcut.Enabled",
+  		Label = "'Show all elements' shortcut enabled",
       Command = "holohud_contextmenu_enabled"
   		}
   	);
 
     panel:AddControl( "Numpad", {
-      Label = "#HOL.Menu.SAE.Shortcut.Key",
+      Label = "[Hold] Display all HUD elements",
       Command = "holohud_contextmenu"
       }
     );
