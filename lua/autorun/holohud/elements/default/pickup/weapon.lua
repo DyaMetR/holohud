@@ -9,7 +9,7 @@ if CLIENT then
 
   -- Parameters
   local WEAPON_WIDTH, WEAPON_HEIGHT, WEAPON_HEIGHT_MARGIN = 192, 96;
-  local ACQUIRED = "ACQUIRED";
+  local ACQUIRED = language.GetPhrase( "#HOL.Ammo.Acquired" );
 	local NONE = "";
 
 	--[[

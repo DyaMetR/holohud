@@ -9,7 +9,7 @@ if CLIENT then
 
   -- Parameters
   local AMMO_WIDTH, AMMO_HEIGHT = 111, 51; -- 150 ; 192, 44
-  local COLLECTED = "COLLECTED";
+  local COLLECTED = language.GetPhrase( "#HOL.Ammo.Collected" );
 
   --[[
     Adds a weapon pickup to the history
