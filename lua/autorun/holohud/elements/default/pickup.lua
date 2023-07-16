@@ -160,17 +160,17 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement("item_history",
-    "Item pickup history",
-    "Informs the player about picked up items",
+    "#holohud.settings.pickup.name",
+    "#holohud.settings.pickup.description",
     {"CHudHistoryResource"},
     {
-      alpha = { name = "Background opacity", value = 0.25, minValue = 0, maxValue = 1 },
-      animate = { name = "Toggle animation", value = true },
-      displayAmmo = { name = "Display known ammo names", desc = "Display the name of ammo types which have icons registered", value = false },
-      displayTitle = { name = "Show pickup title", value = true },
-      displayWeapon = { name = "Display weapon name", value = true },
-      colour = { name = "Colour", value = Color(255, 255, 255) },
-      crit_colour = { name = "Missing weapon colour", value = Color(255, 0, 0) }
+      alpha = { name = "#holohud.settings.pickup.alpha", value = 0.25, minValue = 0, maxValue = 1 },
+      animate = { name = "#holohud.settings.pickup.animation", value = true },
+      displayAmmo = { name = "#holohud.settings.pickup.ammo_names", desc = "#holohud.settings.pickup.ammo_names.description", value = false },
+      displayTitle = { name = "#holohud.settings.pickup.show_title", value = true },
+      displayWeapon = { name = "#holohud.settings.pickup.show_weapon_name", value = true },
+      colour = { name = "#holohud.settings.pickup.color", value = Color(255, 255, 255) },
+      crit_colour = { name = "#holohud.settings.pickup.missing_color", value = Color(255, 0, 0) }
     },
     DrawPanel
   );

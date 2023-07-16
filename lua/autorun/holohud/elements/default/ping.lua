@@ -201,15 +201,15 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement("ping",
-    "Ping meter",
-    "Displays current latency with the server",
+    "#holohud.settings.ping.name",
+    "#holohud.settings.ping.description",
     nil,
     {
-      always = { name = "Always displayed", value = false },
-      low_colour = { name = "Low ping colour", value = NORMAL },
-      mod_colour = { name = "Moderate ping colour", value = MODERATE },
-      high_colour = { name = "High ping colour", value = HIGH },
-      lag_colour = { name = "Extreme ping colour", value = LAG }
+      always = { name = "#holohud.settings.ping.always_displayed", value = false },
+      low_colour = { name = "#holohud.settings.ping.low_color", value = NORMAL },
+      mod_colour = { name = "#holohud.settings.ping.moderate_color", value = MODERATE },
+      high_colour = { name = "#holohud.settings.ping.high_color", value = HIGH },
+      lag_colour = { name = "#holohud.settings.ping.very_high_color", value = LAG }
     }, DrawPanel
   );
 

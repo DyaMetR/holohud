@@ -200,14 +200,14 @@ if CLIENT then
 
   -- Add element
 	HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-		"Killfeed",
-		"List of lethal PvP, PvE or EvE encounters",
+		"#holohud.settings.killfeed.name",
+		"#holohud.settings.killfeed.description",
 		nil,
 		{
-      limit = { name = "Max. entries (0 = unlimited)", value = 0, minValue = 0, maxValue = math.Round(ScrH() / HEIGHT) },
-      escape = { name = "Remove line breaks", desc = "Places the weapon/inflictor name in one line", value = true },
-      unknown = { name = "Generic icon if unnamed", desc = "Will place a generic death icon if the entity does not have a name registered", value = true },
-      colour = { name = "Weapon colour", value = WEAPON_COLOUR }
+      limit = { name = "#holohud.settings.killfeed.limit", value = 0, minValue = 0, maxValue = math.Round(ScrH() / HEIGHT) },
+      escape = { name = "#holohud.settings.killfeed.breakline", desc = "#holohud.settings.killfeed.breakline.description", value = true },
+      unknown = { name = "#holohud.settings.killfeed.placeholder", desc = "#holohud.settings.killfeed.placeholder.description", value = true },
+      colour = { name = "#holohud.settings.killfeed.color", value = WEAPON_COLOUR }
     },
     DrawPanel
 	);

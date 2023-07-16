@@ -76,12 +76,12 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Player count",
-    "How many players are currently in the server",
+    "#holohud.settings.player_count.name",
+    "#holohud.settings.player_count.description",
     nil,
     {
-      always = { name = "Always displayed", value = false },
-      colour = { name = "Colour", value = COLOUR }
+      always = { name = "#holohud.settings.player_count.always_displayed", value = false },
+      colour = { name = "#holohud.settings.player_count.color", value = COLOUR }
     },
     DrawPanel
   );

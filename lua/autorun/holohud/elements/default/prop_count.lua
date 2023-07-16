@@ -110,13 +110,13 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Prop count",
-    "How many props you've spawned",
+    "#holohud.settings.prop_count.name",
+    "#holohud.settings.prop_count.description",
     nil,
     {
-      always = { name = "Always displayed", value = false },
-      colour = { name = "Colour", value = COLOUR },
-      crit_colour = { name = "Limit reach colour", desc = "Colour when nearing the prop limit", value = CRIT_COLOUR }
+      always = { name = "#holohud.settings.prop_count.always_displayed", value = false },
+      colour = { name = "#holohud.settings.prop_count.color", value = COLOUR },
+      crit_colour = { name = "#holohud.settings.prop_count.limit_color", desc = "#holohud.settings.prop_count.limit_color.description", value = CRIT_COLOUR }
     },
     DrawPanel
   );
