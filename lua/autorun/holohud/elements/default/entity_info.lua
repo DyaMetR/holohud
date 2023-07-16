@@ -274,16 +274,16 @@ if CLIENT then
     "#holohud.settings.entity_info.description",
     nil,
     {
-      offset = { name = "holohud.settings.entity_info.offset", value = 0.58, minValue = 0, maxValue = 1 },
-      align = { name = "holohud.settings.entity_info.align", value = 1, options = {"holohud.settings.entity_info.align.right", "holohud.settings.entity_info.align.center", "holohud.settings.entity_info.align.left"} },
-      no_props = { name = "holohud.settings.entity_info.no_props", value = false },
-      unbreakable = { name = "holohud.settings.entity_info.unbreakable", desc = "holohud.settings.entity_info.unbreakable.description", value = true },
-      delay = { name = "holohud.settings.entity_info.delay", desc = "holohud.settings.entity_info.delay.description", value = true },
-      time = { name = "holohud.settings.entity_info.time", desc = "holohud.settings.entity_info.time.description", value = 1.46},
-      sent_only = { name = "holohud.settings.entity_info.sent_only", desc = "holohud.settings.entity_info.sent_only.description", value = false },
-      physgun = { name = "holohud.settings.entity_info.physgun", desc = "holohud.settings.entity_info.physgun.description", value = false },
-      colour = { name = "holohud.settings.entity_info.color", value = Color(255, 255, 255) },
-      health = { name = "holohud.settings.entity_info.health_color", value = HEALTH_COLOUR }
+      offset = { name = "#holohud.settings.entity_info.offset", value = 0.58, minValue = 0, maxValue = 1 },
+      align = { name = "#holohud.settings.entity_info.align", value = 1, options = {"#holohud.settings.entity_info.align.right", "#holohud.settings.entity_info.align.center", "#holohud.settings.entity_info.align.left"} },
+      no_props = { name = "#holohud.settings.entity_info.no_props", value = false },
+      unbreakable = { name = "#holohud.settings.entity_info.unbreakable", desc = "#holohud.settings.entity_info.unbreakable.description", value = true },
+      delay = { name = "#holohud.settings.entity_info.delay", desc = "#holohud.settings.entity_info.delay.description", value = true },
+      time = { name = "#holohud.settings.entity_info.time", desc = "#holohud.settings.entity_info.time.description", value = 1.46},
+      sent_only = { name = "#holohud.settings.entity_info.sent_only", desc = "#holohud.settings.entity_info.sent_only.description", value = false },
+      physgun = { name = "#holohud.settings.entity_info.physgun", desc = "#holohud.settings.entity_info.physgun.description", value = false },
+      colour = { name = "#holohud.settings.entity_info.color", value = Color(255, 255, 255) },
+      health = { name = "#holohud.settings.entity_info.health_color", value = HEALTH_COLOUR }
     },
     DrawPanel
   );
