@@ -64,7 +64,7 @@ if CLIENT then
     if (isDateEnabled) then
       surface.SetFont("holohud_clock_small");
       local weekDay = os.date("*t", os.time()).wday;
-      date = CLOCK.DAY_OF_WEEK[weekDay] .. ", " .. os.date("%d", timestamp) .. " " .. CLOCK.MONTHS[tonumber(os.date("%m", timestamp))];
+      date = language.GetPhrase(CLOCK.DAY_OF_WEEK[weekDay]) .. ", " .. os.date("%d", timestamp) .. " " .. language.GetPhrase(CLOCK.MONTHS[tonumber(os.date("%m", timestamp))]);
       dateW = surface.GetTextSize(date);
       h = EXT_H;
     end

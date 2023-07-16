@@ -8,8 +8,29 @@ if CLIENT then
   -- Namespace
   HOLOHUD.ELEMENTS.CLOCK = {};
 
-  HOLOHUD.ELEMENTS.CLOCK.DAY_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-  HOLOHUD.ELEMENTS.CLOCK.MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+  HOLOHUD.ELEMENTS.CLOCK.DAY_OF_WEEK = {
+    "holohud.hud.clock.week.sunday",
+    "holohud.hud.clock.week.monday",
+    "holohud.hud.clock.week.tuesday",
+    "holohud.hud.clock.week.wednesday",
+    "holohud.hud.clock.week.thursday",
+    "holohud.hud.clock.week.friday",
+    "holohud.hud.clock.week.saturday"
+  };
+  HOLOHUD.ELEMENTS.CLOCK.MONTHS = {
+    "holohud.hud.clock.month.january",
+    "holohud.hud.clock.month.february",
+    "holohud.hud.clock.month.march",
+    "holohud.hud.clock.month.april",
+    "holohud.hud.clock.month.may",
+    "holohud.hud.clock.month.june",
+    "holohud.hud.clock.month.july",
+    "holohud.hud.clock.month.august",
+    "holohud.hud.clock.month.september",
+    "holohud.hud.clock.month.october",
+    "holohud.hud.clock.month.november",
+    "holohud.hud.clock.month.december"
+  };
 
   --[[
     -- Include
@@ -69,18 +90,18 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Clock",
-    "Display current time and date",
+    "#holohud.settings.clock.name",
+    "#holohud.settings.clock.description",
     nil,
     {
-      always = { name = "Always displayed", desc = "Otherwise it will show up every hour", value = true },
-      mode = { name = "Mode", value = 1, options = {"Simple", "Digital", "Simple with date"}},
-      h24 = { name = "24 hours format", value = true },
-      sec = { name = "Display seconds", value = true },
-      hor_off = { name = "Horizontal offset", value = 0.5, minValue = 0, maxValue = 1 },
-      ver_off = { name = "Vertical offset", value = 0.1, minValue = 0, maxValue = 1 },
-      update = { name = "Update rate", desc = "How often (in minutes) it highlights itself", value = 60, minValue = 1, maxValue = 120 },
-      colour = { name = "Colour", value = Color(255, 255, 255) }
+      always = { name = "#holohud.settings.clock.always_displayed", desc = "#holohud.settings.clock.always_displayed.description", value = true },
+      mode = { name = "#holohud.settings.clock.mode", value = 1, options = {"#holohud.settings.clock.mode.simple", "#holohud.settings.clock.mode.digital", "#holohud.settings.clock.mode.simple_with_date"}},
+      h24 = { name = "#holohud.settings.clock.24format", value = true },
+      sec = { name = "#holohud.settings.clock.show_seconds", value = true },
+      hor_off = { name = "#holohud.settings.clock.x", value = 0.5, minValue = 0, maxValue = 1 },
+      ver_off = { name = "#holohud.settings.clock.y", value = 0.1, minValue = 0, maxValue = 1 },
+      update = { name = "#holohud.settings.clock.update_rate", desc = "#holohud.settings.clock.update_rate.description", value = 60, minValue = 1, maxValue = 120 },
+      colour = { name = "#holohud.settings.clock.color", value = Color(255, 255, 255) }
     },
     DrawPanel
   );

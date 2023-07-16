@@ -270,20 +270,20 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement("entity_info",
-    "Entity information",
-    "Information about the entity you're looking at",
+    "#holohud.settings.entity_info.name",
+    "#holohud.settings.entity_info.description",
     nil,
     {
-      offset = { name = "Vertical offset", value = 0.58, minValue = 0, maxValue = 1 },
-      align = { name = "Horizontal alignment", value = 1, options = {"Right", "Center", "Left"} },
-      no_props = { name = "Disable prop information", value = false },
-      unbreakable = { name = "Unbreakables physgun only", desc = "Only display unbreakables information when holding the physics gun", value = true },
-      delay = { name = "Delay prop info", desc = "Delays unbreakable props information display when not holding the physics gun", value = true },
-      time = { name = "Delay time", desc = "If delay is enabled, how much it takes for prop information to show up", value = 1.46},
-      sent_only = { name = "Hide non-SEnts", desc = "Don't show entities that aren't scripted", value = false },
-      physgun = { name = "Physics gun only", desc = "Only display this component if the player is holding the physics gun", value = false },
-      colour = { name = "Text colour", value = Color(255, 255, 255) },
-      health = { name = "Health bar colour", value = HEALTH_COLOUR }
+      offset = { name = "holohud.settings.entity_info.offset", value = 0.58, minValue = 0, maxValue = 1 },
+      align = { name = "holohud.settings.entity_info.align", value = 1, options = {"holohud.settings.entity_info.align.right", "holohud.settings.entity_info.align.center", "holohud.settings.entity_info.align.left"} },
+      no_props = { name = "holohud.settings.entity_info.no_props", value = false },
+      unbreakable = { name = "holohud.settings.entity_info.unbreakable", desc = "holohud.settings.entity_info.unbreakable.description", value = true },
+      delay = { name = "holohud.settings.entity_info.delay", desc = "holohud.settings.entity_info.delay.description", value = true },
+      time = { name = "holohud.settings.entity_info.time", desc = "holohud.settings.entity_info.time.description", value = 1.46},
+      sent_only = { name = "holohud.settings.entity_info.sent_only", desc = "holohud.settings.entity_info.sent_only.description", value = false },
+      physgun = { name = "holohud.settings.entity_info.physgun", desc = "holohud.settings.entity_info.physgun.description", value = false },
+      colour = { name = "holohud.settings.entity_info.color", value = Color(255, 255, 255) },
+      health = { name = "holohud.settings.entity_info.health_color", value = HEALTH_COLOUR }
     },
     DrawPanel
   );

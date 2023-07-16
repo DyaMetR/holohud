@@ -163,20 +163,20 @@ if CLIENT then
 
 	-- Add element
 	HOLOHUD.ELEMENTS:AddElement(ELEMENT_NAME,
-		"Health and armour panel",
-		"Displays player health and armour",
+		"#holohud.settings.health.name",
+		"#holohud.settings.health.description",
 		{"CHudHealth", "CHudBattery"},
 		{
-			always = { name = "Always displayed", value = false },
-			mode = { name = "Mode", value = 1, options = {"Default", "Heart rate monitor", "Heart rate monitor w/ kevlar", "Classic FPS"} },
-			hide = { name = "Don't hide if health is under", desc = "Won't automatically hide the panel if the health is under the given amount", value = 50 },
-			classic_hide_armour = { name = "[Classic] Hide armour on 0%", value = false },
-			heartrate_hide_number = { name = "[Heart rate] Hide numbers", value = false},
-			health_good = { name = "Normal colour", value = HEALTH_GOOD },
-			health_warn = { name = "Warning colour", value = HEALTH_WARN },
-			health_crit = { name = "Critical colour", value = HEALTH_CRIT },
-			armour = { name = "Armour colour", value = ARMOUR_COLOUR },
-			right_align = { name = "Right aligned bar", value = false }
+			always = { name = "#holohud.settings.health.always_displayed", value = false },
+			mode = { name = "#holohud.settings.health.mode", value = 1, options = {"#holohud.settings.health.mode.default", "#holohud.settings.health.mode.heart_rate", "#holohud.settings.health.mode.heart_rate_kevlar", "#holohud.settings.health.mode.classic"} },
+			hide = { name = "#holohud.settings.health.dont_hide_under", desc = "#holohud.settings.health.dont_hide_under.description", value = 50 },
+			classic_hide_armour = { name = "#holohud.settings.health.classic_hide_armour", value = false },
+			heartrate_hide_number = { name = "#holohud.settings.health.heart_rate_hide_number", value = false},
+			health_good = { name = "#holohud.settings.health.good_color", value = HEALTH_GOOD },
+			health_warn = { name = "#holohud.settings.health.warn_color", value = HEALTH_WARN },
+			health_crit = { name = "#holohud.settings.health.low_color", value = HEALTH_CRIT },
+			armour = { name = "#holohud.settings.health.armor_color", value = ARMOUR_COLOUR },
+			right_align = { name = "#holohud.settings.health.right_align", value = false }
 		},
 		DrawPanel
 	);

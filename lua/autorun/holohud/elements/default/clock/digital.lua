@@ -48,7 +48,7 @@ if CLIENT then
     local date_offset = 0;
     if (not sec) then date_offset = 8; end
     HOLOHUD:DrawText(x + min_offset + 3, y + 25 - date_offset, date, "holohud_clock_small", colour, HOLOHUD:GetHighlight(PANEL_NAME));
-    HOLOHUD:DrawText(x + min_offset + 3, y + 41 - date_offset, CLOCK.MONTHS[tonumber(os.date("%m", timestamp))], "holohud_clock_small", colour, HOLOHUD:GetHighlight(PANEL_NAME));
+    HOLOHUD:DrawText(x + min_offset + 3, y + 41 - date_offset, language.GetPhrase(CLOCK.MONTHS[tonumber(os.date("%m", timestamp))]), "holohud_clock_small", colour, HOLOHUD:GetHighlight(PANEL_NAME));
   end
 
   --[[
@@ -66,7 +66,7 @@ if CLIENT then
     surface.SetFont("holohud_clock_small");
 
     local weekDay = os.date("*t", os.time()).wday;
-    local date = CLOCK.DAY_OF_WEEK[weekDay] .. ", " .. os.date("%d", timestamp);
+    local date = language.GetPhrase(CLOCK.DAY_OF_WEEK[weekDay]) .. ", " .. os.date("%d", timestamp);
     w = w + surface.GetTextSize(date) + MARGIN;
 
     HOLOHUD:DrawFragmentAlignSimple((ScrW() * hor_off) - (w * 0.5), ScrH() * ver_off, w, H, Foreground, PANEL_NAME, TEXT_ALIGN_TOP, timestamp, date, h24, sec, colour);

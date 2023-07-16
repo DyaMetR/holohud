@@ -81,11 +81,11 @@ if CLIENT then
     if (w > (W * 1.5) and scale < w/(W * 1.5)) then scale = w/(W * 1.5); end
 
     -- Major
-    DrawGraduation(x, y, w, h, "N", -90, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "S", 90, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "E", 0, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "W", 180, nil, numbers, scale, degrees, colour);
-    DrawGraduation(x, y, w, h, "W", -180, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "#holohud.hud.compass.north", -90, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "#holohud.hud.compass.south", 90, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "#holohud.hud.compass.east", 0, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "#holohud.hud.compass.west", 180, nil, numbers, scale, degrees, colour);
+    DrawGraduation(x, y, w, h, "#holohud.hud.compass.west", -180, nil, numbers, scale, degrees, colour);
 
     -- Minor
     for i=1,8 do -- North to east
@@ -165,18 +165,18 @@ if CLIENT then
 
   -- Add element
 	HOLOHUD.ELEMENTS:AddElement("compass",
-		"Compass",
-		"Utility tool to keep track of your bearings",
+		"#holohud.settings.compass.name",
+		"#holohud.settings.compass.description",
 		nil,
 		{
-      always = { name = "Always displayed", desc = "Display on the HUD at all times", value = true },
-      numbers = { name = "Numeric in-between angles", desc = "Display a number between every 10 degrees", value = false },
-      rotation = { name = "Show the current angle", value = false },
-      degrees = { name = "0 to 360 degrees", desc = "Switch either -180 to 180 or 0 to 360 degrees scale", value = false },
-      scale = { name = "Scale", value = 1, minValue = 0.66, maxValue = 5 },
-      width = { name = "Width", value = W, minValue = 0, maxValue = W * 5 },
-      offset = { name = "Offset", value = 0.044, minValue = 0, maxValue = 1 },
-      colour = { name = "Colour", value = Color(255, 255, 255)}
+      always = { name = "#holohud.settings.compass.always_displayed", desc = "#holohud.settings.compass.always_displayed.description", value = true },
+      numbers = { name = "#holohud.settings.compass.numeric_inbetween", desc = "#holohud.settings.compass.numeric_inbetween.description", value = false },
+      rotation = { name = "#holohud.settings.compass.angle", value = false },
+      degrees = { name = "#holohud.settings.compass.360angle", desc = "#holohud.settings.compass.360angle.description", value = false },
+      scale = { name = "#holohud.settings.compass.scale", value = 1, minValue = 0.66, maxValue = 5 },
+      width = { name = "#holohud.settings.compass.width", value = W, minValue = 0, maxValue = W * 5 },
+      offset = { name = "#holohud.settings.compass.offset", value = 0.044, minValue = 0, maxValue = 1 },
+      colour = { name = "#holohud.settings.compass.color", value = Color(255, 255, 255)}
     },
 		DrawPanel
 	);

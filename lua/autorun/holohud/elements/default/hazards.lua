@@ -197,12 +197,12 @@ if CLIENT then
 
   -- Add element
 	HOLOHUD.ELEMENTS:AddElement("hazards",
-		"Environmental hazards",
-		"Warns the player about the damage type received",
+		"#holohud.settings.hazards.name",
+		"#holohud.settings.hazards.description",
 		nil,
 		{
-      single_tray = { name = "Single icon tray", value = false },
-      colour = { name = "Colour", value = Color(255, 255, 255) }
+      single_tray = { name = "#holohud.settings.hazards.single_tray", value = false },
+      colour = { name = "#holohud.settings.hazards.color", value = Color(255, 255, 255) }
     },
 		DrawPanel
 	);

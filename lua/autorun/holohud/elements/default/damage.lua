@@ -65,13 +65,13 @@ if CLIENT then
 
   -- Add element
 	HOLOHUD.ELEMENTS:AddElement("damage",
-		"Damage indicators",
-		"Informs the player about oncoming damage",
+		"#holohud.settings.damage.name",
+		"#holohud.settings.damage.description",
 		"CHudDamageIndicator",
 		{
-      distance = { name = "Distance from center", value = 1, minValue = 0, maxValue = 10 },
-      colour = { name = "Colour", value = Color(255, 0, 0) },
-      maxCount = { name = "Damage indicators at once", desc = "How many damage indicators can be at once before forcefully flushing the old ones", value = MAX_COUNT }
+      distance = { name = "#holohud.settings.damage.distance", value = 1, minValue = 0, maxValue = 10 },
+      colour = { name = "#holohud.settings.damage.color", value = Color(255, 0, 0) },
+      maxCount = { name = "#holohud.settings.damage.limit", desc = "holohud.settings.damage.limit.description", value = MAX_COUNT }
     },
 		DrawPanel
 	);

@@ -156,22 +156,22 @@ if CLIENT and HOLOHUD ~= nil then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Auxiliary power",
-    "Displays the amount of auxiliary power left",
+    "#holohud.settings.auxpow.name",
+    "#holohud.settings.auxpow.description",
     "CHudSuitPower",
     {
-      colour = { name = "Aux. power colour", value = Color(77, 204, 255) },
-      colour_text = { name = "Aux. power text colour", value = Color(255, 255, 255) },
-      crit_colour = { name = "Aux. power critical colour", value = Color(255, 88, 88) },
-      ep2_colour = { name = "Flashlight colour", value = Color(200, 180, 80)},
-      ep2_colour_text = { name = "Flashlight text colour", value = Color(255, 255, 255)},
-      ep2_crit_colour = { name = "Flashlight critical colour", value = Color(255, 0, 0)},
-      x = { name = "Horizontal offset", value = 20, minValue = 0, maxValue = ScrW() },
-      y = { name = "Vertical offset", value = 20, minValue = 0, maxValue = ScrW() },
-      fX = { name = "Flashlight hor. offset", value = 20, minValue = 0, maxValue = ScrW() },
-      fY = { name = "Flashlight ver. offset", value = 20, minValue = 0, maxValue = ScrW() },
-      mode = { name = "Aux. power mode", options = {"Default", "Icon with background", "Icon only"}, value = 1},
-      flashMode = { name = "Flashlight mode", options = {"Default", "Icon with background", "Icon only"}, value = 1}
+      colour = { name = "#holohud.settings.auxpow.auxpow_color", value = Color(77, 204, 255) },
+      colour_text = { name = "#holohud.settings.auxpow.auxpow_text_color", value = Color(255, 255, 255) },
+      crit_colour = { name = "#holohud.settings.auxpow.auxpow_low_color", value = Color(255, 88, 88) },
+      ep2_colour = { name = "#holohud.settings.auxpow.flashlight_color", value = Color(200, 180, 80)},
+      ep2_colour_text = { name = "#holohud.settings.auxpow.flashlight_text_color", value = Color(255, 255, 255)},
+      ep2_crit_colour = { name = "#holohud.settings.auxpow.flashlight_low_color", value = Color(255, 0, 0)},
+      x = { name = "#holohud.settings.auxpow.auxpow_x", value = 20, minValue = 0, maxValue = ScrW() },
+      y = { name = "#holohud.settings.auxpow.auxpow_y", value = 20, minValue = 0, maxValue = ScrW() },
+      fX = { name = "#holohud.settings.auxpow.flashlight_x", value = 20, minValue = 0, maxValue = ScrW() },
+      fY = { name = "#holohud.settings.auxpow.flashlight_y", value = 20, minValue = 0, maxValue = ScrW() },
+      mode = { name = "#holohud.settings.auxpow.auxpow_mode", options = {"#holohud.settings.auxpow.mode.default", "#holohud.settings.auxpow.mode.icon_with_background", "#holohud.settings.auxpow.mode.icon_only"}, value = 1},
+      flashMode = { name = "#holohud.settings.auxpow.flashlight_mode", options = {"#holohud.settings.auxpow.mode.default", "#holohud.settings.auxpow.mode.icon_with_background", "#holohud.settings.auxpow.mode.icon_only"}, value = 1}
     },
     DrawPanel
   );
