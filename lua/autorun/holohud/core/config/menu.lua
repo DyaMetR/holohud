@@ -26,43 +26,43 @@ if CLIENT then
   local function buildMenuComposition( panel )
   	panel:ClearControls();
 
-    panel:AddControl( "Label" , { Text = "#HOL.Menu.Element.configuration"} );
+    panel:AddControl( "Label" , { Text = "#holohud.qmenu.elements.header"} );
 
     panel:AddControl( "Button", {
-  		Label = "#HOL.Menu.Open.Customization.Menu",
+  		Label = "#holohud.qmenu.elements.open",
   		Command = "holohud_menu"
   		}
   	);
 
     panel:AddControl( "Label" , { Text = ""} );
-    panel:AddControl( "Label" , { Text = "#HOL.Menu.Overall.Configuration"} );
+    panel:AddControl( "Label" , { Text = "#holohud.qmenu.general.header"} );
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Enabled",
+  		Label = "#holohud.qmenu.general.enabled",
       Command = "holohud_enabled"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Configuration.Auto.Saving.Enabled",
+  		Label = "#holohud.qmenu.general.autosave",
       Command = "holohud_autosave_enabled"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Hide.HUD.Upon.Dying",
+  		Label = "#holohud.qmenu.general.hide_on_death",
       Command = "holohud_death"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Display.Even.Without.Suit",
+  		Label = "#holohud.qmenu.general.draw_without_suit",
       Command = "holohud_nosuit_enabled"
   		}
   	);
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Swaying",
+      Label = "#holohud.qmenu.general.swaying",
       Type = "Float",
       Min = "0",
       Max = "4",
@@ -70,7 +70,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Blur",
+      Label = "#holohud.qmenu.general.blur",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -78,7 +78,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Blur.Intensity",
+      Label = "#holohud.qmenu.general.blur_intensity",
       Type = "Float",
       Min = "0",
       Max = "2",
@@ -86,7 +86,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Turned.Off.Elements.Opacity",
+      Label = "#holohud.qmenu.general.off_elements_alpha",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -94,7 +94,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Flash.Brightness",
+      Label = "#holohud.qmenu.general.flash_brightness",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -102,7 +102,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Flash.Opacity",
+      Label = "#holohud.qmenu.general.flash_alpha",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -110,7 +110,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Panel.Deploy.Speed",
+      Label = "#holohud.qmenu.general.panel_deploy_speed",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -118,7 +118,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Panel.Retract.Speed",
+      Label = "#holohud.qmenu.general.panel_retract_speed",
       Type = "Float",
       Min = "0",
       Max = "1",
@@ -126,7 +126,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.Background.Opacity",
+      Label = "#holohud.qmenu.general.background_alpha",
       Type = "Float",
       Min = "0",
       Max = "6",
@@ -134,7 +134,7 @@ if CLIENT then
     );
 
     panel:AddControl( "Color", {
-      Label = "#HOL.Menu.Background.Colour",
+      Label = "#holohud.qmenu.general.background_color",
       Red = "holohud_background_r",
       Green = "holohud_background_g",
       Blue = "holohud_background_b"
@@ -142,13 +142,13 @@ if CLIENT then
     );
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.Enable.Chromatic.Aberration",
+  		Label = "#holohud.qmenu.general.chromatic_aberration",
       Command = "holohud_ca_enabled"
   		}
   	);
 
     panel:AddControl( "Slider", {
-      Label = "#HOL.Menu.CA.separation",
+      Label = "#holohud.qmenu.general.chromatic_aberration_separation",
       Type = "Float",
       Min = "0",
       Max = "10",
@@ -156,30 +156,35 @@ if CLIENT then
     );
 
     panel:AddControl( "Button", {
-  		Label = "#HOL.Menu.Reset.To.Default",
+  		Label = "#holohud.qmenu.general.reset",
   		Command = "holohud_reset"
   		}
   	);
 
     panel:AddControl( "CheckBox", {
-  		Label = "#HOL.Menu.SAE.Shortcut.Enabled",
+  		Label = "#holohud.qmenu.general.show_all",
       Command = "holohud_contextmenu_enabled"
   		}
   	);
 
     panel:AddControl( "Numpad", {
-      Label = "#HOL.Menu.SAE.Shortcut.Key",
+      Label = "#holohud.qmenu.general.show_all_input",
       Command = "holohud_contextmenu"
       }
     );
 
     -- Credits
-    panel:AddControl( "Label" , { Text = ""} );
-    panel:AddControl( "Label",  { Text = "H0L-D4: Holographic Heads Up Display"});
-    panel:AddControl( "Label",  { Text = "Version " .. HOLOHUD.Version.Major .. "." .. HOLOHUD.Version.Minor .. "." .. HOLOHUD.Version.Patch});
-    panel:AddControl( "Label",  { Text = "Made by DyaMetR"});
-    panel:AddControl( "Label",  { Text = "Special thanks to Matsilagi for additional support and testing"});
-    panel:AddControl( "Label",  { Text = "Weapon selector skeleton provided by gs_code"});
+    panel:Help(string.format('\n %s', string.format(language.GetPhrase('#holohud.version'), HOLOHUD.Version.Major, HOLOHUD.Version.Minor, HOLOHUD.Version.Patch)))
+    panel:Help(string.format('\n %s', language.GetPhrase('#holohud.credits')))
+
+    panel:Help("DyaMetR");
+    panel:ControlHelp("#holohud.credits.author");
+
+    panel:Help("Matsilagi");
+    panel:ControlHelp("#holohud.credits.support");
+
+    panel:Help("IBRS");
+    panel:ControlHelp("#holohud.credits.localization.cn");
   end
 
   --[[
@@ -187,7 +192,7 @@ if CLIENT then
     @void
   ]]
   local function menuCreation()
-  	spawnmenu.AddToolMenuOption( "Options", "DyaMetR", "holohud", "H0L-D4", nil, nil, buildMenuComposition );
+  	spawnmenu.AddToolMenuOption( "Utilities", "H0L-D4", "holohud", "Settings", nil, nil, buildMenuComposition );
   end
   hook.Add( "PopulateToolMenu", "holohud_menu", menuCreation );
 
@@ -239,9 +244,9 @@ if CLIENT then
     fonts.Paint = function() end;
     HOLOHUD.MENU:Fonts(fonts);
 
-    sheet:AddSheet("#HOL.Customization.Menu.Fonts", fonts, "icon16/font.png");
-    sheet:AddSheet("#HOL.Customization.Menu.HUD.Elements", elements, "icon16/application_view_tile.png");
-    sheet:AddSheet("#HOL.Customization.Menu.Presets", presets, "icon16/script.png");
+    sheet:AddSheet("#holohud.menu.fonts.tab", fonts, "icon16/font.png");
+    sheet:AddSheet("#holohud.menu.elements.tab", elements, "icon16/application_view_tile.png");
+    sheet:AddSheet("#holohud.menu.presets.tab", presets, "icon16/script.png");
 
   end
   concommand.Add("holohud_menu", function(player, command, arguments) OpenMenu(); end);

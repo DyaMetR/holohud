@@ -9,7 +9,6 @@ if CLIENT then
 
   -- Parameters
   local WEAPON_WIDTH, WEAPON_HEIGHT, WEAPON_HEIGHT_MARGIN = 192, 96;
-  local ACQUIRED = language.GetPhrase( "#HOL.Ammo.Acquired" );
 	local NONE = "";
 
 	--[[
@@ -65,6 +64,7 @@ if CLIENT then
     @void
   ]]
   function PICKUP.WeaponPickup(x, y, w, h, weapon, nameMargin, anim1, anim2, displayTitle, displayWeapon, colour, critColour)
+    local acquired = language.GetPhrase("holohud.hud.pickup.weapon");
     colour = colour or Color(255, 255, 255);
     critColour = critColour or Color(255, 0, 0);
     if (not LocalPlayer():HasWeapon(weapon:GetClass())) then
@@ -73,7 +73,7 @@ if CLIENT then
 
     -- Title
     if (displayTitle) then
-      HOLOHUD:DrawText(x + 3, y, string.sub(ACQUIRED, 1, anim2), "holohud_pickup", Color(255, 255, 255, 30), nil, nil, nil, true);
+      HOLOHUD:DrawText(x + 3, y, string.sub(acquired, 1, anim2), "holohud_pickup", Color(255, 255, 255, 30), nil, nil, nil, true);
     end
 
     -- Icon
@@ -92,6 +92,7 @@ if CLIENT then
   ]]
   function PICKUP:WeaponAnimation(i, animate)
     local pickup = PICKUP.pickups[i];
+    local acquired = language.GetPhrase("holohud.hud.pickup.weapon");
 		local name = getWeaponName(pickup.data.weapon)
 
     if (animate) then
@@ -102,11 +103,11 @@ if CLIENT then
 
       -- Animate text
       if (pickup.data.tick < CurTime() and HOLOHUD:GetFlashPanel(PICKUP.PANEL_SUBFIX .. i).flash <= 0) then
-        if (pickup.data.anim2 < string.len(ACQUIRED)) then
+        if (pickup.data.anim2 < string.len(acquired)) then
           PICKUP.pickups[i].data.anim2 = pickup.data.anim2 + 1;
 
           -- Delay
-          if (math.abs(pickup.data.anim2 - string.len(ACQUIRED)) < 1) then
+          if (math.abs(pickup.data.anim2 - string.len(acquired)) < 1) then
             PICKUP.pickups[i].data.tick = CurTime() + 0.3;
           else
             PICKUP.pickups[i].data.tick = CurTime() + 0.015;
@@ -120,7 +121,7 @@ if CLIENT then
       end
     else
       pickup.data.anim1 = string.len(name);
-      pickup.data.anim2 = string.len(ACQUIRED);
+      pickup.data.anim2 = string.len(acquired);
     end
   end
 end

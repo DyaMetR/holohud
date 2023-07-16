@@ -117,8 +117,12 @@ if CLIENT then
     Returns the background colour for the panels
     @return {Color} background colour
   ]]
+  local cache = Color(0, 0, 0)
   function HOLOHUD:GetBackgroundColour()
-    return Color(values.holohud_background_r:GetInt(), values.holohud_background_g:GetInt(), values.holohud_background_b:GetInt());
+    cache.r = values.holohud_background_r:GetInt();
+    cache.g = values.holohud_background_g:GetInt();
+    cache.b = values.holohud_background_b:GetInt();
+    return cache;
   end
 
   --[[

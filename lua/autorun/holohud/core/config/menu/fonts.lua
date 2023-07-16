@@ -68,7 +68,7 @@ if CLIENT then
     reset:SetPos(width - 24, 3);
     reset:SetSize(14, 14);
     reset:SetImage(RESET_TEXTURE);
-    reset:SetTooltip("Reset to default");
+    reset:SetTooltip("#holohud.menu.fonts.list.reset");
     reset.DoClick = function()
       HOLOHUD.CONFIG.FONTS:ResetFontToDefault(font);
       text:SetText(HOLOHUD.CONFIG.FONTS:GetFontFamily(font) or "");
@@ -142,7 +142,7 @@ if CLIENT then
     local lblGen = vgui.Create("DLabel", frame);
     lblGen:SetPos(3, 5);
     lblGen:SetFont("HudHintTextLarge");
-    lblGen:SetText("Apply a single font family to all fonts");
+    lblGen:SetText("#holohud.menu.fonts.apply_all");
     lblGen:SizeToContents();
 
     local txeGen = vgui.Create("DTextEntry", frame);
@@ -153,7 +153,7 @@ if CLIENT then
     local lblFnt = vgui.Create("DLabel", frame);
     lblFnt:SetPos(3, HEADER_H);
     lblFnt:SetFont("HudHintTextLarge");
-    lblFnt:SetText("Available fonts to customize");
+    lblFnt:SetText("#holohud.menu.fonts.list.header");
     lblFnt:SizeToContents();
 
     local scFonts = vgui.Create("DScrollPanel", frame);
@@ -175,7 +175,7 @@ if CLIENT then
     local btnReset = vgui.Create("DButton", frame);
     btnReset:SetPos(410, 25);
     btnReset:SetSize(200, 20);
-    btnReset:SetText("Reset all to default");
+    btnReset:SetText("#holohud.menu.fonts.reset_all");
     btnReset.DoClick = function()
       HOLOHUD.CONFIG.FONTS:ResetFontsToDefault();
       UpdateFontList(lsFonts);
@@ -185,7 +185,7 @@ if CLIENT then
     local lblPrs = vgui.Create("DLabel", frame);
     lblPrs:SetPos((frame:GetWide() * 0.5) + 8, HEADER_H);
     lblPrs:SetFont("HudHintTextLarge");
-    lblPrs:SetText("Create preset from current font settings");
+    lblPrs:SetText("#holohud.menu.fonts.presets.header");
     lblPrs:SizeToContents();
 
     local txePrs = vgui.Create("DTextEntry", frame);
@@ -196,13 +196,13 @@ if CLIENT then
     btnAdd:SetPos(txePrs.x + txePrs:GetWide() + 8, txePrs.y + 2);
     btnAdd:SetSize(16, 16);
     btnAdd:SetImage(SAVE_TEXTURE);
-    btnAdd:SetTooltip("Save current settings as a preset");
+    btnAdd:SetTooltip("#holohud.menu.fonts.presets.save");
 
     -- Font preset list
     local prsts = vgui.Create("DListView", frame);
     prsts:SetPos(lblPrs.x, HEADER_H + 45);
     prsts:SetSize(284, 170);
-    prsts:AddColumn("Presets");
+    prsts:AddColumn("#holohud.menu.fonts.presets");
     UpdatePresetList(prsts);
 
     btnAdd.DoClick = function()
@@ -220,11 +220,11 @@ if CLIENT then
 
     prsts.OnRowSelected = function(pnl, index, row)
       listOpt:Clear();
-      listOpt:Add(GenerateButtonOption(frame, "Load preset", "Confirm action", LOAD_TEXTURE, function()
+      listOpt:Add(GenerateButtonOption(frame, "#holohud.menu.fonts.presets.load", "Confirm action", LOAD_TEXTURE, function()
         HOLOHUD.CONFIG.FONTS:LoadFontPreset(row:GetValue(1));
         UpdateFontList(lsFonts);
       end));
-      listOpt:Add(GenerateButtonOption(frame, "Delete preset", "Confirm action", DELETE_TEXTURE, function()
+      listOpt:Add(GenerateButtonOption(frame, "#holohud.menu.fonts.presets.delete", "Confirm action", DELETE_TEXTURE, function()
         HOLOHUD.CONFIG.FONTS:DeleteFontPreset(row:GetValue(1));
         UpdatePresetList(prsts);
         listOpt:Clear();

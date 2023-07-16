@@ -40,13 +40,13 @@ if CLIENT then
 
     local lblCheck = vgui.Create("DLabel", panel);
     lblCheck:SetPos(30, 54);
-    lblCheck:SetText("Enabled");
+    lblCheck:SetText("#holohud.menu.elements.common.enabled");
     lblCheck:SizeToContents();
 
     local btnSave = vgui.Create("DImageButton", panel);
     btnSave:SetSize(16, 16);
     btnSave:SetPos(panel:GetWide() - 31, 51);
-    btnSave:SetTooltip("Save configuration");
+    btnSave:SetTooltip("#holohud.menu.elements.options.save");
     btnSave:SetImage(SAVE_TEXTURE);
     btnSave.DoClick = function()
       HOLOHUD.ELEMENTS:SaveUserConfiguration(id);
@@ -56,7 +56,7 @@ if CLIENT then
     local btnReset = vgui.Create("DImageButton", panel);
     btnReset:SetSize(16, 16);
     btnReset:SetPos(panel:GetWide() - 52, 51);
-    btnReset:SetTooltip("Reset to default");
+    btnReset:SetTooltip("#holohud.menu.elements.options.reset");
     btnReset:SetImage(RESET_TEXTURE);
     btnReset.DoClick = function()
       -- Reset panels options
@@ -251,7 +251,7 @@ if CLIENT then
 
     local label = vgui.Create("DLabel", panel);
     label:SetPos(30, 28);
-    label:SetText("Enabled");
+    label:SetText("#holohud.menu.elements.common.enabled");
     label:SizeToContents();
 
     panel.ResetToDefault = function() checkbox:SetValue(defaultConfig.value); end;
@@ -309,7 +309,7 @@ if CLIENT then
     local list = vgui.Create("DListView", frame);
     list:SetPos(0, GENERAL_OFFSET);
     list:SetSize(frame:GetWide() * 0.3, frame:GetTall() - 36 - GENERAL_OFFSET);
-    list:AddColumn("Select to display settings");
+    list:AddColumn("#holohud.menu.elements.options.list");
 
     -- List all elements
     for id, element in SortedPairs(HOLOHUD.ELEMENTS:GetElements()) do
@@ -319,14 +319,14 @@ if CLIENT then
     -- General options
     local label = vgui.Create("DLabel", frame);
     label:SetPos(2, 3);
-    label:SetText("Current layout options");
+    label:SetText("#holohud.menu.elements.options.header");
     label:SetFont("DermaDefaultBold");
     label:SizeToContents();
 
     local btnSave = vgui.Create("DImageButton", frame);
     btnSave:SetSize(16, 16);
     btnSave:SetPos(list.x + list:GetWide() - 38, 2);
-    btnSave:SetTooltip("Save current layout");
+    btnSave:SetTooltip("#holohud.menu.elements.options.save");
     btnSave:SetImage(SAVE_TEXTURE);
     btnSave.DoClick = function()
       print(HOLOHUD.CONFIG.Signature .. " Saving current layout...");
@@ -341,7 +341,7 @@ if CLIENT then
     local btnReset = vgui.Create("DImageButton", frame);
     btnReset:SetSize(16, 16);
     btnReset:SetPos(list.x + list:GetWide() - 18, 2);
-    btnReset:SetTooltip("Reset all elements' settings to default");
+    btnReset:SetTooltip("#holohud.menu.elements.options.reset");
     btnReset:SetImage(RESET_TEXTURE);
     btnReset.DoClick = function()
       print(HOLOHUD.CONFIG.Signature .. " Removing current layout configuration...");

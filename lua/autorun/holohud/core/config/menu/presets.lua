@@ -75,11 +75,11 @@ if CLIENT then
     local lblSubtitle = vgui.Create("DLabel", panel);
     lblSubtitle:SetPos(5, 31);
     lblSubtitle:SetFont("HudHintTextLarge");
-    lblSubtitle:SetText("Choose what would you like to do with this preset");
+    lblSubtitle:SetText("#holohud.menu.presets.selected.header");
     lblSubtitle:SizeToContents();
 
-    GenerateOption(panel, 8, 56, "Load and display preset", LOAD_TEXTURE, Color(0, 255, 0, 100), function() HOLOHUD.CONFIG.PRESETS:SelectPreset(preset); end);
-    GenerateOption(panel, 8, 88, "Delete preset", DELETE_TEXTURE, Color(255, 0, 0, 100), function() HOLOHUD.CONFIG.PRESETS:DeletePreset(preset); UpdateList(); parent:Clear(); end);
+    GenerateOption(panel, 8, 56, "#holohud.menu.presets.selected.load", LOAD_TEXTURE, Color(0, 255, 0, 100), function() HOLOHUD.CONFIG.PRESETS:SelectPreset(preset); end);
+    GenerateOption(panel, 8, 88, "#holohud.menu.presets.selected.delete", DELETE_TEXTURE, Color(255, 0, 0, 100), function() HOLOHUD.CONFIG.PRESETS:DeletePreset(preset); UpdateList(); parent:Clear(); end);
 
     parent:Add(panel);
   end
@@ -96,7 +96,7 @@ if CLIENT then
     list = vgui.Create("DListView", frame);
     list:SetPos(0, 0);
     list:SetSize(frame:GetWide() * 0.3, frame:GetTall() - 10);
-    list:AddColumn("Select to see details");
+    list:AddColumn("#holohud.menu.presets.list");
 
     UpdateList();
 
@@ -109,13 +109,13 @@ if CLIENT then
     local lblTitle = vgui.Create("DLabel", header);
     lblTitle:SetPos(5, 3);
     lblTitle:SetFont("HudHintTextLarge");
-    lblTitle:SetText("Create preset");
+    lblTitle:SetText("#holohud.menu.presets.create.header");
     lblTitle:SizeToContents();
 
     local lblSubtitle = vgui.Create("DLabel", header);
     lblSubtitle:SetPos(5, 20);
     lblSubtitle:SetFont("DermaDefaultBold");
-    lblSubtitle:SetText("Save your current HUD layout as a new preset");
+    lblSubtitle:SetText("#holohud.menu.presets.create.details");
     lblSubtitle:SizeToContents();
 
     local txnName = vgui.Create("DTextEntry", header);

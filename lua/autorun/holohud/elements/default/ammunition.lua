@@ -375,15 +375,15 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(ELEMENT_NAME,
-    "Ammunition panel",
-    "Displays current ammunition",
+    "#holohud.settings.ammo.name",
+    "#holohud.settings.ammo.description",
     {"CHudAmmo", "CHudSecondaryAmmo"},
     {
-      always = {name = "Always displayed", value = false },
-      mode = { name = "Mode", value = 1, options = {"Default", "Minimalist", "Compact"} },
-      hide = { name = "Don't hide if clip is not full", desc = "The panel won't automatically hide if the current weapon clip is not full", value = false },
-      colour = { name = "Colour", value = AMMO_COLOUR },
-      crit_colour = { name = "Out of ammo colour", value = CRIT_COLOUR }
+      always = {name = "#holohud.settings.ammo.always_displayed", value = false },
+      mode = { name = "#holohud.settings.ammo.mode", value = 1, options = {"#holohud.settings.ammo.mode.default", "#holohud.settings.ammo.mode.minimal", "#holohud.settings.ammo.mode.compact"} },
+      hide = { name = "#holohud.settings.ammo.dont_hide", desc = "#holohud.settings.ammo.dont_hide.description", value = false },
+      colour = { name = "#holohud.settings.ammo.color", value = AMMO_COLOUR },
+      crit_colour = { name = "#holohud.settings.ammo.empty_color", value = CRIT_COLOUR }
     }, DrawPanel
   );
 

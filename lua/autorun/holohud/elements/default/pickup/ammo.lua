@@ -8,8 +8,7 @@ if CLIENT then
   local PICKUP = HOLOHUD.ELEMENTS.PICKUP;
 
   -- Parameters
-  local AMMO_WIDTH, AMMO_HEIGHT = 111, 51; -- 150 ; 192, 44
-  local COLLECTED = language.GetPhrase( "#HOL.Ammo.Collected" );
+  local AMMO_WIDTH, AMMO_HEIGHT = 111, 51;
 
   --[[
     Adds a weapon pickup to the history
@@ -75,6 +74,7 @@ if CLIENT then
     local i = HOLOHUD.ICONS:GetBulletIcon(ammoType);
     local bright = HOLOHUD:GetHighlight(PICKUP.PANEL_SUBFIX .. ammoType);
     local ammo = game.GetAmmoID(ammoType);
+    local collected = language.GetPhrase("holohud.hud.pickup.ammo");
 
     -- Display name
     if (displayName) then
@@ -85,7 +85,7 @@ if CLIENT then
     local offset = 0;
     if (displayTitle) then
       offset = 1;
-      HOLOHUD:DrawText(x + 3, y, string.sub(COLLECTED, 1, anim2), "holohud_pickup", Color(255, 255, 255, 30), 0, nil, nil, true); -- Title
+      HOLOHUD:DrawText(x + 3, y, string.sub(collected, 1, anim2), "holohud_pickup", Color(255, 255, 255, 30), 0, nil, nil, true); -- Title
     end
 
     -- Display icon and amount
@@ -102,6 +102,7 @@ if CLIENT then
   ]]
   function PICKUP:AmmoAnimation(i, animate)
     local pickup = PICKUP.pickups[i];
+    local collected = language.GetPhrase("holohud.hud.pickup.ammo");
 
     if (animate) then
 
@@ -113,11 +114,11 @@ if CLIENT then
 
       -- Animate text
       if (pickup.data.tick < CurTime() and HOLOHUD:GetFlashPanel(PICKUP.PANEL_SUBFIX .. i).flash <= 0) then
-        if (pickup.data.anim2 < string.len(COLLECTED)) then
+        if (pickup.data.anim2 < string.len(collected)) then
           PICKUP.pickups[i].data.anim2 = pickup.data.anim2 + 1;
 
           -- Delay
-          if (math.abs(pickup.data.anim2 - string.len(COLLECTED)) < 1) then
+          if (math.abs(pickup.data.anim2 - string.len(collected)) < 1) then
             PICKUP.pickups[i].data.tick = CurTime() + 0.1;
           else
             PICKUP.pickups[i].data.tick = CurTime() + 0.015;
@@ -131,7 +132,7 @@ if CLIENT then
       end
     else
       PICKUP.pickups[i].data.anim1 = string.len(language.GetPhrase(pickup.data.ammoType .. "_ammo"));
-      PICKUP.pickups[i].data.anim2 = string.len(COLLECTED);
+      PICKUP.pickups[i].data.anim2 = string.len(collected);
     end
 
     -- Animate lerp

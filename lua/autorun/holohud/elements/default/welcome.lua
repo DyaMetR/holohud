@@ -11,13 +11,13 @@ if CLIENT then
   local TITLE_COLOUR = Color(133, 216, 255);
   local TEXTURE = surface.GetTextureID("gui/center_gradient");
   local MAX_SYS_LOG = 14;
-  local WELCOME = "#Welcome";
+  local WELCOME = "#holohud.hud.welcome.header";
   local TITLE = "H0L-D4";
-  local VERSION = HOLOHUD.Version.Major .. "." .. HOLOHUD.Version.Minor;
-  local PATCH = HOLOHUD.Version.Patch .. language.GetPhrase( "Welcome.X.Paches.Applied" );
+  local VERSION = string.format("%s.%s", HOLOHUD.Version.Major, HOLOHUD.Version.Minor);
+  local PATCH = string.format(language.GetPhrase("holohud.hud.welcome.patches"), HOLOHUD.Version.Patch);
   local LOG_SPEED = 0.3; -- How often do new entries appear
   local TIME = 2.33; -- How much time is given to the user to see the full log before fading out
-  local NO_PRESETS = language.GetPhrase( "Welcome.No_Presets" );
+  local NO_PRESETS = language.GetPhrase("holohud.hud.welcome.no_presets");
 
   -- Fonts
   HOLOHUD:CreateFont("holohud_welcome_title", 40, "Roboto", 0);
@@ -54,30 +54,30 @@ if CLIENT then
     local fonts = NO_PRESETS;
 
     if (table.Count(HOLOHUD.CONFIG.PRESETS:GetPresets()) > 0) then
-      presets = language.GetPhrase( "Welcome.Loaded" ) .. table.Count(HOLOHUD.CONFIG.PRESETS:GetPresets()) .. language.GetPhrase( "Welcome.Loaded.X.Presets" );
+      presets = string.format(language.GetPhrase("holohud.hud.welcome.presets"), table.Count(HOLOHUD.CONFIG.PRESETS:GetPresets()));
     end
 
     if (table.Count(HOLOHUD.CONFIG.FONTS:GetFontPresets()) > 0) then
-      fonts = language.GetPhrase( "Welcome.Loaded" ) .. table.Count(HOLOHUD.CONFIG.FONTS:GetFontPresets()) .. language.GetPhrase( "Welcome.Loaded.X.Presets" );
+      fonts = string.format(language.GetPhrase("holohud.hud.welcome.presets"), table.Count(HOLOHUD.CONFIG.FONTS:GetFontPresets()));
     end
 
     logQueue = {
-      table.Count(HOLOHUD.ELEMENTS:GetElements()) .. language.GetPhrase( "Welcome.X.HUD.Elements.Found" ),
-      language.GetPhrase( "Welcome.Loading.User.Configuration" ),
-      language.GetPhrase( "Welcome.Configuration.Loaded" ),
-      language.GetPhrase( "Welcome.Font.Configuration.Loaded" ),
-      language.GetPhrase( "Welcome.Scanning.Layout.Presets" ),
+      string.format(language.GetPhrase("holohud.hud.welcome.elements_found"), table.Count(HOLOHUD.ELEMENTS:GetElements())),
+      language.GetPhrase("holohud.hud.welcome.loading_config"),
+      language.GetPhrase("holohud.hud.welcome.layout_loaded"),
+      language.GetPhrase("holohud.hud.welcome.fonts_loaded"),
+      language.GetPhrase("holohud.hud.welcome.layout_presets"),
       presets,
-      language.GetPhrase( "Welcome.Scanning.Font.Presets" ),
+      language.GetPhrase("holohud.hud.welcome.fonts_presets"),
       fonts,
       "",
-      language.GetPhrase( "Welcome.All.Set.HF" )
+      language.GetPhrase("holohud.hud.welcome.footer")
     };
 
     -- By default, sys queue will consist of loading all elements
     for _, element in pairs(HOLOHUD.ELEMENTS:GetElements()) do
-      table.insert(sysQueue, language.GetPhrase( "Welcome.Loading.Element.X" ) .. element.title .. "...");
-      table.insert(sysQueue, language.GetPhrase( "Welcome.Loading.Element.X.Done" ));
+      table.insert(sysQueue, string.format(language.GetPhrase("holohud.hud.welcome.loading_element"), language.GetPhrase(element.title)));
+      table.insert(sysQueue, language.GetPhrase("holohud.hud.welcome.loading_done"));
     end
   end
   LoadLog(); -- In case something goes wrong, preload log
@@ -210,7 +210,7 @@ if CLIENT then
     -- Draw
     HOLOHUD:DrawText(x + 6, y + 3, WELCOME, "holohud_welcome_text", textCol);
     HOLOHUD:DrawText(x + 14, y + 21, TITLE, "holohud_welcome_title", titleCol);
-    HOLOHUD:DrawText(x + 136, y + 57, HOLOHUD.Version.Major .. "." .. HOLOHUD.Version.Minor, "holohud_welcome_subtitle", titleCol, nil, nil, TEXT_ALIGN_BOTTOM);
+    HOLOHUD:DrawText(x + 136, y + 57, VERSION, "holohud_welcome_subtitle", titleCol, nil, nil, TEXT_ALIGN_BOTTOM);
 
     draw.RoundedBox(0, x + 10, y + 64, (w - 20) * lerp, 1, Color(titleCol.r, titleCol.g, titleCol.b, 166));
     if (HOLOHUD.Version.Patch > 0) then
@@ -340,12 +340,12 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    language.GetPhrase( "Welcome.Settings.Title" ),
-    "#Welcome.Settings.Desc",
+    "#holohud.settings.welcome.name",
+    "#holohud.settings.welcome.description",
     nil,
     {
-      title = { name = "#Welcome.Settings.Title.Coluor", value = TITLE_COLOUR },
-      text = { name = "#Welcome.Settings.Text.Coluor", value = Color(255, 255, 255) }
+      title = { name = "#holohud.settings.welcome.title_color", value = TITLE_COLOUR },
+      text = { name = "#holohud.settings.welcome.text_color", value = Color(255, 255, 255) }
     },
     DrawPanel
   );

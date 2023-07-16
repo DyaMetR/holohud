@@ -9,7 +9,6 @@ if CLIENT then
 
   -- Parameters
   local ITEM_WIDTH, ITEM_HEIGHT = 192, 20;
-  local PICKED_UP = language.GetPhrase( "#HOL.Ammo.PickedUp" );
 
   --[[
     Adds an item pickup to the history
@@ -60,9 +59,11 @@ if CLIENT then
     @void
   ]]
   function PICKUP.ItemPickup(x, y, w, h, item, anim1, anim2, displayTitle, colour)
+    local pickedup = language.GetPhrase("holohud.hud.pickup.item");
+
     -- Title
     if (displayTitle) then
-      HOLOHUD:DrawText(x + 3, y, string.sub(PICKED_UP, 1, anim2), "holohud_pickup", Color(255, 255, 255, 30), nil, nil, nil, true);
+      HOLOHUD:DrawText(x + 3, y, string.sub(pickedup, 1, anim2), "holohud_pickup", Color(255, 255, 255, 30), nil, nil, nil, true);
     end
 
     -- Info
@@ -78,6 +79,7 @@ if CLIENT then
   ]]
   function PICKUP:PickupAnimation(i, animate)
     local pickup = PICKUP.pickups[i];
+    local pickedup = language.GetPhrase("holohud.hud.pickup.item");
 
     if (animate) then
       -- Delay text animation
@@ -87,11 +89,11 @@ if CLIENT then
 
       -- Animate text
       if (pickup.data.tick < CurTime() and HOLOHUD:GetFlashPanel(PICKUP.PANEL_SUBFIX .. i).flash <= 0) then
-        if (pickup.data.anim2 < string.len(PICKED_UP)) then
+        if (pickup.data.anim2 < string.len(pickedup)) then
           PICKUP.pickups[i].data.anim2 = pickup.data.anim2 + 1;
 
           -- Delay
-          if (math.abs(pickup.data.anim2 - string.len(PICKED_UP)) < 1) then
+          if (math.abs(pickup.data.anim2 - string.len(pickedup)) < 1) then
             PICKUP.pickups[i].data.tick = CurTime() + 0.16;
           else
             PICKUP.pickups[i].data.tick = CurTime() + 0.015;
@@ -105,7 +107,7 @@ if CLIENT then
       end
     else
       pickup.data.anim1 = string.len(language.GetPhrase(pickup.data.item));
-      pickup.data.anim2 = string.len(PICKED_UP);
+      pickup.data.anim2 = string.len(pickedup);
     end
   end
 end
