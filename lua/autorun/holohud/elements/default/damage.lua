@@ -71,7 +71,7 @@ if CLIENT then
 		{
       distance = { name = "#holohud.settings.damage.distance", value = 1, minValue = 0, maxValue = 10 },
       colour = { name = "#holohud.settings.damage.color", value = Color(255, 0, 0) },
-      maxCount = { name = "#holohud.settings.damage.limit", desc = "holohud.settings.damage.limit.description", value = MAX_COUNT }
+      maxCount = { name = "#holohud.settings.damage.limit", desc = "#holohud.settings.damage.limit.description", value = MAX_COUNT }
     },
 		DrawPanel
 	);

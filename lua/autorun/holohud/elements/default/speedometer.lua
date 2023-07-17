@@ -212,23 +212,23 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Speed-o-meter",
-    "When in a vehicle, it'll track its speed",
+    "#holohud.settings.speedometer.name",
+    "#holohud.settings.speedometer.description",
     nil,
     {
-      unitveh = { name = "Unit (in vehicle)", value = 1, options = {"km/h", "mph", "ups"} },
-      unitfoot = { name = "Unit (on foot)", value = 3, options = {"km/h", "mph", "ups"} },
-      damage = { name = "Health bar as damage", desc = "Health meter with count the amount of damage instead of the health left", value = false},
-      hide_bar = { name = "Don't show damage bar", value = false },
-      center = { name = "Centered", value = false },
-      colour = { name = "Foreground colour", value = Color(255, 255, 255) },
-      bg_col = { name = "Brackets colour", value = Color(255, 112, 66) },
-      good_colour = { name = "Good state colour", value = GOOD_COLOUR },
-      warn_colour = { name = "Warning colour", value = WARN_COLOUR },
-      crit_colour = { name = "Critical colour", value = CRIT_COLOUR },
-      x_offset = { name = "Horizontal offset", value = 0, minValue = 0, maxValue = ScrW() },
-      y_offset = { name = "Vertical offset", value = 0, minValue = 0, maxValue = ScrH() },
-      always = { name = "Display on foot", value = false }
+      unitveh = { name = "#holohud.settings.speedometer.units_in_vehicle", value = 1, options = {"km/h", "mph", "ups"} },
+      unitfoot = { name = "#holohud.settings.speedometer.units_on_foot", value = 3, options = {"km/h", "mph", "ups"} },
+      damage = { name = "#holohud.settings.speedometer.damage", desc = "#holohud.settings.speedometer.damage.description", value = false},
+      hide_bar = { name = "#holohud.settings.speedometer.hide_damage", value = false },
+      center = { name = "#holohud.settings.speedometer.centered", value = false },
+      colour = { name = "#holohud.settings.speedometer.color", value = Color(255, 255, 255) },
+      bg_col = { name = "#holohud.settings.speedometer.brackets_color", value = Color(255, 112, 66) },
+      good_colour = { name = "#holohud.settings.speedometer.good_color", value = GOOD_COLOUR },
+      warn_colour = { name = "#holohud.settings.speedometer.warn_color", value = WARN_COLOUR },
+      crit_colour = { name = "#holohud.settings.speedometer.low_color", value = CRIT_COLOUR },
+      x_offset = { name = "#holohud.settings.speedometer.x", value = 0, minValue = 0, maxValue = ScrW() },
+      y_offset = { name = "#holohud.settings.speedometer.y", value = 0, minValue = 0, maxValue = ScrH() },
+      always = { name = "#holohud.settings.speedometer.always_displayed", value = false }
     },
     DrawPanel
   );

@@ -258,25 +258,25 @@ if CLIENT then
 
   -- Add element
   HOLOHUD.ELEMENTS:AddElement(PANEL_NAME,
-    "Target ID",
-    "Displays the health of the player/NPC you're looking at",
+    "#holohud.settings.target_health.name",
+    "#holohud.settings.target_health.description",
     nil,
     {
-      alpha = { name = "Background opacity", value = 0.15, minValue = 0, maxValue = 1 },
-      npc_offset = { name = "NPC panel offset", value = 0.16, minValue = 0, maxValue = 1 },
-      player_offset = { name = "Player panel offset", value = 0.63, minValue = 0, maxValue = 1 },
-      h_offset = { name = "Horizontal panel offset", value = 0.5, minValue = 0, maxValue = 1 },
-      name = { name = "Name colour", value = Color(255, 255, 255)},
-      ally = { name = "Ally colour", value = Color(100, 255, 100) },
-      enemy = { name = "Enemy colour", value = Color(255, 100, 72) },
-      full_colour = { name = "Full colour", value = HEALTH_FULL },
-      good_colour = { name = "Normal colour", value = HEALTH_GOOD },
-      warn_colour = { name = "Warning colour", value = HEALTH_WARN },
-      crit_colour = { name = "Critical colour", value = HEALTH_CRIT },
-      armour = { name = "Armour colour", value = ARMOUR_COLOUR },
-      lerp = { name = "Enable smooth animation", value = true },
-      right_align = { name = "Right aligned bar", value = false },
-      bar_length = { name = "Dynamic bar sizing", value = false }
+      alpha = { name = "#holohud.settings.target_health.alpha", value = 0.15, minValue = 0, maxValue = 1 },
+      npc_offset = { name = "#holohud.settings.target_health.npc_offset", value = 0.16, minValue = 0, maxValue = 1 },
+      player_offset = { name = "#holohud.settings.target_health.player_offset", value = 0.63, minValue = 0, maxValue = 1 },
+      h_offset = { name = "#holohud.settings.target_health.x", value = 0.5, minValue = 0, maxValue = 1 },
+      name = { name = "#holohud.settings.target_health.name_color", value = Color(255, 255, 255)},
+      ally = { name = "#holohud.settings.target_health.ally_color", value = Color(100, 255, 100) },
+      enemy = { name = "#holohud.settings.target_health.enemy_color", value = Color(255, 100, 72) },
+      full_colour = { name = "#holohud.settings.target_health.full_color", value = HEALTH_FULL },
+      good_colour = { name = "#holohud.settings.target_health.good_color", value = HEALTH_GOOD },
+      warn_colour = { name = "#holohud.settings.target_health.warn_color", value = HEALTH_WARN },
+      crit_colour = { name = "#holohud.settings.target_health.low_color", value = HEALTH_CRIT },
+      armour = { name = "#holohud.settings.target_health.armor_color", value = ARMOUR_COLOUR },
+      lerp = { name = "#holohud.settings.target_health.smooth_animation", value = true },
+      right_align = { name = "#holohud.settings.target_health.right_align", value = false },
+      bar_length = { name = "#holohud.settings.target_health.dynamic_sizing", value = false }
     },
     DrawPanel
   );

@@ -16,26 +16,26 @@ if CLIENT then
   local REGULAR = "Roboto Light";
   local CONDENSED = "Roboto Condensed Light";
 
-  HOLOHUD:AddFont("holohud_main", "Main numeric display", REGULAR, 50);
-  HOLOHUD:AddFont("holohud_main_cds", "Secondary numeric display", CONDENSED, 50);
-  HOLOHUD:AddFont("holohud_med_sm", "Medium numeric display", REGULAR, 38);
-  HOLOHUD:AddFont("holohud_small", "Small numeric display", CONDENSED, 28);
-  HOLOHUD:AddFont("holohud_tiny", "Tiny numeric display", CONDENSED, 18, 1000);
+  HOLOHUD:AddFont("holohud_main", "#holohud.fonts.main", REGULAR, 50);
+  HOLOHUD:AddFont("holohud_main_cds", "#holohud.fonts.main_cds", CONDENSED, 50);
+  HOLOHUD:AddFont("holohud_med_sm", "#holohud.fonts.med_sm", REGULAR, 38);
+  HOLOHUD:AddFont("holohud_small", "#holohud.fonts.small", CONDENSED, 28);
+  HOLOHUD:AddFont("holohud_tiny", "#holohud.fonts.tiny", CONDENSED, 18, 1000);
 
-  HOLOHUD:AddFont("holohud_pickup", "Pickup title", CONDENSED, 18, 1000);
-  HOLOHUD:AddFont("holohud_weapon_name", "Weapon name", CONDENSED, 20, 0);
-  HOLOHUD:AddFont("holohud_entity", "Entity details", REGULAR, 23, 1000);
-  HOLOHUD:AddFont("holohud_target", "Player Target ID", CONDENSED, 28);
+  HOLOHUD:AddFont("holohud_pickup", "#holohud.fonts.pickup", CONDENSED, 18, 1000);
+  HOLOHUD:AddFont("holohud_weapon_name", "#holohud.fonts.weapon_name", CONDENSED, 20, 0);
+  HOLOHUD:AddFont("holohud_entity", "#holohud.fonts.entity", REGULAR, 23, 1000);
+  HOLOHUD:AddFont("holohud_target", "#holohud.fonts.target", CONDENSED, 28);
 
-  HOLOHUD:AddFont("holohud_compass", "Compass (main bearings)", CONDENSED, 28);
-  HOLOHUD:AddFont("holohud_compass_small", "Compass (graduation)", CONDENSED, 18, 1000);
+  HOLOHUD:AddFont("holohud_compass", "#holohud.fonts.compass", CONDENSED, 28);
+  HOLOHUD:AddFont("holohud_compass_small", "#holohud.fonts.compass_small", CONDENSED, 18, 1000);
 
-  HOLOHUD:AddFont("holohud_killfeed", "Killfeed labels", REGULAR, 20, 1000);
+  HOLOHUD:AddFont("holohud_killfeed", "#holohud.fonts.killfeed", REGULAR, 20, 1000);
 
-  HOLOHUD:AddFont("holohud_clock_main", "Main clock display", REGULAR, 26);
-  HOLOHUD:AddFont("holohud_clock_big", "Hour display", REGULAR, 50);
-  HOLOHUD:AddFont("holohud_clock_med", "Minute display", REGULAR, 32);
-  HOLOHUD:AddFont("holohud_clock_small", "Small date display", REGULAR, 20);
+  HOLOHUD:AddFont("holohud_clock_main", "#holohud.fonts.clock_main", REGULAR, 26);
+  HOLOHUD:AddFont("holohud_clock_big", "#holohud.fonts.clock_big", REGULAR, 50);
+  HOLOHUD:AddFont("holohud_clock_med", "#holohud.fonts.clock_med", REGULAR, 32);
+  HOLOHUD:AddFont("holohud_clock_small", "#holohud.fonts.clock_small", REGULAR, 20);
   HOLOHUD.CONFIG.FONTS:SetDefaultFont();
 
 end

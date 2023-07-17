@@ -192,7 +192,7 @@ if CLIENT then
     @void
   ]]
   local function menuCreation()
-  	spawnmenu.AddToolMenuOption( "Utilities", "H0L-D4", "holohud", "Settings", nil, nil, buildMenuComposition );
+  	spawnmenu.AddToolMenuOption( "Utilities", "H0L-D4", "holohud", "#spawnmenu.utilities.settings", nil, nil, buildMenuComposition );
   end
   hook.Add( "PopulateToolMenu", "holohud_menu", menuCreation );
 

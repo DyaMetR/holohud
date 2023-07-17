@@ -279,20 +279,20 @@ end
 
 -- add element
 HOLOHUD.ELEMENTS:AddElement(ELEMENT_NAME,
-  'Weapon selector',
-  'Allows the user to switch between the weapons they currently hold',
+  '#holohud.settings.weapon_selector.name',
+  '#holohud.settings.weapon_selector.description',
   nil,
   {
-    alpha = {name = 'Background opacity', value = 0.1725, maxValue = 1},
-    animation = {name = 'Toggle animations', desc = 'Animations that play every time you open and/or navigate the inventory', value = true},
-    x = {name = 'Horizontal margin', value = ScrH() * 0.1, maxValue = ScrW()},
-    y = {name = 'Vertical margin', value = ScrH() * 0.1, maxValue = ScrH()},
-    volume = {name = 'Sound volume', value = 1, minValue = 0, maxValue = 2},
-    colour = { name = 'Colour', value = Color(255, 255, 255) },
-    ammo_colour = { name = 'Ammo bar colour', value = AMMO_COLOUR },
-    crit_colour = { name = 'Out of ammo colour', value = Color(255, 0, 0)},
-    weapon_details = { name = 'Draw weapon details', value = false },
-    timeout = {name = 'Auto-close delay', desc = 'How much time does it stand idle before closing. (0 for infinite)', value = 5}
+    alpha = {name = '#holohud.settings.weapon_selector.alpha', value = 0.1725, maxValue = 1},
+    animation = {name = '#holohud.settings.weapon_selector.animated', desc = '#holohud.settings.weapon_selector.animated.description', value = true},
+    x = {name = '#holohud.settings.weapon_selector.x', value = ScrH() * 0.1, maxValue = ScrW()},
+    y = {name = '#holohud.settings.weapon_selector.y', value = ScrH() * 0.1, maxValue = ScrH()},
+    volume = {name = '#holohud.settings.weapon_selector.volume', value = 1, minValue = 0, maxValue = 2},
+    colour = { name = '#holohud.settings.weapon_selector.color', value = Color(255, 255, 255) },
+    ammo_colour = { name = '#holohud.settings.weapon_selector.ammo_color', value = AMMO_COLOUR },
+    crit_colour = { name = '#holohud.settings.weapon_selector.empty_color', value = Color(255, 0, 0)},
+    weapon_details = { name = '#holohud.settings.weapon_selector.details', value = false },
+    timeout = {name = '#holohud.settings.weapon_selector.timeout', desc = '#holohud.settings.weapon_selector.timeout.description', value = 5}
   }, drawHUD
 )
 
