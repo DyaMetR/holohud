@@ -7,6 +7,8 @@
 ![](https://img.shields.io/github/issues/DyaMetR/holohud)
 ![](https://img.shields.io/github/license/DyaMetR/holohud)
 
+> This repository has been archived in favour of an [updated version](https://github.com/DyaMetR/holohud2).
+
 Customizable holographic themed heads up display (HUD) for Garry's Mod.
 
 ## Features
