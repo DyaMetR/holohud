@@ -9,7 +9,7 @@ if CLIENT then
 
   -- Parameters
   local PANEL_NAME = "speedometer";
-  local KPH_UNIT, MPH_UNIT, UPS_UNIT = "km/h", "MPH", "ups";
+  local KPH_UNIT, MPH_UNIT, UPS_UNIT = "#holohud.settings.speedometer.unit.KMH", "#holohud.settings.speedometer.unit.MPH", "#holohud.settings.speedometer.unit.UPS";
   local KPH, MPH = 1.6093, 0.056818181;
   local W, H = 17, 50;
   local SCREEN_OFFSET = 20;
@@ -216,8 +216,8 @@ if CLIENT then
     "#holohud.settings.speedometer.description",
     nil,
     {
-      unitveh = { name = "#holohud.settings.speedometer.units_in_vehicle", value = 1, options = {"km/h", "mph", "ups"} },
-      unitfoot = { name = "#holohud.settings.speedometer.units_on_foot", value = 3, options = {"km/h", "mph", "ups"} },
+      unitveh = { name = "#holohud.settings.speedometer.units_in_vehicle", value = 1, options = {"#holohud.settings.speedometer.unit.KMH", "#holohud.settings.speedometer.unit.MPH", "#holohud.settings.speedometer.unit.UPS"} },
+      unitfoot = { name = "#holohud.settings.speedometer.units_on_foot", value = 3, options = {"#holohud.settings.speedometer.unit.KMH", "#holohud.settings.speedometer.unit.MPH", "#holohud.settings.speedometer.unit.UPS"} },
       damage = { name = "#holohud.settings.speedometer.damage", desc = "#holohud.settings.speedometer.damage.description", value = false},
       hide_bar = { name = "#holohud.settings.speedometer.hide_damage", value = false },
       center = { name = "#holohud.settings.speedometer.centered", value = false },

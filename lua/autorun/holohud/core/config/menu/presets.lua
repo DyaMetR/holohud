@@ -125,7 +125,7 @@ if CLIENT then
     local btnSave = vgui.Create("DImageButton", header);
     btnSave:SetSize(16, 16);
     btnSave:SetPos(txnName.x + txnName:GetWide() + 8, 42);
-    btnSave:SetTooltip("Save configuration");
+    btnSave:SetTooltip("#holohud.menu.presets.create.save");
     btnSave:SetImage(SAVE_TEXTURE);
     btnSave.DoClick = function()
       HOLOHUD.CONFIG.PRESETS:CreateSnapshot(txnName:GetValue(1));
